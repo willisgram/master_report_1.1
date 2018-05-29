@@ -1,0 +1,46 @@
+
+%% Master Thesis Template
+%% Please update the specification through this link: https://daim.idi.ntnu.no/howto_thesis_submission.pdf
+
+\documentclass[pdftex,10pt,b5paper,twoside]{book}
+\usepackage[lmargin=25mm,rmargin=25mm,tmargin=27mm,bmargin=30mm]{geometry}
+\include{docsetup}
+
+\newcommand*{\captionsource}[2]{%
+  \caption[{#1}]{%
+    #1%
+    \\\hspace{\linewidth}%
+    \textbf{Source:} #2%
+  }%
+}
+
+\begin{document}
+
+%% PART 1
+%%The title page will be automatically generated and added by the DAIM system
+\include{dedication}		%% Optional
+
+%% PART 2
+\include{preface}
+\include{summary}	
+%\include{acknowledgemenets}
+\include{list}			 
+
+%% PART 3 -- The Chapters
+\include{chapter1}		%% Edit each chapter
+\include{chapter2}
+\include{chapter3}
+\include{chapter4}
+\include{chapter5}
+\include{chapter6}
+\include{chapter7}
+\include{chapter8}
+\include{chapter9}
+
+
+
+%% PART 4
+\include{references}	%% Edit your references in "mylib.bib"
+\include{appendix}		%% Optional
+
+\end{document}

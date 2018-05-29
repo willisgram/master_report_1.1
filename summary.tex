@@ -1,0 +1,53 @@
+\clearpage
+
+\begin{comment}
+
+\pagenumbering{roman} 				
+\setcounter{page}{1}
+
+\pagestyle{fancy}
+\fancyhf{}
+\renewcommand{\chaptermark}[1]{\markboth{\chaptername\ \thechapter.\ #1}{}}
+\renewcommand{\sectionmark}[1]{\markright{\thesection\ #1}}
+\renewcommand{\headrulewidth}{0.1ex}
+\renewcommand{\footrulewidth}{0.1ex}
+\fancyfoot[LE,RO]{\thepage}
+\fancypagestyle{plain}{\fancyhf{}\fancyfoot[LE,RO]{\thepage}\renewcommand{\headrulewidth}{0ex}}
+
+\end{comment}
+
+\pagenumbering{roman}
+
+\section*{\Huge Summary}
+\addcontentsline{toc}{chapter}{Summary}	
+$\\[0.5cm]$
+
+\noindent Fantasy Premier League is an imaginary online game where participants assemble imaginary teams consisting of real players within the English Premier League. Participants gain points based on the statistical performance of the players in the Premier League. This thesis applies an optimization model in order to make manager decisions in Fantasy Premier League.
+\newpar 
+The model maximizes the expected points gained by the Premier League players in order to select players for the team. Three variations of forecasts are developed in order to generate expected Fantasy points for the season 2017/2018. The first approach considers the previous average fantasy points in order to provide a prediction for the upcoming rounds. The second approach is based on linear regression. The last approach utilizes bookmakers' odds in order to predict the future player performances, combining results odds and individual players odds. The latter approach is done with cooperation with Sportradar, a Norwegian company providing odds probabilities for international bookmakers. The research in this thesis is based on data from Premier League seasons 2016/2017 and 2017/2018.
+\newpar
+The model has been run for the first 35 gameweeks of this Fantasy Premier League season, and the results are compared to the performance of Fantasy Premier League managers. The last part of the thesis is dedicated to discussion of further research in order to improve the performance of the model.  
+
+
+
+
+  
+\clearpage
+
+\begin{comment}
+\pagestyle{fancy}
+\fancyhf{}
+\renewcommand{\chaptermark}[1]{\markboth{\chaptername\ \thechapter.\ #1}{}}
+\renewcommand{\sectionmark}[1]{\markright{\thesection\ #1}}
+\renewcommand{\headrulewidth}{0.1ex}
+\renewcommand{\footrulewidth}{0.1ex}
+\fancyfoot[LE,RO]{\thepage}
+\fancyhead[LE]{\leftmark}
+\fancyhead[RO]{\rightmark}
+\fancypagestyle{plain}{\fancyhf{}\fancyfoot[LE,RO]{\thepage}\renewcommand{\headrulewidth}{0ex}}
+
+\pagenumbering{arabic} 				
+\setcounter{page}{1}
+\end{comment}
+
+\cleardoublepage

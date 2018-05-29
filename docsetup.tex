@@ -1,0 +1,64 @@
+\usepackage{setspace}
+\usepackage{graphicx}
+\usepackage{amssymb}
+\usepackage{mathrsfs}
+\usepackage{amsthm}
+\usepackage{amsmath}
+\usepackage{color}
+\usepackage{booktabs}
+\usepackage{float}
+\usepackage{subcaption}
+%\floatstyle{boxed} 
+\restylefloat{figure}
+\usepackage{algorithm}
+%\usepackage[noend]{algpseudocode}
+\usepackage{algpseudocode}
+\usepackage{enumitem} %for å få i) istedenfor a) i listing. 
+\usepackage{dsfont} %for å få større greske bokstaver.
+\usepackage{relsize} %for å få større greske bokstaver. 
+\usepackage{verbatim}
+\usepackage[Lenny]{fncychap}
+\usepackage[pdftex,bookmarks=true]{hyperref}
+\usepackage[pdftex]{hyperref}
+\hypersetup{
+    colorlinks,%
+    citecolor=black,%
+    filecolor=black,%
+    linkcolor=black,%
+    urlcolor=blue
+}
+\usepackage[font=small,labelfont=bf]{caption}
+\usepackage{fancyhdr}
+\usepackage{times}
+%\usepackage[intoc]{nomencl}
+%\renewcommand{\nomname}{List of Abbreviations}
+%\makenomenclature
+\usepackage{natbib}
+\usepackage{setspace}
+
+
+% ShareLaTeX does not support glossaries now. Sorry...
+%\usepackage[number=none]{glossary}
+%\makeglossary
+%\newglossarytype[abr]{abbr}{abt}{abl}
+%\newglossarytype[alg]{acronyms}{acr}{acn}
+%\newcommand{\abbrname}{Abbreviations} 
+%\newcommand{\shortabbrname}{Abbreviations}
+%%\makeabbr
+\newcommand{\HRule}{\rule{\linewidth}{0.5mm}}
+
+\renewcommand*\contentsname{Table of Contents}
+
+\pagestyle{fancy}
+\fancyhf{}
+\setlength\parindent{0pt} %Slik at man ikke får noe indent på nye paragraf.
+\newcommand{\newpar}{\vskip 0.5cm} %Slik at hvert nytt avsnitt begynner med ny blank linje.
+\renewcommand{\chaptermark}[1]{\markboth{\chaptername\ \thechapter.\ #1}{}}
+\renewcommand{\sectionmark}[1]{\markright{\thesection\ #1}}
+\renewcommand{\headrulewidth}{0.1ex}
+\renewcommand{\footrulewidth}{0.1ex}
+\fancypagestyle{plain}{\fancyhf{}\fancyfoot[LE,RO]{\thepage}\renewcommand{\headrulewidth}{0ex}}
+
+\DeclareMathOperator{\EX}{\mathbb{E}} %brukes i matematisk formulering
+\let\origRho\rho %for å få større rho gjennom hele teksten.
+\renewcommand*\rho{\mathlarger\origRho} %for å få større rho gjennom hele teksten.

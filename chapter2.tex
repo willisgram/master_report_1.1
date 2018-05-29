@@ -1,0 +1,99 @@
+%===================================== CHAP 2 =================================
+
+\chapter{Problem Description} \label{chapter_problem_description}
+In Fantasy Premier League a manager attempts to maximize his total score over an entire season. For each gameweek, decisions must be made on which players to include in the squad and which players to be selected for a starting line-up. In addition, a captain- and vice-captain choice must be made. Further, one has to set a substitution priority for the players that are not selected for the starting line-up. As pointed out in Chapter \ref{introduction}, the manager is allowed to perform transfers during the season. Therefore, a manager must also decide whether to make a transfer, and which players to be transferred in and out for each gameweek. Hence, it is considered a multi-week problem. Hereby, the mentioned decisions are referred to the Fantasy Premier League Decision Problem (FPLDP).
+
+\newpar
+
+The scope of this thesis is two-folded. Firstly, the aim is to formulate a mathematical model for the FPLDP. Secondly, we aim to develop a framework which could compete with human managers in terms of overall ranking. 
+
+\begin{comment}
+This implies that the objective is not solely to maximize total points, as we are willing to sacrifice the expected points in order to reduce risk. 
+\end{comment}
+
+
+\begin{comment}
+Although the ultimate target would be to finish on top of Fantasy Premier League, winning requires a great amount of luck due to the high uncertainty in football.
+The scope of this thesis is to create an optimization model that is competitive to the top rated Fantasy Premier League players. 
+\end{comment}
+
+\section{Rules of Fantasy Premier League} \label{rules of fpl}
+
+In order to understand how the Fantasy Premier League works, a review of the game rules is necessary. Each season consists of 380 fixtures split into a set of 38 chronological gameweeks. In general, every gameweek consists of 10 fixtures featuring each team once. All the matches within a gameweek are usually played over a period of 3-4 days. However, due to matches in the national and international cups, some of the Premier League matches are postponed or played ahead of the original date. This implies that some of the gameweeks do not consist of exactly 10 fixtures. Gameweeks consisting of more than 10 fixtures are hereby referred to as \textit{double} gameweeks, while gameweeks consisting of less than 10 gameweeks are referred to as \textit{blank} gameweeks.
+
+
+\newpar
+
+Initially, a manager must select a team of 15 players consisting of exactly: 2 goalkeepers, 5 defenders, 5 midfielders and 3 forwards. This is regarded as the \textit{selected squad}. As each team has a registered squad of 25 players, the whole FPL database consists of approximately 500 players. This creates numerous ways of selecting the team. The total purchase price of the team may not exceed the initial budget limit of \pounds 100m. Notice that the budget limit may vary over time, as player prices increase and decrease during the season. Further, one can not select more than 3 players from the same club. After the FPL manager has picked the selected squad, a \textit{starting line-up} consisting of 11 players has to be selected. You can play in any formation as long as there is exactly 1 goalkeeper, at least 3 defenders, at least 3 midfielders and at least 1 forward. This is regarded as the \textit{team formation criteria}. The players in the starting line-up are the only players that are awarded points. However, if any players from the starting line-up is not playing, they will be replaced by one of the four substitutes on the bench. As only 1 goalkeeper can feature in the starting line-up, the goalkeeper will only be substituted in if the goalkeeper in the starting line-up is not playing. For the remaining 3 substitutes, each manager must set a \textit{substitution priority}, deciding the order of substitution. It is important to note that the formation criteria overrules the substitution priority. Consider a case where you have 3 defenders in your starting line-up and a midfielder with substitution priority 1. If a defender in your starting line-up does not play, the formation criteria ensures that the defender with the highest substitution priority will be substituted in. 
+
+\newpar
+
+Each player in the FPL database is assigned with a value, depending on how well the player is expected to perform. Player prices change during the season depending on the popularity of the player in the transfer market. A player's value will increase when more managers select him, and decrease when fewer managers select him. Further, a player's selling price may be less than the player's current purchase price as a sell-on fee of 50 \% (rounded down to the nearest \pounds 0.1m) will be applied on any profits made on that player. For example, if you buy a player for \pounds 9.5m and his value increases to \pounds 9.8m, his selling price will be \pounds 9.6m.
+
+\begin{comment}
+In the model there is a difference between the selected squad, the starting line-up and substitutes. The selected squad include all the players whom could be picked for the starting line-up. Further, players in the starting line-up are the ones which get credited points. Those who are not picked for the starting line-up are regarded as substitutes. Hence, the connection between these three sets is that whenever players in the starting line-up do not feature, a player from the substitutes replaces them.
+\end{comment}
+
+\newpar
+
+For each gameweek, a managers may use one free transfer if they want to replace one of their players with another player. It is possible to make more than one transfer for a gameweek, but each additional transfer in a gameweek will deduct 4 points from the total score. Hereby, transfers deducting points are regarded as \textit{penalized transfers}. However, if the manager choose not to make any transfers for a gameweek, the free transfer is saved for the next gameweek and it possible to make two free transfers. It is important to notice that one can not make more than two free transfers for a given gameweek. Thus, not making any transfers for two consecutive gameweeks does not give one the opportunity to make three free transfers in the upcoming gameweek. 
+
+
+\begin{figure}[H]
+\centering
+\includegraphics[scale=0.35]{fig/fantasyteam1.png}
+ \captionsource{Illustration of the team selection page of Fantasy Premier League.}{\url{https://fantasy.premierleague.com/a/squad/transfers} (10.12.2017)}
+\label{Figure_2.1}
+\label{fig:fantasy_bilde}
+\end{figure}
+
+Figure \ref{Figure_2.1} illustrates how a squad is selected in FPL. It also illustrates that the manager is considering to remove Kane, Ramsey and Carroll. As one can see, this deducts -4 points. Hence, the manager had two free transfers for this gameweek. Further, the manager has \pounds 25.2m left in the bank if these transfers are carried out. In addition, it is observed that Ramsey and Moreno have a red triangle attached to them. This implies that they are either injured or suspended for the upcoming gameweek. Notice how the squad consists of exactly 2 goalkeepers, 5 defenders, 5 midfielders and 3 forwards as stated in the game rules. 
+
+
+\section{The Point System} \label{point_system}
+The Premier League players are rewarded with points depending on their performance during a gameweek. The main point factors are related to goals scored, assists given and clean sheets. In the following, the point system according to \url{www.fantasypremierleague.com} is presented. 
+
+\begin{table}[H]
+\centering
+\small
+\begin{tabular}{|l|l|l|l|l|}
+\hline
+                               & Goalkeepers & Defenders & Midfielders & Forwards \\
+\hline
+For playing up to 60 minutes   & 1           & 1         & 1           & 1        \\
+For playing 60 minutes or more & 2           & 2         & 2           & 2        \\
+For each goal scored           & 6           & 6         & 5           & 4        \\
+For each assist                & 3           & 3         & 3           & 3        \\
+For keeping a clean sheet      & 4           & 4         & 1           & -        \\
+For every 3 saves made         & 1           & -         & -           & -        \\
+For each penalty saved         & 5           & -         & -           & -        \\
+For each penalty missed        & -2          & -2        & -2          & -2       \\
+For every two goals conceded   & -1          & -1        & -           & -        \\
+For each yellow card           & -1          & -1        & -1          & -1       \\
+For each red card              & -3          & -3        & -3          & -3       \\
+For each own goal              & -2          & -2        & -2          & -2      \\
+\hline
+\end{tabular}
+\caption{Point system of FPL.}
+\end{table}
+
+\begin{itemize}
+    \item In a match, the three best players are evaluated according to the FPL Bonus Points System, and are awarded a bonus of 1, 2 and 3 points. Bonus Points are calculated according to 32 match statistics, where goals scored, assists and clean sheets are the factors that are heaviest weighted. A complete overview of the Bonus Points System is given in Appendix \ref{A1_BPS}
+    \item In order for a goalkeeper or defender to receive points for a clean sheet, he has to play at least 60 minutes, excluding stoppage time. 
+    \item If a goal is scored on a direct free kick or a penalty, the player that got the free kick/penalty is awarded with an assist. 
+    \item For each round, you choose a captain and a vice-captain. If the captain is playing, he will be awarded with double points for the entire round. However, if the captain is not playing, the vice-captain will be awarded double points. 
+\end{itemize}
+Notice that the point system does not consider the outcome of a match. Hence, players are not rewarded with points for playing on a team that wins or loses. 
+\newpar
+In addition to the regular scoring system, each manager is awarded four different chips, where only one chip can be used in a gameweek: 
+\begin{enumerate} [label=(\roman*)]
+
+\item \textbf{Wildcard}. The Wildcard can be used twice a season, once in the first and once in the second half of the season. A Wildcard allows the manager to replace his entire squad for free. As for the Wildcard squad selection, the same rules applies as in the regular fantasy team composition. Hence, one can only select a maximum of three players from each team and the formation constraints must be held. When playing a Wildcard, a manager's budget is set to the sell price of his original squad at that particular gameweek. Further, when playing a Wildcard, any saved transfers will be lost. One will be back to the usual 1 free transfer the following gameweek.
+
+\item \textbf{Bench Boost}. The Bench Boost allows you to receive points for all the 15 players of your squad. The gamechip can only be used once a season. 
+
+\item \textbf{Free Hit}. The Free Hit allows the manager to replace his entire squad for one gameweek. However, for the next gameweek your original team will return.  The Free Hit can only be used once a season. As for the Wildcard, the same transfer- and budget rules applies for the Free Hit.
+
+\item \textbf{Triple Captain}. The Triple Captain triples the points of your captain for a gameweek. If the captain does not play, the gamechip is awarded the vice-captain. The Triple Captain can only be used once a season. 
+\end{enumerate}
+

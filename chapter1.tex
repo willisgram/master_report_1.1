@@ -1,0 +1,108 @@
+%===================================== CHAP 1 =================================
+
+%Only for right page counting---------------
+\pagestyle{fancy}
+\fancyhf{}
+\renewcommand{\chaptermark}[1]{\markboth{\chaptername\ \thechapter.\ #1}{}}
+\renewcommand{\sectionmark}[1]{\markright{\thesection\ #1}}
+\renewcommand{\headrulewidth}{0.1ex}
+\renewcommand{\footrulewidth}{0.1ex}
+\fancyfoot[LE,RO]{\thepage}
+\fancyhead[LE]{\leftmark}
+\fancyhead[RO]{\rightmark}
+\fancypagestyle{plain}{\fancyhf{}\fancyfoot[LE,RO]{\thepage}\renewcommand{\headrulewidth}{0ex}}
+
+\pagenumbering{arabic} 				
+\setcounter{page}{1}
+%--------------------------------------------
+
+\chapter{Introduction}\label{introduction}
+
+\begin{comment}
+Studying Fantasy Premier League is interesting for a number of reasons. Its proximity to analysis of real life football is one of them. Analysis of football matches has been an important aspect of the game for several years. Typical applications of such analysis are to get information about the opponent teams, players in the transfer market as well as information about composition of a team's existing players. Analysis are performed both before, during and after matches are played. Analysis have previously been qualitative in nature. However, nowadays quantitative analysis has gained momentum, and companies like Opta and Sportradar make profit on delivering sophisticated data sets to professional football clubs and bookmakers. In combination with the steady increase
+in computational power, these data sets create new possibilities for statistical analysis in sports,
+commonly referred to as sports analytics.
+\end{comment}
+
+\newpar
+
+For the past decade, a phenomenon called Fantasy Sports has experienced an enormous growth, both by terms of active players and by media attention. Fantasy Sports is a type of online game where participants assemble imaginary teams consisting of real players within a professional sport. Fantasy teams compete in both private- and public leagues, where the teams gain points based on the statistical performance of real players in actual games. According to Fantasy Sports Trade Association (2017), it is estimated that 59.3 million players in the U.S and Canada are competing in some kind of Fantasy Sports. Fantasy Premier League (FPL) is the Fantasy Sports of England's top division football league, Premier League. It is the largest Fantasy Sports in Europe, with more than 5.5 million active players. 
+
+\newpar
+
+Fantasy Sports has its origin from the latter part of 1950s when a limited partner of the Oakland Raiders, Wilfred Winkenbach, invented a Fantasy Sports for golf. Each player selected a team of professional golfers, and the player who suggested the team with the lowest total score would win the tournament. In 1962, Winkenbach suggested the first fantasy league for American Football, initiating the birth of what has become a billion-dollar business. Nowadays, Fantasy Sports are available for several sports, including American football, basketball, ice hockey, baseball, football and cricket.  
+
+\newpar
+
+Typically, Fantasy Sports managers select a squad consisting of a given amount of players in each position on the field. Each real-life player is given a buying price based on their skill level and ability to perform well in the Fantasy Sports. The performance of each player in the actual games is measured in terms of points, where an action like scoring a goal will provide the player with a specified amount of points. In order to avoid players from selecting only top rated real-life players, each manager is typically given a restricted budget.
+
+\newpar
+
+ \cite{Smith} explore a discussion forum for NBA Fantasy containing more than 82,000 messages in order to examine Fantasy managers' strategies. These forums primarily consisted of managers sharing their line-up and discussing which players to select. By analyzing the content of the forums, the authors found that managers mainly determine their Fantasy Sports rosters by terms of reputations, team loyalty or personal predictions of future performance. In addition, some statistics such as average points and assists were often presented in the threads. However, these statistics were seldom discussed and never in terms of statistical analysis. 
+
+\newpar
+
+There exist several optimization models Fantasy Sports, for instance ice hockey \citep{drafting_hockey_pools} and American football\citep{Fry}. However, compared to the models suggested for the mentioned Fantasy Sports, there is a difference when modelling Fantasy Premier League. For instance, classical American Fantasy leagues consist of selecting a team for an entire season and does not allow for transfers. On the contrary, Fantasy Premier League allows for making player transfers during the season. Thus, FPL managers has to consider making new decisions each gameweek in a season. To the author's knowledge, an optimization model making optimal decisions in Fantasy Premier League has not been developed. Therefore, the aim of this thesis is to propose a model making decisions in a multi-week manner for Fantasy Premier League. Sportradar, a Norwegian company providing data for international bookmakers, has assisted us in writing this thesis by providing relevant data.
+
+
+
+%The two companies nearly collected a combined entry fee of \$3 billion in 2015. For instance, DraftKings arranged a 1-day contest for the Major League Baseball in 2015, with combined winning prizes of \$500 000 where the first-place finisher received \$125 000.%
+\newpar
+
+Over the last years, the interest for Fantasy Sports has grown rapidly among commercial actors. For instance, a phenomenon called Daily Fantasy Sports (DFS) has arisen. It is a version of Fantasy Sports, allowing managers to compete for money over short time-periods, typically for one day or a weekend. In the U.S, FanDuel and DraftKings are the main providers of DFS, with both companies being valued more than \$1 billion. They were granted permission to launch a DFS for the English Premier League in 2015 \citep{Purdum}. Furthermore, in 2017 the Scandinavian bookmaker Unibet launched its first Daily Fantasy Sports, Fantasy Sports Beta. This allows customers to compete for money within a Fantasy Sports for Premier League. In addition, the Norwegian bookmaker GUTS included bets on Fantasy Premier League in 2016. They offer bets on whether one player will perform better than another for the upcoming week.
+\newpar
+
+\begin{comment}
+Although Daily Fantasy Sports are primarily available for American leagues, FanDuel and DraftKings were granted permission to launch a DFS for the English Premier League in 2015 \citep{Purdum}. However, DFS is yet to break through in Europe. With the great interest of the English Premier League, and the amount of active FPL managers, a question has arisen of why this is the case. The answer may lie in the difference in gambling rules in the US and in Europe. While sports gambling is illegal in most of the states in the US, sports gambling has been a tradition in Europe for several years. Hence, European gamblers might not consider Daily Fantasy Sports as a substitute for regular sports gambling.
+
+\newpar
+
+For the past years, there has been a lack of European bookmakers providing gambling for Fantasy Sports. In 2017 however, the Scandinavian bookmaker Unibet launched its first Daily Fantasy Sports, Fantasy Sports Beta. This allows customers to compete for money within a Fantasy Sports for Premier League. In addition, the Norwegian bookmaker GUTS included bets on Fantasy Premier League in 2016. For instance, one may bet on whether one player will perform better than another for the upcoming week. Additionally, one can bet on which of the top rated players will perform best for the upcoming gameweek. As a result of Fantasy Premier League becoming more popular over years and European bookmakers providing odds for the game, it seems like Fantasy Sports can experience a growth in Europe as well. 
+\end{comment}
+
+
+%According to Sportradar, a Norwegian company providing data for international bookmakers, there seem to be an increasing interest for the subject. Although money-making on Fantasy Premier League is rather insignificant at the time, Sportradar assume that Fantasy Sports can be an important aspect of bookmakers' offer in the future. 
+
+\newpar
+
+Many readers may be interested in detailed analysis, providing answers to questions like "what is the optimal team so far?" and "what are the optimal transfers for each particular gameweek?". These answers can easily be answered by an ex-post optimization model. Therefore, we find it interesting to run an optimization model under the assumption that all data are known beforehand. In addition, the model can then be used to determine which were the optimal transfers in a particular gameweek for a given participant's starting team. Further, it would be interesting to compare the optimal solution to the score of the manager who finished on top of the overall rankings. It is quite reasonable that the optimal solution strategy largely outperforms that of the best manager. Thus, when realizing how big the gap between an optimal solution and the winning team is, people get the impression that winning FPL is not that difficult after all and hence overestimate their chances of winning the game. Consequently, computing an optimization model based on perfect information can attract more participants to the game.
+
+\begin{comment}
+%Forslag til 3 siste avsnitt William (uten å telle med det aller siste )
+
+Over the last years, the interest for Fantasy Sports has grown rapidly among commercial actors. For instance, a phenomenon called Daily Fantasy Sports (DFS) has arisen. It is a version of Fantasy Sports, allowing managers to compete for money over short time-periods, typically for one day or a weekend. In the U.S, FanDuel and DraftKings are the main providers of DFS, with both companies being valued more than \$1 billion. They were granted permission to launch a DFS for the English Premier League in 2015 \citep{Purdum}. Furthermore, in 2017 the Scandinavian bookmaker Unibet launched its first Daily Fantasy Sports, Fantasy Sports Beta. This allows customers to compete for money within a Fantasy Sports for Premier League. In addition, the Norwegian bookmaker GUTS included bets on Fantasy Premier League in 2016. They offer bets on whether one player will perform better than another for the upcoming week. Therefore, it is of interest to examine the performance of a data-driven model that competes by the same set of rules human managers.
+
+Furthermore, many readers may be interested in a detailed ex-post analysis of FPL, providing answers to questions like "what is the optimal team so far?" and "what would have been the optimal transfers for my team last gameweek?". Therefore, one interesting application of the optimization model is to run it under the assumption that all data are known beforehand. To this date there are no metrics provided on what is the maximum number of points obtainable so far. By solving the model ex-post, an upper bound of maximum points is obtained which would be useful in evaluating how skillful FPL managers are. If the gap is large, more participants may be attracted to the game. Furthermore, could provide a motivation for further developing more sophisticated models.
+
+%To this date there are no metrics provided on what is the maximum number of points obtainable so far. By solving a model with perfect information, an upper bound of maximum points is obtained and hence useful in evaluating how skillful FPL managers are.
+
+
+The methods suggested in this thesis can be generalized to apply for other situations when decision-making is similar to that of FPL. For instance, the problem is analogous to that of a football team facing decision in a transfer window. For one, a football team has a restricted budget when purchasing new players. Furthermore, both FPL managers and real life managers base their transfer decisions on projected future performance. By further comparison, FPL mangers face a final set of players to select. As does real life managers, namely the set of all players available in a transfer window.
+
+\end{comment}
+
+\newpar
+
+In addition, the approach suggested in this thesis can be generalized to apply for other situations facing decision-making similar to those in FPL. For instance, the model may be of inspiration to actual football teams when considering which players to sign during a transfer window. Even though some adjustments should be made, the characteristics of the problems are related in a great manner. As for FPL, a football team has got a restricted budget when purchasing new players. While FPL managers base their transfers on projected points gained by a player, football managers purchase players they expect to perform well in the future. By further comparison, FPL consists of a set of players to select, while the actual clubs can buy players from a similar set of players, namely the set of all players available in a transfer window.
+
+\newpar
+
+The thesis is structured as follows. Chapter 2 provides the problem description. Here, the rules and point system of Fantasy Premier League are presented. Chapter 3 provides a structural literature review of comparison of Fantasy football to real life football, Fantasy Sports optimization models, player performance forecast and a comparison to other well-known problems. Chapter 4 describes the mathematical formulation of the problem. It includes the problem structure, assumptions as well as a mathematical model for the Fantasy Team Composition Problem. Chapter 5 describes the solution framework. Chapter 6 describes the experimental setup of the approach and introduce the data sets used in order to suggest a solution. Chapter 7 provides a computational study of the results obtained by the optimization model. Chapter 8 gives a conclusion of the work that has been done. Finally, Chapter 9 addresses the potential for further research.
+
+% \subsection{Further adjustments}
+
+% \begin{enumerate}
+    % \item få inn motivasjon om at det er flere bettingselskaper som har begynt å legge inn odds på fantasy pl 
+    % \item få inn mer konkret fra sportsradar om hvorfor fpl er interessant. ergo noe på at kunder etterspør mer odds der i fra etc.. 
+    % \item få inn et avsnitt om hvor stor feltet sport analytics har blitt, ergo hvor stor budjsett klubber har på analyse og hvordan dette har utviklet seg de siste ukene. 
+    % \item knytte hvorfor dette problemet er interessant utenom fantasy. 
+% \end{enumerate}
+
+% rekkefølge: 
+% \begin{enumerate}
+    % \item sport analytics 
+    % \item fantasy. Ta med artikkel om hvordan valg i fantasy communitites blir tatt. Se på drive.  
+    % \item sportradar 
+    % \item hvorfor dette problemet er interessant for ikke-fantasy folk
+    % \item strucuture på rapporten
+% \end{enumerate}

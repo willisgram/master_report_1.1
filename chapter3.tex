@@ -1,0 +1,203 @@
+%===================================== CHAP 3 =================================
+
+\chapter{Literature Review}
+The literature review focuses on academic work related to the FPLDP. First, Section \ref{Literature_fantasy_real} compares Fantasy Football to real football. Further, Section \ref{Opt_Models_for_Fantasy_Sports} focuses on use of operations research in sports, Fantasy Sports and Fantasy Football. Next, in Section \ref{Forecasting_of_future_performance} forecasting of player performance is considered. In addition, this section covers methods for measuring the quality of football teams and home field advantage. Section \ref{Other_Relevant_Research} draws parallels to other well-studied problems. We complete the chapter by emphasizing our contribution.
+
+\section{Football Team Composition} \label{Literature_fantasy_real}
+
+A question that arise when discussing the selection of a Fantasy Premier League team is that of whether it's comparable to the selection of a real football team. \cite{Boon} provide an optimization model for selecting the line-up of sports teams, accounting for questions like "How to select an optimal line-up from the set of all candidates in different positions?". Further, \cite{Trninic} discusses the importance of individual player's roles and tasks when selecting the starting line-up, as they focus on finding the position and role most suitable for each player. In addition, they argue that consistency is an important consideration when selecting a line-up. Moreover, \cite{Ozceylan} identifies key performance criteria for each position and suggest an approach for selecting the players with the greatest contribution to the team. Similarly, \cite{Tavana} propose a framework for player selection and team formation with regards to determining the collection of individual players that forms an effective team. Further, \cite{Pantuso} propose a stochastic programming approach for composition of football teams. 
+
+\newpar
+
+When selecting a real football line-up, other considerations are faced than when selecting a Fantasy Football line-up. For instance, in real football it is important that the players hold the necessary skills that are compatible to the team's organization of play \citep{Pantuso}. Furthermore, a quality like leadership is considered important when selecting the captain. In addition, different skills are required for different positions on the field \citep{Boon}. Moreover, it is important that the selected players have a good chemistry and play each other better. Hence, in real football several factors are considered when selecting the team composition. As for the Fantasy Premier League however, it's most important to select players that perform well in terms of Fantasy Premier League points. Thus, the chemistry between the players does not have an impact, as the team mainly consists of players that do not play in the same club. In addition, while leadership is important when selecting the captain of a real football line-up, it is meaningless with regards to FPL line-ups, as the captain is chosen according to the player with the highest expected points. Moreover, player skills like stamina, interceptions and passing have a low impact for the points obtained by a FPL player. For instance, N'golo Kant\'e, the winner of the PFA Players' Player of the year award in 2017 \citep{Skysports_Kante}, is considered a hard working midfield anchor. During the 2016-2017 season, Kant\'e earned a total of 83 points in FPL, scoring 1 goal, having 1 assist and awarded with 9 yellow cards. Hence, in terms of FPL points this was a poor season for a world class midfielder. However, his contribution was invaluable for Chelsea as they won the Premier League that season. Thus, although Fantasy Premier League is based upon the performances of real football, there are significant differences in terms of selecting the team. While FPL managers should mainly focus on players that score goals, have assists and keep clean sheets, actual football managers have to ensure that the team is composed with the mix of required and compatible skills \citep{Pantuso}.
+
+
+
+\section{Operations Research in Sports} \label{Opt_Models_for_Fantasy_Sports}
+
+
+In recent years, the development of literature in sport analytics has been rapid. Well known journals in statistics, applied mathematics, operations research and economics have published a great number of articles on this field \citep{Coleman}. In this section three topics are discussed. First, operations research related to sports are discussed. Next, operations research in Fantasy Sports are regarded. Finally, articles which discusses Fantasy Football are presented. 
+
+\newpar
+
+An area of great progress within operations research is called "Sports Scheduling". This field of research contains problems which involve deciding optimal league seasons' schedules for different sports. The arena of sports scheduling has existed for over 40 years, but until recently the number of papers has increased significantly \citep{Kendall}. The adaption of operations research can be explained by the growing complexity of playoff structures, league divisions and opposing demands from constituent teams and other stakeholders.  It's use has been investigated in sports including volleyball (\cite{arg_volleyball}), table-tennis (\cite{Mattfeld}; \cite{Knust}), cricket (\cite{Mwright}), basketball (\cite{Wright}; \cite{van_Voorhis}; \cite{Henz}), baseball (\cite{Trick}), Canadian football (\cite{Kostuk}) and softball (\cite{Saur}). In football, sports scheduling is also prominent. \cite{Bartsch} schedules the professional soccer leagues of Austria and Germany. Besides constraints for inner-league requirements and preferences, the European top soccer leagues also has to take into account constraints related to European Cup matches(Champions League, UEFA Cup). They developed models and applied greedy algorithms and branch and bound which yielded reasonable schedules quickly. It resulted in that the schedules were applied by the professional soccer league in both Austria and Germany. Further, \cite{Della} schedules the Italian football league where the schedules also are balanced with respect to additional cable televisions requirements. Further, Chile is perhaps one of the countries where sports scheduling in football has been most present. Since 2005, the Chilean professional soccer has adopted a scheduling system that is based on an integer linear programming model. \cite{Guajardo} generated schedules that gave teams benefits such as higher incomes, lower cost, higher fan attendance and fairer seasons. Their work was further expanded \citep{Duran}, when they considered challenges for Chile's Second Division soccer league. Similar scheduling problems are also studied in Belgium by  \cite{Goossens} and Denmark by  \cite{Rasmussen}. Finally, \cite{Kendall} addresses the special case of English football fixtures over holiday periods. In England, during the Christmas and New Years period teams can play up to four matches in less than ten days. This paper regards the minimization of the travel distances by English football clubs during this period, and generates schedules which have 25 \% lower total travel distances than the fixtures actually used. 
+
+\newpar
+
+In the world of Fantasy Sports the use of operations research is rather limited. Most of the research focuses on NFL Fantasy Draft, which could partly be explained by more attractive monetary prizes compared to e.g., Fantasy Football leagues. Here optimization models and solution methods have been proposed by \cite{Fry}, \cite{Gibson} and \cite{Becker}. Though Fantasy Premier League and NFL Fantasy Draft are both Fantasy Sports, they are essentially different problems. For instance, in NFL Fantasy Draft leagues only one manager within the league can own a given player - while in FPL this is not a restriction. Furthermore, for every gameweek each manager is matched head to head where the one with highest points wins - a feature that is not present in FPL. The most profound similarity that exists is that in each gameweek a fixed number of players in different roles have to be picked. In addition, decisions on starting line-ups are made. With respect to this, player performance predictions comes in handy. This topic is further discussed in Section \ref{Forecasting_of_future_performance}.
+
+
+\newpar
+
+To our knowledge, there is no operations research literature which explicitly discusses the FPLDP. However, there are articles which could be related. \cite{Mathsports} discuss the common characteristics in Fantasy Sports games, where the common game rules characteristics are the most relevant. They present a mixed integer programming model for finding an optimal set of ex-post decisions in Fantasy Sports games under the assumption that all data are known in advance. The model is tested on a fantasy cycling game with all data known beforehand. Without the gamechips, captain and vice-captain, part of the model can with modification be used for FPLDP. However, including the gamechips increases the complexity and calls for a more sophisticated mathematical model. 
+
+\newpar
+
+\cite{Matthews} were the first to develop a sequential team formation algorithm on Fantasy Premier League. They modelled the Fantasy Team Composition Problem as a belief-sate Markov Decision Problem and solved it using Bayesian Q-learning. Their model produced promising results as it outperformed most human FPL managers. They only modelled the Wildcard gamechip, with the qualitative assessment of the opportunity to play it in the 8th and 23rd gameweek. Although their method did not specifically use operations research, their results motivate the development of analytic tools for the FPLDP. 
+
+\newpar
+
+\cite{Bonomo} presents two optimization models for the Argentinian Fantasy Football. The first model called \textit{a priori} determines line-ups and transfers based on predictions of player points, while the second model called \textit{a posteriori} determines the optimal line-ups with data known beforehand. The results obtained by the \textit{a priori} model positioned within the top 0.2 \% of all managers. They are the first to develop and solve an optimization model for Fantasy Football, and it encourages the use of operations research on this field. The points in the Argentinian Fantasy Football are to a high degree allocated in the same manner as in the English Fantasy Premier League. They are set by both objective statistics (goals, assists, yellow cards and etc.) and subjective statistics determined by a newspaper that are somewhat analogous to the Bonus Points System in FPL. Comparing the optimization model to \cite{Mathsports}, many of the constraints can be related, though adjusted for Fantasy Football. Further, as with the points allocation, the rules in Argentinian Fantasy Football resemble much of the same rules and features of FPL. Nevertheless, there are some major exceptions: 
+
+
+\begin{itemize}
+    \item Gamechips are a feature which is only present in the FPL.  
+    \item Over the run of the season, player values can increase or decrease based on how many managers select them. This opens up the possibility of buying players cheap and selling them expensive to buy better performing players. This is only a feature in FPL.
+    \item The Argentinian Fantasy League allows 4 free transfers in each gameweek, while FPL allocate 1 each gameweek. Further, in FPL, each penalized transfers deducts 4 points. Therefore, a manager in the Argentinian Fantasy Football are to a greater extent guarded from factors such as injury, suspension or players not performing well. A manager in FPL is more exposed to these factors and faces a more difficult choice. It is likely that to do more than one transfer if the decision to make a transfer is first made. Due to the budget restriction there is a reasonable chance that in order to afford a more expensive player, the manager also has to trade to a cheaper player in another position. It is worth noting that it only pays off to take the 4 points hit from an additional transfer if that player in total earns 4 or more points than the player which was transferred out. 
+    \item The decisions regarding captain and vice-captain choices are only featured in FPL. It calls for FPL managers to be even better skilled to pick right players to double their points. 
+\end{itemize}
+
+In general, FPL managers face more decisions and thus an increased level of complexity and uncertainty. 
+
+\newpar
+
+\begin{comment}
+As can seen from the works above, the amount of academic articles on Fantasy Sports are restricted. As for the use of operations research in Fantasy Sports, the number of articles are even fewer and most of the work is concerned NFL Fantasy Draft. As mentioned earlier, this may be due to the big money prices in this game. No academic works were found on the use of operations research on Fantasy Premier League. This thesis is the first to use operations research in Fantasy Premier League, and is solved using forecasting to predict player performance.
+\end{comment}
+ 
+
+\begin{comment}
+- på samme måte at man har en budget limit finnes det også budget constraints i portfolio. 
+- i portfolio kan man investere fraksjoner i assets, mens i FPLDP er valgene binary, enten er spilleren med på laget eller ikke. 
+- en forskjell er også at i FPLDP har man en limit på hvor mange spillere man skal ha totalt, men også en grense på antall spillere i forskjellige roller, mens i portfolje er vanligvis asset classes ikke gitt på forhånd. 
+- risk er et viktig og vanlig aspekt i portfølge optimeringen
+- skrive om daily fantasy sports artikkelen 
+\end{comment}
+
+
+
+\begin{comment}
+
+To this date there are no metrics provided on what is the maximum number of points obtainable so far. By solving a model with perfect information, an upper bound of maximum points is obtained and hence useful in evaluating how skillful FPL managers are.
+
+All the post-analysis of FPL to this date are limited to 
+
+Determining the maximum number of points obtainable with perfect information 
+
+To this date there are no 
+
+- igjen er det som skiller vårt problem fra dette at man må ta et valg på kaptein i hver runde og man har muligheten til å bruke gamechips. Også har man med det at spillere kan stige og minke i pris. Samtidig har man i den argentiske ligaen får man kun 4 gratis bytter i hver runde, mens i FPL får man ett gratis bytte i hver runde og muligheten til å gjøre flere points reducing bytter. "Artikkel om varians" presenterer en modell på drafting decisions i NFL og introduserer varians i modellen som et estimat på risk. Man vil til en viss grad minimere eller sete et treshold på risk i forhold til return i en slik oppgave. 
+
+Dette er et aspekt som ikke er blitt vurdert i Argentinsk liga artikkelen, og  
+
+
+To the best of our knowledge, there has never been developed an optimization model for Fantasy Premier League.
+
+\end{comment}
+\begin{comment}
+
+
+\cite{Fry} define a stochastic dynamic programming model for NFL Fantasy  Draft, focusing on the weekly performance of each player. However, as they state that it is intractable to solve this model by classical solution methods, they suggest an alternative solution approach. By modeling the problem as a dynamic deterministic problem and reducing the sample set of players, they obtain a solution for optimizing a team in the NFL Fantasy Draft. Further, they simplified their model by not considering the actions of the competitors in a NFL Fantasy Draft. A draft Fantasy Sports is quite different from the Fantasy Premier League, as only one manager can own a given player in a draft league. Hence this approach can not be totally applied to FPL. However, as a FPL manager has to make decisions in every gameweek accounting for recent player performance, the dynamic aspect of the model suggested by \cite{Fry} should be considered in this project. 
+
+\newpar
+
+\cite{Gibson} expanded the work of \cite{Fry} by taking account for the competitor's actions. They presented a hybrid metaheuristic for addressing a multi-period stochastic knapsack problem in which the availability of items in future periods is uncertain due to the presence of competitors. This was solved by introducing a beam search algorithm that simulates the actions of the competitors, which are unknown to the decision-makers. As the actions of the competitors does not affect the team selection in Fantasy Premier League, this approach is not considered in this project. 
+
+\newpar
+
+\cite{Matthews} proposed a model for optimization of a Fantasy Premier League team, modelling FPL as a Markov decision problem (MDP). Further, they expanded their model as a belief-state MDP, solving it using Bayesian Q-learning. Their model outperformed multiple FPL managers on predicting the points of a FPL squad over an entire season, as their model finished among the top 20, 000 players for the 2010/2011 season. However, there are lack of information on their approach. The authors were contacted on mail, but without success of gaining more information than provided in the article. Therefore, their model is not considered for this project report. 
+
+\end{comment}
+
+\begin{comment}
+There is limited research available on optimization of a Fantasy Premier League team. However, due to the large amount of active NFL Fantasy Sports players, literature is available for both season- and weekly format. \cite{King} suggested a model for predicting points for the quarterbacks in the NFL, using Backward Stepwise regression and Support Vector regression models in his research. Further, he predicted fantasy points by use of Artificial Neural Networks. Similar approaches can be used in order to predict the performance of the Premier League players.
+\end{comment}
+
+
+\section{Forecasting of Player Performance} \label{Forecasting_of_future_performance}
+
+The ability of predicting future player performances is perhaps the most important skill required in Fantasy Premier League. As stated by \cite{Smith}, fantasy managers have a tendency of ignoring historical statistics when selecting their line-up. Since one aim of this thesis is to compete against human managers in FPL, forecasting of player performance can be of great use. 
+
+\subsection{Individual Player Performance} \label{Forecasting_of_player_performance}
+
+\cite{Yang} predicted the results of the 2016 NBA season by running a least-square linear regression model on players’ individual statistics and the win-ratio of their team, thus predicting the results of the NBA matches based on player performances. The explanatory variables primarily used are well-known statistics such as points scored, assists, rebounds, steals and blocks. These variables were analysed for the past 20 seasons in order to predict the outcome of the upcoming season. In order to evaluate the impact of the players, he assigned each player with a player efficiency rating, a number representing a player’s effectiveness by a single number. A limitation of Yang’s approach is that the data used mainly focuses on offensive contributions, hence good defending players are not valued properly. Although this paper focuses on predicting a team’s performance and not solely player performance, a similar approach may be used in order to predict the performance of individual Premier League players. 
+
+\newpar
+
+\cite{Hvattum_2015} propose a top-down rating model for football players, using a regression model to capture how players perform relative to their teammates and to the opposition. They provide a regression based player rating using  a plus-minus player statistics, measuring the number of goals scored minus the number of goals conceded when a player is used by the team. Further, they discount older observations placing greater emphasis on recent performances. As their model did not sufficiently differentiate between players from different divisions or different league systems, their model was further improved \citep{Hvattum_2017}. The model was extended by adding a factor depending on a player's current league and division. 
+
+\newpar
+
+An approach used for rating the players in the Norwegian Tippeligaen was suggested by \cite{vabo}. They applied a binary logistic regression in order to assign values to shots attempted in football, hence calculating the probability of a shot resulting in a goal scored. In addition, they developed two Markov game models in order to evaluate all players actions, not only the shots. Their analysis are made post-game, thus there is no forecasting of player performance. However, the regression variables used and the idea of valuing players using regression are of great interest.
+
+\newpar
+
+As mentioned in \ref{Opt_Models_for_Fantasy_Sports}, \cite{Bonomo} propose a mathematical model for an Argentinian Fantasy League. In addition to the optimization model, they also provide forecasting of future performance for the individual players. Future points predictions are calculated by taking the average of the past three performances of each particular players. A player's predicted points are further multiplied by four deciding factors related to the upcoming match:
+\begin{itemize}
+    \item 1.05 if the team is playing at home and 0.95 if the team is playing away.
+    \item A value between 0.95 and 1.05, linearly dependent on the position in the league table. The players on the team leading the league are weighted by 1.05, while the players on the team in the bottom of the league are weighted by 0.95.
+    \item 0.95 to 1.05, depending on a performance streak factor.
+    \item A starting line-up factor. This factor is set to 1 for players which have played more than 20 minutes in the $k$ last matches, and 0 if not.
+\end{itemize}
+As the problem of modelling the Argentinian Fantasy League resembles the FPLDP, this approach can be used for the English Fantasy Premier League as well. Thus, the approach is considered later in this thesis. 
+
+\subsection{Rating Football Teams} \label{Strength_of_football_teams} 
+
+A question that arises when one predicts future performance of individual players is the impact of that particular player's team. It is reasonable to assume that a player will perform better if he plays for a top-rated team than for a weaker team. Team strengths has been a hot topic in scoreline prediction for several years. Gamblers try to develop scoreline predictions in order to create realistic odds for upcoming matches, hence trying to beat the bookmakers. In addition to development of profitable gambling, an appropriate scoreline prediction could be of great use when one are to predict the future performance of Premier League players. 
+
+\newpar
+
+\cite{Maher} introduced attacking- and defensive strength parameters for each team in order to develop a model calculating the expected goals scored by both a home and away team, where the amount of goals is modelled as a Poisson distribution. This was further expanded by \cite{Dixon} who were able to calculate probabilities of different scorelines in a given match, by which they created a strategy for profitable gambling. \cite{Rue} suggested that the attacking- and defensive strengths of a team were time-dependent, and updated the strength estimates using Bayesian methods. In order to do so, they used Markov Chain Monte Carlo iterative simulation techniques.
+
+\newpar
+
+Although the approach suggested by \cite{Maher} has been improved over the years, there are other ways of determining the strength of a team. In 1978 the Elo rating was introduced by \cite{Elo}. The rating was initially developed for rating the strength of chess players, but has widely been adopted to different sports, including golf, tennis and football. \cite{Hvattum} used the Elo rating in order to rank teams when predicting match results in football. The ratings appeared to be useful in encoding the information of past results for measuring the strength of a team. However, when used in terms of forecasts it appeared to be considerably less accurate compared to market odds. \cite{vabo} adopted the approach suggested by \cite{Hvattum} for consideration of team strengths as they valued the individual player performance in Norwegian football. In addition, the Elo rating was assessed by \cite{Leitner} along with FIFA/Coca-Cola World Rankings \citep{FIFA} in order to predict the outcome of tournament winners. However, both rating systems were found to be greatly inferior to bookmakers' odds on basis of the outcome of the 2008 Euro Cup results. Hence, it confirms the findings of \cite{Hvattum}. 
+
+\subsection{Home Field Advantage in Football}\label{HomeFieldAdvantage}
+It is no secret that teams have a tendency of performing better when playing at home than when playing away. This topic is of great interest as the effect of home field advantage may play an important role when forecasting the performance of a player for an upcoming match. In the following, academic work on home field advantage in football is presented.
+
+\newpar
+
+\cite{Nevill} identifies likely causes of home field advantage. They discuss four factors thought to be responsible for the home field advantage. These factors are categorized under the general headings of crowds, learning, travel and rule factors. When considering the learning factor, they claimed that the players for the home team were used to play at that particular stadium. There was evidence to suggest that travel factors could be responsible for part of the home field advantage, provided that the journey involved crossing a number of time zones. However, as most of the matches does not require long travels, these factors were not thought to be a major cause of home field advantage. It was evidence that the crowd factors appeared to be the most dominant cause of home field advantage. Finally, rules factors were found to play a minor role in contributing to home field advantage. 
+
+\newpar
+
+\cite{Clarke} used least squares in order to fit a model to the individual match results in English football and found home field advantage effects on club level. Home field advantages were calculated for all teams in the English Football League from 1981-82 to 1990-91, and some reasons for their differences were investigated. Their results showed no division effects, however significant year effects were found. It was evident that teams with special facilities had significantly higher home field advantage, and that London clubs in general had a lower home field advantage. In addition, they found that the home field advantage had more leverage on winning than on goals margin. 
+
+\newpar
+
+\cite{Pollard} analysed over 400,000 sport matches since the start of the main professional sports, including English top division football. They found that the home field advantage in English football decreased from the 1980s to the 2000s. Further, in contrary to \cite{Nevill} they claimed that travel and familiarity contributes to home field advantage, but limited in support of crowd effects. For football, \citep{Pollard} quantified home field advantage as the number of points obtained by the home team expressed as a percentage of all points obtained in all games played. For the English Premier League, they provide results that annual values of home advantage of below 60 \% are not uncommon. 
+
+
+\section{Connections to Existing Literature}\label{Other_Relevant_Research}
+Although this thesis focuses exclusively on optimizing decisions related to Fantasy Premier League, parallels can be drawn to other scientific areas. The Fantasy Premier League Decision Problem shares features with many well-studied problems.  
+
+\newpar
+
+Knapsack problems share several similarities with the FPLDP. A capacity (budget) has to be allocated to items characterized by a weight (cost) and a reward (expected performance). \cite{Kirshner} modelled the problem of selecting free agent players for a NBA squad by using a multiple choice knapsack model. Here, the rewards are measured in terms of the ability of the players, weights as the salaries and the capacity as the NBA teams' salary cap. Furthermore, \cite{Gibson} used a stochastic knapsack problem in order to make team composition decisions regarding player drafts. Ahead of the American sports seasons, teams sign players according to a pick order. Therefore, players become stochastically unavailable over time, depending on the pick decisions of the teams. Thus, they model the draft decisions as a stochastic knapsack problem, where the future availability of the items is considered stochastic. There exist significant differences between the knapsack problem and the FPLDP. First, the FPLDP includes not only adding items to a knapsack, it also involves removing items from the knapsack. This is done in terms of buying and selling players from your selected squad. In addition, removal decisions does not only free space to your knapsack, as it can also yield a reward in terms of increased or lowered budget. This is a result of stochastically changing player prices over time. 
+
+\newpar
+
+Similarities can be found between the FPLDP and staffing problems, where one seek to compose a set of personnel that satisfy the supply and demand of personnel from different categories \citep{Komarudin,Bruecker}. In general, the FPLDP makes decisions in terms of buying and selling players, while staffing problems consider hiring and dismissal of personnel. Although the two problems resemble each other in terms of composing a team, there exist significant differences. For instance, the FPLDP considers players as assets that can increase the value (budget) of the team, and not only as items used to satisfy a demand. Furthermore, \cite{Davis} aim to determine the optimal composition of the pre-hospital medical response team and evaluate the importance of including a doctor to the team. While the there is no distinction between workers in the same category for the staffing problems (e.g. individual nurses are assumed homogeneous), football players are considered heterogeneous. For instance, although defenders are evaluated according to the point system of defenders, several factors have an impact of their expected performance. For example, the team of the player, his opponent team and his ability of scoring a goal, all influence the expected performance of a defender.
+
+\newpar
+
+In capacity renewal problems \citep{Chand,Rajagopalan}, machinery are replaced due to damages over time, improved equipment and changes of production \citep{Hopp,Adkins}. Similarly, players are replaced in the FPLDP, but due to change in expected performance. This can be the result of injuries, suspensions or poor recent performance. However, a significant difference between the problems is that while players are considered assets for maximizing expected points, machinery is considered a necessary item in order to satisfy a demand in an efficient way. Furthermore, in the machinery problems, individual machines are often indistinguishable from one another. Hence, different machines can satisfy the same requirements. For the FPLDP however, players are considered unique as the expected performance is dependent on factors such as teammates, opponents and recent performance.
+
+\newpar
+
+For the long-term vehicle fleet composition \citep{Jabali}, different types of ships are needed in order to perform distribution activities, in which size and mix of fleets are important decision variables. As for the FPLDP, a mix of players are necessary in order to fulfill the formation criteria. Various ships may contain the same characteristics and can hence be used for the same purposes. For the FPLDP however, although two players can be listed with the same purchase price, their performance in terms of expected points can be significantly different. Furthermore, there is by far more uncertainty related to the performance of a football player compared to a ship's ability to satisfy a demand. 
+
+
+
+
+\begin{comment}
+\cite{Bell} studied team composition variables in order to increase team performance. The results of the meta-analysis performed can be used to effectively compose teams in organizations. \cite{Davis} aim to determine the optimal composition of the pre-hospital medical response team and evaluate the importance of including a doctor to the team. \cite{Jabali} present a continuous approximation model to determine the long-term vehicle fleet composition needed to perform distribution activities, in which fleet size and mix of fleets are important decision variables.  These problems resembles the Fantasy Team problem as similar decisions arise when one are to decide which formation one should use in addition to the mix of players. 
+\end{comment}
+
+
+
+
+\newpar
+
+Finally, there is a large correspondence between FPLDP and portfolio optimization problems (see, e.g., \cite{Markowitz}, \cite{Zenios} and \cite{Speranza}). The FPLDP can be interpret as the problem of investing in a number of assets (football players) with stochastic returns in order to maximize total return (the total number of points). Furthermore, the budget limit in FPLDP can be seen as a budget constraint in portfolio optimization. However, in the FPLDP the decisions are binary (a player is either bought or not) while in portfolio optimization fractions of wealth are allocated to different assets. Moreover, the fixed number of assets (players) in FPLDP resemble cardinality-constrained portfolio optimization problems \citep{Chang}. Additionally, while the formation criteria in the FPLDP gives a fixed number of players in each role, cardinality-constrained portfolio optimization problems may impose a minimum or maximum proportion of wealth to be allocated on certain class of assets. Finally, variance in returns is a well known measure of risk in portfolio optimization problems. For the FPLDP, variance can be regarded in a similar manner in order to model the uncertainty in future player performances. \cite{Dailyfantasysports} optimize the expected payout of a tiered Daily NFL Fantasy Sports by using a stochastic integer program. Here variance in points obtained is used as a measure of risk.
+
+
+
+\section{Our Contribution}
+As discussed in this literature review, the FPLDP shares similarities with many well-studied optimization problems. Moreover, several optimization models have been suggested for football team composition as well as for Fantasy Sports. However, to authors' knowledge, this is the first mathematical model suggested for the Fantasy Premier League. Further, we have developed the first optimization driven framework that can compete on the same terms as human FPL managers. Additionally, it is the first study on optimal FPL decisions made post season, yielding information about optimal ex-post decisions. Finally, the analogy between FPL and portfolio optimization has never been considered in terms of FPL decisions. 
+
+
+
+
+
