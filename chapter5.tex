@@ -99,7 +99,7 @@ Rolling horizon is an appropriate solution method for FPLDP as managers are prov
 
 \newpar
 
-In the rolling horizon heuristic, each sub-problem is solved over shorter sub-horizons for the whole season. This corresponds well to the FPLDP, as FPL managers often consider several gameweeks when making decisions. Each sub-horizon is split in two time periods ($TP$). The two \textit{TP}s are $TP_t^{C}$, which is the central period that will be implemented in sub-problem $t$, and the forecasting period $TP_t^{F}$. Before solving sub-problem $t+1$, variables $x$, $v$ and $q$ are frozen and used as input. The sub-horizon is shifted so that the first part of $TP_t^{F}$ becomes $TP_{t+1}^{C}$. If the central period and the forecasting period have equal length, the forecasting period becomes the new central period. 
+In the rolling horizon heuristic, each sub-problem is solved over shorter sub-horizons for the whole season. This corresponds well to the FPLDP, as FPL managers often consider several gameweeks when making decisions. Each sub-horizon is split in two time periods ($TP$). The two \textit{TP}s are $TP_k^{C}$, which is the central period that will be implemented in sub-problem $k$, and the forecasting period $TP_k^{F}$. Before solving sub-problem $k+1$, variables $x$, $v$ and $q$ are frozen and used as input. The sub-horizon is shifted so that the first part of $TP_k^{F}$ becomes $TP_{k+1}^{C}$. If the central period and the forecasting period have equal length, the forecasting period becomes the new central period. 
 
 \begin{itemize}
     \item \textbf{Fixed period (FP)}. A gameweek where decisions have been implemented and are fixed for the next sub-problem. These decisions are the players that are selected in a gameweek, $x$, the remaining budget variable, $v$, and the number of free transfers available, $q$.
@@ -125,40 +125,23 @@ An important decision is that of determining the length of the sub-horizon. Idea
 By including forecasting, gamechip strategies and variance, we have arrived at a \textit{forecast-based optimization model} for the Fantasy Premier League Decisions Problem. Algorithm \ref{alg:forecast_based_opt_model} gives a pseudo code for the forecast-based optimization model.
 
 
-\begin{comment}
-
-\textbf{Description of the forecast-based optimization model}
-
-\textit{Step 1}. For the set of gameweeks in the sub-horizon:  generate forecasts of players' expected points, calculate empirical variance and correlation. 
-\newline
-\textit{Step 2}. Check if gameweek in sub-horizon is \textit{double} or \textit{blank}. If yes, implement gamechip strategy. 
-\newline
-\textit{Step 3}. If gameweek 8-12 is in sub-horizon, implement Wildcard as stated in gamechip strategy. 
-\newline
-\textit{Step 4}. Run the mathematical model over sub-horizon with input data from step 1. 
-\newline
-\textit{Step 5}. Acquire new and updated information such as realized points, injuries and suspensions for current gameweek, and go to step 1 and solve for for next sub-problem where you fix $x$, $v$ and $q$ from solution of previous sub-problem. Continue until $\mathcal{T}$ sub-problems are solved.
-
-\end{comment}
-
-
-
 \newpar
 
 \begin{algorithm}
 \setstretch{1.35}
 \caption{Forecast-based optimization model}
 \begin{algorithmic}
-\State{$t$ = 0} 
-\While{($t = t+1$) $\leq$ $\mathcal{|T|}$}
-    \State{Generate input data: expected points, variance and correlation for $TP_{t}^{C}$ and $TP_{t}^{F}$}
-    \If{a gameweek in $TP_{t}^{F}$ is \textit{double} or \textit{blank}}
+\State{$k$ = 1} 
+\While{$k$ $\leq$ $\mathcal{|T|}$}
+    \State{Generate input data: expected points, variance and correlation for $TP_{k}^{C}$ and $TP_{k}^{F}$}
+    \If{a gameweek in $TP_{k}^{F}$ is \textit{double} or \textit{blank}}
         \State{Implement gamechip strategy}
-    \ElsIf{a gameweek in $TP_{t}^{F}$ according to Wildcard strategy}
+    \ElsIf{a gameweek in $TP_{k}^{F}$ according to Wildcard strategy}
         \State{Implement Wildcard strategy}
     \EndIf
-    \State{Solve the mathematical model for the problem defined by $TP^{C}_{t}$ and $TP^{F}_{t}$}
-    \State{Fix variables $x_{pt}$, $v_{t}$ and $q_{t}$ in central period $TP^{C}_{t}$}
+    \State{Solve the mathematical model for the problem defined by $TP^{C}_{k}$ and $TP^{F}_{k}$}
+    \State{Fix variables $x$, $v$ and $q$ in central period $TP^{C}_{k}$}
+    \State{  $k \gets k + 1$}
 \EndWhile
 \end{algorithmic}
 \label{alg:forecast_based_opt_model}

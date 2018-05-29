@@ -87,11 +87,13 @@ Table \ref{tab:computational_statistics} displays the problem size of FPLDP with
 
 \begin{table}[H]
 \centering
-\begin{tabular}{@{}llll@{}}
+\begin{tabular}{@{}lll@{}}
 \toprule
-                            & Rows(Constraints)    & Columns(Variables) & Elements \\ \midrule
-Original Problem Statistics & 172 034 & 254 425  & 1 052 715  \\
-Xpress Presolve Statistics  & 170 750 & 206 689  & 891 995   \\ \bottomrule
+                            & Rows(Constraints)    & Columns(Variables) 
+                            \\ \midrule
+Original Problem Statistics & 172 034 & 254 425   \\
+Xpress Presolve Statistics  & 170 750 & 206 689   \\ 
+\bottomrule
 \end{tabular}
 \caption{Problem size of the model run with realized points.}
 \label{tab:computational_statistics}
@@ -100,7 +102,7 @@ Xpress Presolve Statistics  & 170 750 & 206 689  & 891 995   \\ \bottomrule
 
 \subsection{Results of running the model with realized points}
 
-\textit{Here we think to have the gap and the justify the decision of stupping the model after for example 10 000 seconds.}
+\textit{Here we think to have the gap and the justify the decision of stopping the model after for example 10 000 seconds.}
 
 \subsection{Performance in Fantasy Premier League}
 In the following we provide the results for the model introduced in chapter \ref{chapter_model_formulation} when solved with realized points, i.e. with perfect information. Figure \ref{Figure_Realized_points} gives an overview of how many points the model obtained in each gameweek. The coloured dots represents gameweeks where the gamechips were used. 
@@ -181,7 +183,7 @@ As observed, it is an enormous difference between the optimal solution strategy 
  
 
 
-\section{Forecast based solution}\label{sec:inexact}
+\section{Forecast-based solutions}\label{sec:inexact}
 
 \begin{comment}
 \begin{enumerate}
@@ -196,9 +198,9 @@ In this section we present the computational results for the 3 different forecas
 
 \newpage
 
-\subsection{Disregarding gamechips}
+\subsection{Comparison of Solution Methods Disregarding Gamechips}
 
-In Figure \ref{fig:res_comp_dis_gamechips} and Table \ref{tab:res_dis_gamechips} we present the results of the different solution methods. Notice, that for the odds method we have presented results for both 28 and 30 gameweeks. This is due to the fact that two of the gameweeks were missing odds for several matches. Hence, these gameweeks were not representable for the solution method.  
+In Figure \ref{fig:res_comp_dis_gamechips} and Table \ref{tab:res_dis_gamechips} we present the results of the different solution methods. Notice, that for the odds method we have presented results for both 28 and 30 gameweeks. This is due to the fact that two of the gameweeks were missing odds for 2 gameweeks. Hence, these gameweeks were not representable for the solution method.
 
 \begin{figure}[H]
     \centering
@@ -209,28 +211,69 @@ In Figure \ref{fig:res_comp_dis_gamechips} and Table \ref{tab:res_dis_gamechips}
 
 \begin{table}[H]
 \centering
-\begin{tabular}{|l|l|l|l|}
+\begin{tabular}{|l|c|c|c|c|}
 \hline
-Solution method     & Total points & Mean  & Overall ranking \\
+Solution method     & Total points & Mean  & Overall ranking & Average transfers \\
 \hline
-Modified Average    & 1916         & 54.74 & Top 8\%         \\
-Regression          & 1765         & 50.43 & Top 30\%        \\
-Odds (30 gameweeks) & 1331         & 44.37 & Top 58\%        \\
-Odds (28 gameweeks) & 1320         & 47.14 & Top 47\%        \\
+Modified Average    & 1916         & 54.74 & Top 8\%   & 0.23       \\
+Regression          & 1765         & 50.43 & Top 30\%  & 1.80      \\
+Odds (30 gameweeks) & 1331         & 44.37 & Top 58\%  &
+...\\
+Odds (28 gameweeks) & 1320         & 47.14 & Top 47\%  &
+...\\
 \hline
 \end{tabular}
 \caption{Results disregarding gamechips}
 \label{tab:res_dis_gamechips}
 \end{table}
 
-As we only have data for 30 gameweeks for the Odds method, comparisons are made in terms of mean points obtained when considering the overall rankings. From Table \ref{tab:res_dis_gamechips} we see that the Modified Average greatly outperforms the two other solution methods over the entire season when gamechips are disregarded. Moreover, the Regression method yield significant better results than the Odds method. However, from Figure \ref{fig:res_comp_dis_gamechips} it is evident that the Odds method performs better than the two other methods in the first 4 gameweeks. Furthermore, its performance varies significantly during the first half of the season. As for the Modified Average, its performance increases in the third gameweek. From that point on, the performance stabilizes until gameweek 17, where it increases heavily. Throughout the rest of the season, the Modified Average's performance is greatly improved, reaching scores above 80 points in diverse gameweeks. From Figure \ref{fig:res_comp_dis_gamechips} its observable that the performance of the Regression method is very weak in the first third of the season. However, it tends to increase over the length of the season.  
+As we only have data for 30 gameweeks for the Odds method, comparisons are made in terms of mean points obtained when considering the overall rankings. From Table \ref{tab:res_dis_gamechips} we see that the Modified Average greatly outperforms the two other solution methods over the entire season when gamechips are disregarded. Moreover, the Regression method yield significant better results than the Odds method. 
+
+\begin{comment}
+However, from Figure \ref{fig:res_comp_dis_gamechips} it is evident that the Odds method performs better than the two other methods in the first 4 gameweeks. Furthermore, its performance varies significantly during the first half of the season. Note that the odds obtains negative points in gameweek 7 and 13. These were the gameweeks where odds data were missing. As for the Modified Average, its performance increases in the third gameweek. From that point on, the performance stabilizes until gameweek 17, where it increases heavily. Throughout the rest of the season, the Modified Average's performance is greatly improved, reaching scores above 80 points in diverse gameweeks. From Figure \ref{fig:res_comp_dis_gamechips} its observable that the performance of the Regression method is very weak in the first third of the season. However, it tends to increase over the length of the season.
+\end{comment}
+ 
+
+\subsubsection{Modified Average}
+The Modified Average reaches a total score of 1916 points in the first 35 gameweeks, yielding a mean of 54.74 points per week. In terms of the overall FPL ranking, the Modified Average finishes among the top 8\% of the managers. 
+\newpar
+From Figure \ref{fig:res_comp_dis_gamechips}, it is evidence that the Modified Average performs poorly in the first two gameweeks. First, one can argue that the model perform poorly in the first gameweek as it picks Gary Cahill and Cesc Fabregas, who both received a red card in the first gameweek.  With Cahill selected as captain, they deducted a total of -7 points. Further, the weak performance is a result of poor forecast for the first two rounds. Hence, players that performed well in the previous season had a rather weak start of this season. In fact, from the previous season’s dream team, i.e.  the 11 players that collected most points, only one of them had a score above two points in the first gameweek. In addition, one can argue that the poor performance in the first gameweeks is due to exclusion of players that were transferred to Premier League ahead of the season. Hence, players like Mohamed Salah, Alvaro Morataand Alexandre Lacazette were not included in the first gameweek. 
+\newpar
+It is observable that the weekly results tend to stabilize from gameweek 3 to gameweek 18. This can be due to forecasts that now include the realized points from previous gameweeks in the 2017/2018 season. Hence, it is able to select the players who had a good start to the season. In addition, the transferred players from outside Premier League, including the newly promoted teams, are now included to the model. 
+\newpar
+In the second half of the season, from gameweek 19 to gameweek 35, the Modified Average improves its performance compared to that in the first half of the season. Again, this is due to enhanced forecasts, being able to capture which players that are in a good form. Moreover, the performances tend to fluctuate in the second half of the season. One of the reasons is due to blank and double gameweeks. Additionally, football is a sport with high uncertainty. Player performances are hard to predict, as factors such as opponents, home field advantage and after all luck affects the performances.  
+
+
+\subsubsection{Regression}
+
+As seen from Table \ref{tab:res_dis_gamechips} the regression method earns an average of 50.43 points for the 2017/2018 season, thus achieving a place among the top 30\% of managers. The method appears to display a higher variance than the other methods, with both higer tops and lower bottoms. Without gamechips, the method is outperformed by the average method by a substantial margin, but beat the odds method with an approximately equivalent margin. 
+
+\newpar
+
+The weakest realizations are obtained in the beginning of the season. This is perhaps explained by the fact the each player is listed with 0 on variables such as goals, assists,  saves etc, making it hard to distinguish the players from one-another. Also, data for the newly promoted teams are sparse, limiting the possibilities. Also, it earns the highest realization for a unique gamweek in gameweek 20, earning 114 points.  
+
+\subsubsection{Odds}
+
+The odds method performs worst of the three methods, earning an average of 47.14 points when excluding gameweek 7 and 14. However, it compets fairly well in the first gameweeks. The missing data will have a huge impact as the teams selected for these rounds are carried forwards
 
 \subsubsection{Discussion}
 
+\begin{itemize}
+    \item Regresjon ser ut til å variere mer
+    \item Odds gjør det best helt i begynnelsen. Further research: kan brueks som variabel i regresjonen
+    \item Skal vi ha med noe om illegal transfers, budget etc?
+\end{itemize}
+
+
+
+
 \subsubsection{Comparing Modified Average with the solution suggested by \cite{Bonomo}}
 
-\subsection{Including gamechips}
+From the Figure, it is clear that the Modified average performs best. However, one should be careful not to draw too categorical statements about the two methods. The Argentinan league does not penalize transfers. Therefore, the basis for comparison is somewhat compromised.  
 
+\subsection{Comparison of Solution Methods Including Gamechips}
+
+Here, we present a comparison when gamechips are used. First, we compare the 5 different time-series. Then. we compare each method with and without gamechips. In Figure \ref{fig:res_comp_gamechips} we compare with gamechips.
 
 \begin{table}[H]
 \centering
@@ -249,11 +292,6 @@ Odds (28 gameweeks) & 1401         & 50.04 & Top 31\%        \\
 \end{table}
 
 
-
-\subsection{With gamechips}
-
-Here, we present a comparison when gamechips are used. First, we compare the 5 different time-series. Then. we compare each method with and without gamechips. In Figure \ref{fig:res_comp_gamechips} we compare with gamechips.
-
 \begin{figure}[H]
     \centering
     \includegraphics[scale=0.5]{fig/chapter_7/comparison_methods_gc.png}
@@ -261,6 +299,16 @@ Here, we present a comparison when gamechips are used. First, we compare the 5 d
 \label{fig:res_comp_gamechips}    
 \end{figure}
 
+\subsubsection{Modified Average}
+
+\subsubsection{Regression}
+
+\subsubsection{Odds}
+
+\subsubsection{}
+
+
+\begin{comment}
 \subsection{Average} \label{Average_results}
 In the following we present the results from the average solution approach suggested in section \ref{Player_Performance}. First, we provide results of the improved average method, considering both the case when including and disregarding the gamechips. Thereafter, we compare the best results to the ones obtained by the human Fantasy Premier League managers. Finally, we compare the results from the improved average approach to the one suggested by \cite{Bonomo}.
 
@@ -332,6 +380,9 @@ Finally, we see that the wildcard and the bench boost in gameweek 33 and 34 resp
 \newpar
 In order to conclude the discussion above, one can argue that the first wildcard had a severe negative impact in the first half of the season. However, as mentioned above there is a high uncertainty related to football, one can never ensure that your prediction is correct. 
 As for the triple captain and the bench boost chips, they should not have a negative effect if the starting line-up is held constant over the season. Well, one can argue that the captain can receive a red card or that the players on the bench earn negative points, but the probability of this negligible. 
+\end{comment}
+
+
 
 \begin{comment}
 
@@ -368,8 +419,7 @@ forklare minst og høyeste antall illegal transfers og referere til appendiks.
 graf 1: poeng hver runde, average for hver runde i selve spillet, når gamechippene brukes,
  \end{comment}
 
-
-
+\begin{comment}
 \newpage
 \subsection{Regression Model}
 With the solution approach using a linear regression, our model obtain an average score of 49.22 points in the first 35 gameweeks. With this average, the model perform among the top 36\% on the FPL overall ranking. Figure \ref{Regression_results} provide the score for each gameweek compared to the mean of 49.22 points. 
@@ -404,6 +454,9 @@ A comparison of the results from the regression approach to the human average pe
 As expected from figure \ref{Regression_results}, the model is outperformed by the average human managers in the first gameweeks. This is as mentioned due to the frequently usage of illegal transfers. In the first 9 gameweeks, the average managers outperform the model by a total of 133 points. However, over the entire season (35 gameweeks in this case) the model outperforms the average managers by a total of 24 points, which is considered to be a good result considering the poor start of the season. As we reach gameweek 17, the model outperforms the average managers in 14 of the remaining 19 gameweeks. Firstly, this is due to the model adopting which players that have performed best over the season. Secondly, the decrease of illegal transfers is an important factor. However, it has to be mentioned that as time goes by some human managers tend to quit playing FPL as a result of a bad start. Hence, it is likely that the average would have been slightly higher if some managers did not quit during the season. 
 
 \subsection{Odds}
+
+\end{comment}
+
 
 
 \subsection{Summary}
@@ -504,6 +557,35 @@ In the end, it is interesting to investigate how different the teams actually ar
     \item 
 \end{enumerate}
 Remember: similar to efficient frontier with expected points
+
+\begin{table}[H]
+\centering
+\begin{tabular}{@{}lll@{}}
+\toprule
+$\sigma^2$ & Expected Points GW1 & Computational Time \\ \midrule
+$10^2$       & 318.84              & 919.085            \\
+$15^2$       & 319.619             & 1005.57            \\
+$20^2$       & 323.391             & 848.809            \\
+$25^2$       & 327.164             & 685.687            \\
+$30^2$       & 327.445             & 590.303            \\
+$35^2$      & 329.316             & 629.958            \\
+$40^2$      & 335.164             & 105.532            \\
+$45^2$      & 335.475             & 102.61             \\
+$50^2$      & 335.475             & 103.023            \\
+$55^2$      & 335.475             & 94.686             \\
+$60^2$      & 335.475             & 86.712             \\
+$65^2$      & 335.475             & 65.378             \\
+$70^2$      & 335.475             & 102.856            \\
+$75^2$      & 335.475             & 169.981            \\
+$80^2$      & 335.475             & 118.392            \\
+$85^2$      & 335.475             & 111.9              \\
+$90^2$      & 335.475             & 128.027            \\
+$95^2$      & 335.475             & 114.051            \\
+$100^2$     & 335.475             & 109.042            \\ \bottomrule
+\end{tabular}
+\caption{Expected points GW1 run with different thresholds}
+\label{tab: threshold_expected_points_gw1}
+\end{table}
 
 \begin{comment}
 - man skal forvente at man oppnår efficient frontier når man plotter threshold opp mot expected value 
