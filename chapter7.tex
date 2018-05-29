@@ -182,32 +182,84 @@ As observed, it is an enormous difference between the optimal solution strategy 
 
 
 \section{Forecast based solution}\label{sec:inexact}
+
+\begin{comment}
 \begin{enumerate}
     \item all the gamechips are explained before this chapter. the implementation of the gamechips do not change in each forecasting method. 
     \item a parameter study on the average method for horizon, penalty and obj.value on average forecasts on season 2016. This has been done before computational study. Suggestion figure: matrix for horizon and penalty, with green = good obj value, red = bad obj value
     \item  the decision on the threshold(risk) is explained in Experimental setup method. 
 \end{enumerate}
+\end{comment}
+
 
 In this section we present the computational results for the 3 different forecasting methods. In order to evaluate the results, we compare the results with the performance of the best overall manager and the weekly average among all players. First, we present the performance of the 3 different methods where gamechips are disregarded. Then, we compare the performance of each method with the top manager and the weekly average when gamechips are included.  
 
-\subsubsection{Disregarding gamechips}
+\newpage
 
-In Figure \ref{fig:comp_method} we compare the different methods. 
+\subsection{Disregarding gamechips}
+
+In Figure \ref{fig:res_comp_dis_gamechips} and Table \ref{tab:res_dis_gamechips} we present the results of the different solution methods. Notice, that for the odds method we have presented results for both 28 and 30 gameweeks. This is due to the fact that two of the gameweeks were missing odds for several matches. Hence, these gameweeks were not representable for the solution method.  
 
 \begin{figure}[H]
     \centering
     \includegraphics[scale=0.5]{fig/chapter_7/comparison_methods.png}
     \caption{Comparing performance.}
-\label{fig:comp_method}    
+\label{fig:res_comp_dis_gamechips}    
 \end{figure}
+
+\begin{table}[H]
+\centering
+\begin{tabular}{|l|l|l|l|}
+\hline
+Solution method     & Total points & Mean  & Overall ranking \\
+\hline
+Modified Average    & 1916         & 54.74 & Top 8\%         \\
+Regression          & 1765         & 50.43 & Top 30\%        \\
+Odds (30 gameweeks) & 1331         & 44.37 & Top 58\%        \\
+Odds (28 gameweeks) & 1320         & 47.14 & Top 47\%        \\
+\hline
+\end{tabular}
+\caption{Results disregarding gamechips}
+\label{tab:res_dis_gamechips}
+\end{table}
+
+As we only have data for 30 gameweeks for the Odds method, comparisons are made in terms of mean points obtained when considering the overall rankings. From Table \ref{tab:res_dis_gamechips} we see that the Modified Average greatly outperforms the two other solution methods over the entire season when gamechips are disregarded. Moreover, the Regression method yield significant better results than the Odds method. However, from Figure \ref{fig:res_comp_dis_gamechips} it is evident that the Odds method performs better than the two other methods in the first 4 gameweeks. Furthermore, its performance varies significantly during the first half of the season. As for the Modified Average, its performance increases in the third gameweek. From that point on, the performance stabilizes until gameweek 17, where it increases heavily. Throughout the rest of the season, the Modified Average's performance is greatly improved, reaching scores above 80 points in diverse gameweeks. From Figure \ref{fig:res_comp_dis_gamechips} its observable that the performance of the Regression method is very weak in the first third of the season. However, it tends to increase over the length of the season.  
+
+\subsubsection{Discussion}
 
 \subsubsection{Comparing Modified Average with the solution suggested by \cite{Bonomo}}
 
-We see that our performance is better.\\
+\subsection{Including gamechips}
+
+
+\begin{table}[H]
+\centering
+\begin{tabular}{|l|l|l|l|}
+\hline
+Solution method     & Total points & Mean  & Overall ranking \\
+\hline
+Modified Average    & 1881         & 53.74 & Top 12\%        \\
+Regression          & 1889         & 53.97 & Top 11\%        \\
+Odds (30 gameweeks) & 1417         & 47.23 & Top 46\%        \\
+Odds (28 gameweeks) & 1401         & 50.04 & Top 31\%        \\
+\hline
+\end{tabular}
+\caption{Results including gamechips}
+\label{tab:res_incl_gamechips}
+\end{table}
 
 
 
+\subsection{With gamechips}
 
+Here, we present a comparison when gamechips are used. First, we compare the 5 different time-series. Then. we compare each method with and without gamechips. In Figure \ref{fig:res_comp_gamechips} we compare with gamechips.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[scale=0.5]{fig/chapter_7/comparison_methods_gc.png}
+    \caption{Comparing performance with gamechips.}
+\label{fig:res_comp_gamechips}    
+\end{figure}
 
 \subsection{Average} \label{Average_results}
 In the following we present the results from the average solution approach suggested in section \ref{Player_Performance}. First, we provide results of the improved average method, considering both the case when including and disregarding the gamechips. Thereafter, we compare the best results to the ones obtained by the human Fantasy Premier League managers. Finally, we compare the results from the improved average approach to the one suggested by \cite{Bonomo}.
