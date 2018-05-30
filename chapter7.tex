@@ -254,8 +254,12 @@ The weakest realizations are obtained in the beginning of the season. This is pe
 
 \subsubsection{Odds}
 
-The odds method performs worst of the three methods, earning an average of 47.14 points when excluding gameweek 7 and 14. However, it compets fairly well in the first gameweeks. The missing data will have a huge impact as the teams selected for these rounds are carried forwards
+The odds method performs worst of the three methods, earning an average of 47.14 points when excluding gameweek 7 and 14. However, it competes fairly well in the first gameweeks. The missing data have a huge impact on the overall points obtained. As the sub-horizon is automatically set to 1, the model performs 10 penalized transfers ahead of gameweek 7, accounting for the missing match odds. Hence, the team selected in this round is carried forwards for the upcoming gameweeks. The same applies to gameweek 14. 
+\newpar
+In general, the Odds method 
 
+
+as the teams selected for these rounds are carried forwards for the upcoming gameweeks.
 \begin{comment}
 \subsubsection{Discussion}
 
@@ -284,12 +288,12 @@ Here, we present a comparison when gamechips are used. First, we compare the 5 d
 \hline
 Solution method     & Total points & Mean  & Overall ranking & Average transfers\\
 \hline
-Modified Average    & 1881         & 53.74 & Top 12\%   &     \\
-Regression          & 1889         & 53.97 & Top 11\%   &     \\
-Odds (30 gameweeks) & 1417         & 47.23 & Top 46\%   &    \\
-Odds (28 gameweeks) & 1401         & 50.04 & Top 31\%   &     \\
+Modified Average    & 1881         & 53.74 & Top 12\%   &  0.23   \\
+Regression          & 1889         & 53.97 & Top 11\%   &  1.03   \\
+Odds (30 gameweeks) & 1417         & 47.23 & Top 46\%   & 0.80   \\
+Odds (28 gameweeks) & 1401         & 50.04 & Top 31\%   &  0.29   \\
 Weekly Average      &           &       &               &  \\
-Top Manager & & & & \\
+Top Manager         & 2329      & 66.54     & Top 1 ‰   & \\
 \hline
 \end{tabular}
 \caption{Results including gamechips}
@@ -307,7 +311,7 @@ Top Manager & & & & \\
 \begin{figure}[H]
     \centering
     \includegraphics[scale=0.5]{fig/chapter_7/top_mean.png}
-    \caption{Comparing performance with gamechips for each solution.}
+    \caption{Comparing performance with gamechips with weekly average and top manager.}
 \label{fig:top_mean}    
 \end{figure}
 
