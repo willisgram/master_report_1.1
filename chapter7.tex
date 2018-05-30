@@ -275,7 +275,14 @@ In general, the Odds method has a disadvantage as the teams selected for these r
 
 \subsubsection{Comparing Modified Average with the solution suggested by \cite{Bonomo}}
 
-From the Figure, it is clear that the Modified average performs best. However, one should be careful not to draw too categorical statements about the two methods. The Argentinan league does not penalize transfers. Therefore, the basis for comparison is somewhat compromised.  
+From the Figure \ref{fig:avg_vs_bon}, it is clear that the Modified average performs best. However, one should be careful not to draw too categorical statements about the two methods. The Argentinan league does not penalize transfers. Therefore, the basis for comparison is somewhat compromised.  
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[scale=0.5]{fig/chapter_7/bon_gc_no_gc.png}
+    \caption{Comparing performance of Modified Average with the solution approach suggested by \citep{Bonomo}.}
+\label{fig:avg_vs_bon}    
+\end{figure}
 
 \subsection{Comparison of Solution Methods Including Gamechips}
 
@@ -350,6 +357,8 @@ We see that the the top manager is under weekly average a couple of times.
 \end{figure}
 
 \subsubsection{Discussion - effect of gamechips}
+Firstly, it is important to note that no robous statements can be made due to the lack of data. However, some insightful observations can be made. It is for instance worth noting that one of the methods perform worse with the gamechips. 
+
 \textit{Here, a summarizing discussion will come}
 
 
@@ -612,25 +621,43 @@ In the end, it is interesting to investigate how different the teams actually ar
 \toprule
 $\sigma^2$ & Expected Points GW1 & Computational Time (seconds) \\ \midrule
 $5^2$       & 314.185              & 315.917            \\
-
-$10^2$       & 318.84              & 919.085            \\
-$15^2$       & 319.619             & 1005.57            \\
+$7.5^2$     & 317.951             & 207.44             \\
+$10^2$      & 318.84              & 919.085            \\
+$12.5^2$    & 318.759             & 140.888            \\
+$15^2$      & 319.619             & 1005.57            \\
+$17.5^2$    & 322.155             & 183.62             \\
 $20^2$       & 323.391             & 848.809            \\
+$22.5^2$ & 324.712             & 103.374            \\
 $25^2$       & 327.164             & 685.687            \\
+$27.5^2$& 325.11              & 140.167            \\
 $30^2$       & 327.445             & 590.303            \\
+$32.5^2$     & 330.43              & 116.318            \\
 $35^2$      & 329.316             & 629.958            \\
+$37.5^2$     & 333.1               & 82.781             \\
 $40^2$      & 335.164             & 105.532            \\
+$42.5^2$    & 335.475             & 27.688             \\
 $45^2$      & 335.475             & 102.61             \\
+$47.5^2$    & 335.475             & 27.403             \\
 $50^2$      & 335.475             & 103.023            \\
+$52.5^2$    & 335.475             & 27.621             \\
 $55^2$      & 335.475             & 94.686             \\
+$57.5^2$     & 335.475             & 27.382             \\
 $60^2$      & 335.475             & 86.712             \\
+$62.5^2$     & 335.475             & 27.5               \\
 $65^2$      & 335.475             & 65.378             \\
+$67.5^2$    & 335.475             & 21.747             \\
 $70^2$      & 335.475             & 102.856            \\
+$72.5^2$     & 335.475             & 27.775             \\
 $75^2$      & 335.475             & 169.981            \\
+$77.5^2$    & 335.475             & 27.752             \\
 $80^2$      & 335.475             & 118.392            \\
+$82.5^2$    & 335.475             & 27.619             \\
 $85^2$      & 335.475             & 111.9              \\
+$87.5^2$    & 335.475             & 27.589             \\
 $90^2$      & 335.475             & 128.027            \\
+$92.5^2$    & 335.475             & 27.612             \\
 $95^2$      & 335.475             & 114.051            \\
+$97.5^2$    & 335.475             & 27.627             \\
 $100^2$     & 335.475             & 109.042            \\ \bottomrule
 \end{tabular}
 \caption{Expected points GW1 run with different thresholds}
