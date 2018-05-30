@@ -213,7 +213,7 @@ In Figure \ref{fig:res_comp_dis_gamechips} and Table \ref{tab:res_dis_gamechips}
 \centering
 \begin{tabular}{|l|c|c|c|c|}
 \hline
-Solution method     & Total points & Mean  & Overall ranking & Average transfers \\
+Solution method     & Total points & Mean  & Overall ranking & Average penalized transfers \\
 \hline
 Modified Average    & 1916         & 54.74 & Top 8\%   & 0.23       \\
 Regression          & 1765         & 50.43 & Top 30\%  & 1.80      \\
@@ -237,7 +237,7 @@ However, from Figure \ref{fig:res_comp_dis_gamechips} it is evident that the Odd
 \subsubsection{Modified Average}
 The Modified Average reaches a total score of 1916 points in the first 35 gameweeks, yielding a mean of 54.74 points per week. In terms of the overall FPL ranking, the Modified Average finishes among the top 8\% of the managers. 
 \newpar
-From Figure \ref{fig:res_comp_dis_gamechips}, it is evidence that the Modified Average performs poorly in the first two gameweeks. First, one can argue that the model perform poorly in the first gameweek as it picks Gary Cahill and Cesc Fabregas, who both received a red card in the first gameweek.  With Cahill selected as captain, they deducted a total of -7 points. Further, the weak performance is a result of poor forecast for the first two rounds. Hence, players that performed well in the previous season had a rather weak start of this season. In fact, from the previous season’s dream team, i.e.  the 11 players that collected most points, only one of them had a score above two points in the first gameweek. In addition, one can argue that the poor performance in the first gameweeks is due to exclusion of players that were transferred to Premier League ahead of the season. Hence, players like Mohamed Salah, Alvaro Morataand Alexandre Lacazette were not included in the first gameweek. 
+From Figure \ref{fig:res_comp_dis_gamechips}, it is evidence that the Modified Average performs poorly in the first two gameweeks. First, one can argue that the model perform poorly in the first gameweek as it picks Gary Cahill and Cesc Fabregas, who both received a red card in the first gameweek.  With Cahill selected as captain, they deducted a total of -7 points. Further, the weak performance is a result of poor forecast for the first two rounds. Hence, players that performed well in the previous season had a rather weak start of this season. In fact, from the previous season’s dream team, i.e.  the 11 players that collected most points, only one of them had a score above two points in the first gameweek. In addition, one can argue that the poor performance in the first gameweeks is due to exclusion of players that were transferred to Premier League ahead of the season. Hence, players like Mohamed Salah, Alvaro Morataand Alexandre Lacazette were not included in the first gameweek.
 \newpar
 It is observable that the weekly results tend to stabilize from gameweek 3 to gameweek 18. This can be due to forecasts that now include the realized points from previous gameweeks in the 2017/2018 season. Hence, it is able to select the players who had a good start to the season. In addition, the transferred players from outside Premier League, including the newly promoted teams, are now included to the model. 
 \newpar
@@ -250,12 +250,13 @@ As seen from Table \ref{tab:res_dis_gamechips} the regression method earns an av
 
 \newpar
 
-The weakest realizations are obtained in the beginning of the season. This is perhaps explained by the fact the each player is listed with 0 on variables such as goals, assists,  saves etc, making it hard to distinguish the players from one-another. Also, data for the newly promoted teams are sparse, limiting the possibilities. Also, it earns the highest realization for a unique gamweek in gameweek 20, earning 114 points.  
+The weakest realizations are obtained in the beginning of the season. This is perhaps explained by the fact the each player is listed with 0 on variables such as goals, assists,  saves etc, making it hard to distinguish the players from one-another. Also, data for the newly promoted teams are sparse, limiting the possibilities. Furthermore, it earns the highest realization for a unique gamweek in gameweek 20, earning 114 points. By comparison, the best over-all manager earned 156 points the  gameweek, but played the Triple Captain. Adjusting for the gamechip use, the best manager earned 137 points, leaving a gap of 23 points.
 
 \subsubsection{Odds}
 
 The odds method performs worst of the three methods, earning an average of 47.14 points when excluding gameweek 7 and 14. However, it compets fairly well in the first gameweeks. The missing data will have a huge impact as the teams selected for these rounds are carried forwards
 
+\begin{comment}
 \subsubsection{Discussion}
 
 \begin{itemize}
@@ -263,6 +264,8 @@ The odds method performs worst of the three methods, earning an average of 47.14
     \item Odds gjør det best helt i begynnelsen. Further research: kan brueks som variabel i regresjonen
     \item Skal vi ha med noe om illegal transfers, budget etc?
 \end{itemize}
+
+\end{comment}
 
 
 
@@ -273,18 +276,20 @@ From the Figure, it is clear that the Modified average performs best. However, o
 
 \subsection{Comparison of Solution Methods Including Gamechips}
 
-Here, we present a comparison when gamechips are used. First, we compare the 5 different time-series. Then. we compare each method with and without gamechips. In Figure \ref{fig:res_comp_gamechips} we compare with gamechips.
+Here, we present a comparison when gamechips are used. First, we compare the 5 different time-series. Then. we compare each method with and without gamechips. In Figure \ref{fig:res_comp_gamechips} we compare with gamechips. Be aware that is our final proposed method.
 
 \begin{table}[H]
 \centering
-\begin{tabular}{|l|l|l|l|}
+\begin{tabular}{|l|l|l|l|l|}
 \hline
-Solution method     & Total points & Mean  & Overall ranking \\
+Solution method     & Total points & Mean  & Overall ranking & Average transfers\\
 \hline
-Modified Average    & 1881         & 53.74 & Top 12\%        \\
-Regression          & 1889         & 53.97 & Top 11\%        \\
-Odds (30 gameweeks) & 1417         & 47.23 & Top 46\%        \\
-Odds (28 gameweeks) & 1401         & 50.04 & Top 31\%        \\
+Modified Average    & 1881         & 53.74 & Top 12\%   &     \\
+Regression          & 1889         & 53.97 & Top 11\%   &     \\
+Odds (30 gameweeks) & 1417         & 47.23 & Top 46\%   &    \\
+Odds (28 gameweeks) & 1401         & 50.04 & Top 31\%   &     \\
+Weekly Average      &           &       &               &  \\
+Top Manager & & & & \\
 \hline
 \end{tabular}
 \caption{Results including gamechips}
@@ -299,13 +304,28 @@ Odds (28 gameweeks) & 1401         & 50.04 & Top 31\%        \\
 \label{fig:res_comp_gamechips}    
 \end{figure}
 
+\begin{figure}[H]
+    \centering
+    \includegraphics[scale=0.5]{fig/chapter_7/top_mean.png}
+    \caption{Comparing performance with gamechips for each solution.}
+\label{fig:res_comp_gamechips}    
+\end{figure}
+
+We see that the the top manager is under weekly average a couple of times.
+
+
 \subsubsection{Modified Average}
+\textit{here, a plot of the method with and with-out gamechips will come and a discussion similar to that of the previous section section}
+
 
 \subsubsection{Regression}
+\textit{here, a plot of the method with and with-out gamechips will come and a discussion similar to that of the previous section section}
 
 \subsubsection{Odds}
+\textit{here, a plot of the method with and with-out gamechips will come and a discussion similar to that of the previous section section}
 
-\subsubsection{}
+\subsubsection{Discussion - effect of gamechips}
+\textit{Here, a summarizing discussion will come}
 
 
 \begin{comment}
@@ -549,6 +569,7 @@ In the end, it is interesting to investigate how different the teams actually ar
 \label{fig:threshold_mean}    
 \end{figure}
 
+\begin{comment}
 \begin{enumerate}
     \item plot with the objective value and threshold. the objective value is the accumulated objective value of the model run over all gameweeks. 
     \item explanation of the graph and discussion 
@@ -556,13 +577,16 @@ In the end, it is interesting to investigate how different the teams actually ar
     \item explanation of the graph and discussion. 
     \item 
 \end{enumerate}
-Remember: similar to efficient frontier with expected points
+\end{comment}
+
+
 
 \begin{table}[H]
 \centering
 \begin{tabular}{@{}lll@{}}
 \toprule
-$\sigma^2$ & Expected Points GW1 & Computational Time \\ \midrule
+$\sigma^2$ & Expected Points GW1 & Computational Time (seconds) \\ \midrule
+$5^2$       & 314.185              & 315.917            \\
 $10^2$       & 318.84              & 919.085            \\
 $15^2$       & 319.619             & 1005.57            \\
 $20^2$       & 323.391             & 848.809            \\
@@ -586,7 +610,7 @@ $100^2$     & 335.475             & 109.042            \\ \bottomrule
 \caption{Expected points GW1 run with different thresholds}
 \label{tab: threshold_expected_points_gw1}
 \end{table}
-
+- GRAFEN ER IKKE LINEAR SIDEN VALGET OM Å HA MED EN SPILLER ER BINARY OG IKKE FRACTION. 
 \begin{comment}
 - man skal forvente at man oppnår efficient frontier når man plotter threshold opp mot expected value 
 
