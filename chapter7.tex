@@ -256,10 +256,9 @@ The weakest realizations are obtained in the beginning of the season. This is pe
 
 The odds method performs worst of the three methods, earning an average of 47.14 points when excluding gameweek 7 and 14. However, it competes fairly well in the first gameweeks. The missing data have a huge impact on the overall points obtained. As the sub-horizon is automatically set to 1, the model performs 10 penalized transfers ahead of gameweek 7, accounting for the missing match odds. Hence, the team selected in this round is carried forwards for the upcoming gameweeks. The same applies to gameweek 14. 
 \newpar
-In general, the Odds method 
+In general, the Odds method has a disadvantage as the teams selected for these rounds are carried forwards for the upcoming gameweeks. \textit{Kan sjekke snitt med minus +- 3 kamper}
 
 
-as the teams selected for these rounds are carried forwards for the upcoming gameweeks.
 \begin{comment}
 \subsubsection{Discussion}
 
@@ -623,6 +622,40 @@ $100^2$     & 335.475             & 109.042            \\ \bottomrule
 \label{tab: threshold_expected_points_gw1}
 \end{table}
 - GRAFEN ER IKKE LINEAR SIDEN VALGET OM Å HA MED EN SPILLER ER BINARY OG IKKE FRACTION. 
+
+% Please add the following required packages to your document preamble:
+% \usepackage{booktabs}
+\begin{table}[]
+\centering
+\begin{tabular}{@{}lll@{}}
+\toprule
+Threshold & Expected Points GW1 & Computational Time \\ \midrule
+56.25     & 317.951             & 207.44             \\
+156.25    & 318.759             & 140.888            \\
+306.25    & 322.155             & 183.62             \\
+506.25    & 324.712             & 103.374            \\
+756.25    & 325.11              & 140.167            \\
+1056.25   & 330.43              & 116.318            \\
+1406.25   & 333.1               & 82.781             \\
+1806.25   & 335.475             & 27.688             \\
+2256.25   & 335.475             & 27.403             \\
+2756.25   & 335.475             & 27.621             \\
+3306.25   & 335.475             & 27.382             \\
+3906.25   & 335.475             & 27.5               \\
+4556.25   & 335.475             & 21.747             \\
+5256.25   & 335.475             & 27.775             \\
+6006.25   & 335.475             & 27.752             \\
+6806.25   & 335.475             & 27.619             \\
+7656.25   & 335.475             & 27.589             \\
+8556.25   & 335.475             & 27.612             \\
+9506.25   & 335.475             & 27.627             \\ \bottomrule
+\end{tabular}
+\caption{Expected points GW1 run with different thresholds}
+\label{tab: threshold_expected_points_gw1_halves}
+\end{table}
+
+
+
 \begin{comment}
 - man skal forvente at man oppnår efficient frontier når man plotter threshold opp mot expected value 
 
