@@ -99,7 +99,7 @@ Rolling horizon is an appropriate solution method for FPLDP as managers are prov
 
 \newpar
 
-In the rolling horizon heuristic, each sub-problem is solved over shorter sub-horizons for the whole season. This corresponds well to the FPLDP, as FPL managers often consider several gameweeks when making decisions. Each sub-horizon is split in two time periods ($TP$). The two \textit{TP}s are $TP_t^{C}$, which is the central period that will be implemented in sub-problem $t$, and the forecasting period $TP_t^{F}$. Before solving sub-problem $t+1$, variables $x$, $v$ and $q$ are frozen and used as input. The sub-horizon is shifted so that the first part of $TP_t^{F}$ becomes $TP_{t+1}^{C}$. If the central period and the forecasting period have equal length, the forecasting period becomes the new central period. 
+In the rolling horizon heuristic, each sub-problem is solved over shorter sub-horizons for the whole season. This corresponds well to the FPLDP, as FPL managers often consider several gameweeks when making decisions. Each sub-horizon is split in two time periods ($TP$). The two \textit{TP}s are $TP_k^{C}$, which is the central period that will be implemented in sub-problem $k$, and the forecasting period $TP_k^{F}$. Before solving sub-problem $k+1$, variables $x$, $v$ and $q$ are frozen and used as input. The sub-horizon is shifted so that the first part of $TP_k^{F}$ becomes $TP_{k+1}^{C}$. If the central period and the forecasting period have equal length, the forecasting period becomes the new central period. 
 
 \begin{itemize}
     \item \textbf{Fixed period (FP)}. A gameweek where decisions have been implemented and are fixed for the next sub-problem. These decisions are the players that are selected in a gameweek, $x$, the remaining budget variable, $v$, and the number of free transfers available, $q$.
@@ -125,40 +125,23 @@ An important decision is that of determining the length of the sub-horizon. Idea
 By including forecasting, gamechip strategies and variance, we have arrived at a \textit{forecast-based optimization model} for the Fantasy Premier League Decisions Problem. Algorithm \ref{alg:forecast_based_opt_model} gives a pseudo code for the forecast-based optimization model.
 
 
-\begin{comment}
-
-\textbf{Description of the forecast-based optimization model}
-
-\textit{Step 1}. For the set of gameweeks in the sub-horizon:  generate forecasts of players' expected points, calculate empirical variance and correlation. 
-\newline
-\textit{Step 2}. Check if gameweek in sub-horizon is \textit{double} or \textit{blank}. If yes, implement gamechip strategy. 
-\newline
-\textit{Step 3}. If gameweek 8-12 is in sub-horizon, implement Wildcard as stated in gamechip strategy. 
-\newline
-\textit{Step 4}. Run the mathematical model over sub-horizon with input data from step 1. 
-\newline
-\textit{Step 5}. Acquire new and updated information such as realized points, injuries and suspensions for current gameweek, and go to step 1 and solve for for next sub-problem where you fix $x$, $v$ and $q$ from solution of previous sub-problem. Continue until $\mathcal{T}$ sub-problems are solved.
-
-\end{comment}
-
-
-
 \newpar
 
 \begin{algorithm}
 \setstretch{1.35}
 \caption{Forecast-based optimization model}
 \begin{algorithmic}
-\State{$t$ = 0} 
-\While{($t = t+1$) $\leq$ $\mathcal{|T|}$}
-    \State{Generate input data: expected points, variance and correlation for $TP_{t}^{C}$ and $TP_{t}^{F}$}
-    \If{a gameweek in $TP_{t}^{F}$ is \textit{double} or \textit{blank}}
+\State{$k$ = 1} 
+\While{$k$ $\leq$ $\mathcal{|T|}$}
+    \State{Generate input data: expected points, variance and correlation for $TP_{k}^{C}$ and $TP_{k}^{F}$}
+    \If{a gameweek in $TP_{k}^{F}$ is \textit{double} or \textit{blank}}
         \State{Implement gamechip strategy}
-    \ElsIf{a gameweek in $TP_{t}^{F}$ according to Wildcard strategy}
+    \ElsIf{a gameweek in $TP_{k}^{F}$ according to Wildcard strategy}
         \State{Implement Wildcard strategy}
     \EndIf
-    \State{Solve the mathematical model for the problem defined by $TP^{C}_{t}$ and $TP^{F}_{t}$}
-    \State{Fix variables $x_{pt}$, $v_{t}$ and $q_{t}$ in central period $TP^{C}_{t}$}
+    \State{Solve the mathematical model for the problem defined by $TP^{C}_{k}$ and $TP^{F}_{k}$}
+    \State{Fix variables $x$, $v$ and $q$ in central period $TP^{C}_{k}$}
+    \State{  $k \gets k + 1$}
 \EndWhile
 \end{algorithmic}
 \label{alg:forecast_based_opt_model}
@@ -473,13 +456,13 @@ In order to decide the value of $\lambda$, and subsequently what variables to in
 
 \subsubsection{Model Selection}
 
-It is important to note that lasso regression is only conducted in order to perform variable selection. The $\beta$-values from the regression are not carried forward. Instead, we have decided to forecast points by use of linear regression on the variables selected by the lasso regression. Linear regression has an advantage over a lasso regression as it has more easily interpreted coefficients and well-defined variance. This makes the calculation of p-values possible. Moreover, it makes the results more accessible for readers from different disciplines as it is widely known. Furthermore, a linear regression model has an advantage compared to for instance logistic regressions, as points can be negative, which is a possibility in FPL.\newpar 
-
+It is important to note that lasso regression is only conducted in order to perform variable selection. The $\beta$-values from the regression are not carried forward. Instead, we have decided to forecast points by use of linear regression on the variables selected by the lasso regression. Linear regression has an advantage over a lasso regression as it has more easily interpreted coefficients and well-defined variance. This makes the calculation of p-values possible. Moreover, it makes the results more accessible for readers from different disciplines as it is widely known. Furthermore, a linear regression model has an advantage compared to for instance logistic regressions, as points can be negative, which is a possibility in FPL.
+\newpar 
 Only one variable explicitly related to points is considered. This variable is previous points. We have decided not to include variables such as total points in the season so far and points from the Bonus Point System. These variables would be highly correlated with variables such as goals, and are excluded as not to over-complicate the regression model. Since the bonus points to a large degree are decided by the same factors as "regular" points (e.g. goals, assists, clean sheets etc) their effect are included in the coefficients for these explanatory variables. 
 
 
 \subsection{Forecasting using odds}
-\cite{Gupta} created a scoreline prediction for the fixtures of the Premier League. Further, they used this scoreline prediction in order to forecast future performance of the players in FPL. However, they found their scoreline predictions far less accurate than those of bookmakers' odds. Moreover, as stated in Section \ref{Strength_of_football_teams}, \cite{Hvattum} found that Elo ratings appeared to be considerably less accurate than market odds when used for forecasts. Therefore, we find it interesting to adapt an approach based on bookmakers' odds. By acquiring the result outcomes for each Premier League match, a scoreline prediction can be obtained. By summing all the result odds and dividing each individual result odds by that sum, one can obtain the probability of an exact result to occur. A great drawback with this approach, is the fact that bookmakers only provide odds for the upcoming gameweek. Hence, the odds can only be used in order to predict the fantasy points one gameweek ahead.  
+A scoreline prediction gives the probability of a result outcome to occur. For instance, it could tell that there was 0.1044 probability that Leicester would beat Burnley 1-0 on April 4th (Table \ref{Prob.Lei-Bur}). Moreover, scoreline predictions can be used in order to calculate the expected goals scored by both teams featured in a match. \cite{Gupta} created a scoreline prediction for the fixtures of the Premier League. Further, they used this scoreline prediction in order to forecast future performance of the players in FPL. However, they found their scoreline predictions far less accurate than those of bookmakers' odds. Moreover, as stated in Section \ref{Strength_of_football_teams}, \cite{Hvattum} found that Elo ratings appeared to be considerably less accurate than market odds when used for forecasts. Therefore, we find it interesting to adapt an approach based on bookmakers' odds. By acquiring the result outcomes odds for each Premier League match, a scoreline prediction can be obtained. By summing all the result odds and dividing each individual result odds by that sum, one can obtain the probability of each exact result to occur. A great drawback with this approach, is the fact that bookmakers only provide odds for the upcoming gameweek. Hence, the odds can only be used in order to predict the fantasy points one gameweek ahead.  
 
 \newpar
 
