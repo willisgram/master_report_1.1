@@ -231,13 +231,13 @@ As observed, it is an enormous difference between the optimal solution strategy 
 \end{comment}
 
 
-In this section, we present the computational results for the 3 different forecasting methods. First, we present and discuss the performance when gamechips are disregarded. Then, we compare the performance of each method when gamechips are included. In order to evaluate the results, we compare the results with the performance of the solution with realized points, the best overall manager and the weekly average among all players. 
+In this section, we present the computational results for the three different forecasting methods. First, we present and discuss the performance when gamechips are disregarded. Then, we compare the performance of each method when gamechips are included. In order to evaluate the results, we compare the results with the performance of the solution with realized points, the best overall manager and the weekly average among all players. 
 
 \newpage
 
 \subsection{Results Disregarding Gamechips}
 
-In Figure \ref{fig:res_comp_dis_gamechips} the points obtained by the different forecasting methods are plotted for each gameweek. In Table \ref{tab:res_dis_gamechips}, total points, mean points for each gameweek, overall ranking and the mean number of penalized transfers for each method are presented. Notice that for the Odds method we have presented results for both 28 and 30 gameweeks. This is due to the fact that for gameweek 7 and gameweek 13 odds for most of the matches are missing.
+In Figure \ref{fig:res_comp_dis_gamechips} the points obtained by the different forecasting methods are plotted for each gameweek. In Table \ref{tab:res_dis_gamechips}, summarizes the results. Notice that for the Odds method we have presented results for 31 gameweeks, as we only had data for these gameweeks.
 
 \begin{figure}[H]
     \centering
@@ -246,7 +246,7 @@ In Figure \ref{fig:res_comp_dis_gamechips} the points obtained by the different 
 \label{fig:res_comp_dis_gamechips}    
 \end{figure}
 
-Comparisons of the overall ranking are made in terms of mean points obtained. This is done because we have considered 30 gameweeks for the Odds method and 35 gameweeks for the two other methods. From Table \ref{tab:res_dis_gamechips} we see that the Modified Average greatly outperforms the two other solution methods over the entire season. Moreover, the Regression method performs far better than the Odds method. From Table \ref{tab:res_dis_gamechips} it is clear the mean number of penalized transfers vary considerably between the methods. The difference between the Modified Average and Regression is particularly apparent. 
+Comparisons of the overall ranking are made in terms of mean points obtained. This is done because we have considered 31 gameweeks for the Odds method and 35 gameweeks for the two other methods. From Table \ref{tab:res_dis_gamechips}, we see that the Modified Average and the Odds method outperform the Regression method. Moreover, it is clear the mean number of penalized transfers vary considerably between the methods. The difference between the Modified Average and Regression is particularly apparent. 
 
 \begin{table}[H]
 \centering
@@ -274,9 +274,12 @@ However, from Figure \ref{fig:res_comp_dis_gamechips} it is evident that the Odd
  
 
 \subsubsection{Modified Average}
+\begin{comment}
 The Modified Average reaches a total score of 1916 points in the first 35 gameweeks, yielding a mean of 54.74 points per gameweek. In terms of the overall FPL ranking, the Modified Average finishes in the top 8\%.
 
 \newpar
+\end{comment}
+
 
 From Figure \ref{fig:res_comp_dis_gamechips}, it is evident that the Modified Average performs poorly in the first two gameweeks. A reasonable explanation is that the forecasts are based on the previous season. Also, several players are not taken into consideration in the first gameweeks, for instance due to promotions and international transfers. In fact, the Modified Average selects Gary Cahill and Cesc Fabregas, who both received a red card, in the first gameweek. With Cahill selected as captain, they deducted a total of -7 points.
 
@@ -286,31 +289,38 @@ It is observable that the weekly results tend to stabilize from gameweek 3 to ga
 
 \newpar
 
-From gameweek 19 to gameweek 35, the Modified Average improves its performance compared to that in the first part of the season. Again, a plausible explanation is that the forecasts are better, by for instance being able to capture which players that are performing consistently well. Moreover, the performance fluctuates more in gameweek 19 to gameweek 35. One sensible reason is the emergence of blank and double gameweeks. 
+From gameweek 19 to gameweek 35, the Modified Average improves its performance compared to that in the first part of the season. Again, a plausible explanation is that the forecasts are better, by for instance being able to capture which players are performing consistently well. Moreover, the performance fluctuates more in gameweek 19 to gameweek 35. One sensible reason is the emergence of blank and double gameweeks. 
 
 
 \subsubsection{Regression}
 
+\begin{comment}
 The Regression method reaches a total score of 1765 points in the first 35 gameweeks, yielding a mean of 50.43 points per gameweek. In terms of the overall FPL ranking, the Regression method finishes in the top 30\%.
 
 \newpar
+\end{comment}
 
-The Regression method displays a higher variance than the other methods, with both higher tops and lower bottoms. The method is outperformed by the Modified Average method, but beats the Odds method with an approximately equivalent margin. The weakest weekly performances are obtained in the beginning of the season. This is perhaps explained by the fact the each player is listed with low values for variables such as goals, assists,  saves etc, making it hard to distinguish the players from each other. Also, data for the newly promoted teams are scarce, thus limiting possibilities. The method achieves its highest weekly score in gameweek 20, earning 114 points. By comparison, the best overall manager earned 156 points, but played the Triple Captain. Adjusting for the gamechip use, the best manager earned 137 points, leaving a gap of 23 points.
+
+The Regression method displays a higher variance than the other methods, and reaches the highest weekly realization. However, the method is outperform by the two other methods in terms of mean. The weakest weekly performances are obtained in the beginning of the season. This is perhaps explained by the fact the each player is listed with low values for variables such as goals, assists,  saves etc, making it hard to distinguish the players from each other. Also, data for the newly promoted teams are scarce, thus limiting possibilities. The method achieves its highest weekly score in gameweek 20, earning 114 points. By comparison, the best overall manager earned 156 points, but played the Triple Captain. Adjusting for the gamechip use, the best manager earned 137 points, leaving a gap of 23 points.
 
 \subsubsection{Odds}
+\begin{comment}
 The Odds method reaches a total score of 1331 points for 30 gameweeks, and 1320 for 28 gameweeks, yielding a mean of 44.37 and 47.14 points per gameweek respectively. In terms of the overall FPL ranking, the Odds method finishes in the top 47\% when 28 gameweeks are considered.
+\end{comment}
+
 
 \newpar
 
-The Odds method performs worst of the three methods, earning an average of 47.14 points when excluding gameweek 7 and 13. However, it competes fairly well in the first gameweeks. One explanation is that for the Odds method, the forecasts of points are solely based on bookmakers predictions. Since bookmakers are professional, it is not expected that their forecasts will improve greatly over the season. Of course, bookmakers will adjust their calculations based on recent performance of players and teams. However, these adjustment will not be as critical as the adjustments for the two other solution methods. It is also important to note that bookmakers are profit-seekers, and that the odds they set does not necessarily transfer into real probabilities.
+The Odds method outperforms the other methods in the first gameweek and has the lowest variance. One explanation is that for the Odds method, the forecasts of points are solely based on bookmakers predictions. Since bookmakers are professional, it is not expected that their forecasts will improve greatly over the season. Of course, bookmakers will adjust their calculations based on recent performance of players and teams. However, these adjustment will not be as critical as the adjustments for the two other solution methods. Another explanation for the low variance, is that the Bench Boost and the second Wildcard is not played. It is observable that this yields high fluctuations for the two other methods. 
 
 \newpar
 
-The sub-horizon is set to 1 and the model performs 10 penalized transfers ahead of gameweek 7, one of the gameweeks with missing match odds. Further, the team selected in this round is carried forwards for the upcoming gameweeks. The same applies to gameweek 13. Compared to the other methods, the Odds method does not only have a disadvantage for the gameweeks where data is missing. As the selected squad is carried forward to the next gameweek, the decisions for the gameweek 7 and gameweek 13 propagate to further gameweeks. This is substantiated by Figure \ref{fig:res_comp_dis_gamechips}. After gameweek 13, the Odds method lags behind the two other methods for a number of gameweeks.
+The Odds method is beaten by the Modified Average method. However, this does not mean that bookmakers are poor at setting odds. Remember that bookmakers are profit-seekers, and that the odds they set does not necessarily transfer into real probabilities, but are probably lower. Also, the method has a disadvantage in that the data limits us to make forecasts only for one gameweek ahead. That is, the sub-horizon must be equal one.
+
 
 \subsubsection{Discussion}
 
-Even though both the Modified Average and the Regression methods outperform the Odds method, the Odds method performs best over the first five gameweeks. As mentioned, the Odds method is based on bookmakers odds, and is not as heavily influenced by past seasons performance as the Modified Average and Regression method. In fact, from the previous season’s dream team, i.e. the 11 players that collected most points, only one player had a score above two points in the first gameweek. In addition, the odds method does not exclude players due to promotion or transfers to Premier League ahead of the season.
+The Odds method performs best over the first five gameweeks. As mentioned, the Odds method is based on bookmakers odds, and is not as heavily influenced by past season's performance as in the Modified Average and Regression method. In fact, from the previous season's dream team, i.e. the 11 players that collected most points, only one player had a score above two points in the first gameweek. In addition, the Odds method does not exclude players due to promotion or transfers to Premier League ahead of the season.
 
 \newpar
 
