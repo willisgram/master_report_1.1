@@ -127,13 +127,13 @@ Gap      & 0.75 \%   \\
 \begin{tabular}{@{}llllllll@{}}
 \toprule
 Number of gameweeks                 & 5       & 10       & 15       & 20       & 25       & 30       & 35      \\ \midrule
-Rows, without presolve    & 24043   & 48708    & 73373    & 98038    & 122704   & 147369   & 172 034 \\
-Rows, presolve            & 22787   & 47448    & 72108    & 96768    & 121429   & 146090   & 170 750 \\
-Columns, without presolve & 35275   & 71800    & 108325   & 144850   & 181375   & 217900   & 254 425 \\
-Columns,, presolve        & 28124   & 58045    & 87962    & 117897   & 147778   & 177640   & 206 689 \\
-Solution                  & 773.439 & 1380.951 & 2002.686 & 2660.418 & 3327.116 & 3956.755 & 4553.03 \\
+Rows, without presolve    & 24 043   & 48 708    & 73 373    & 98 038    & 122 704   & 147 369   & 172 034 \\
+Rows, presolve            & 22 787   & 47 448    & 72 108    & 96 768    & 121 429   & 146 090   & 170 750 \\
+Columns, without presolve & 35 275   & 71 800    & 108 325   & 144 850   & 181 375   & 217 900   & 254 425 \\
+Columns,, presolve        & 28 124   & 58 045    & 87 962    & 117 897   & 147 778   & 177 640   & 206 689 \\
+Objective value           & 773.439 & 1380.951 & 2002.686 & 2660.418 & 3327.116 & 3956.755 & 4553.03 \\
 Gap                       & -       & -        & -        & -        & -        & 0.27 \%  & 0.75 \% \\
-Time to optimality        & 29      & 295      & 1103     & 2010     & 23692    & N/A      & N/A     \\ \bottomrule
+Time to optimality        & 29      & 295      & 1 103     & 2 010     & 23 692    & N/A      & N/A     \\ \bottomrule
 \end{tabular}%
 }
 \caption{Model run with different number of gameweeks.}
@@ -599,7 +599,7 @@ The aim is to discuss the effect of risk handling on the solution, and examine t
 
 \newpar
 
-The aim of the study is to discuss the effect risk handling has on the solution. Further, the performances are examined to observe if there are any similarities between the expected points and variance trade-off in the FPLDP and in portfolio optimization. Thus, there are two interesting dependencies to analyze: the effect the variation of threshold has on expected points, and the effect the variation of threshold has on performance.
+The aim of the study is to discuss the effect risk handling has on the solution. Further, the performances are examined to observe if there are any similarities between the expected points and variance trade-off in the FPLDP and in portfolio optimization. Thus, there are two interesting dependencies to analyze: the effect the variation of threshold has on expected points, and the effect the variation of threshold has on performance. The further analysis is done by considering risk in standard deviation. 
 
 \newpar
 
@@ -612,7 +612,7 @@ The computational time is increased considerably when including constraints \ref
 
 \newpar
 
-The mathematical model maximizes a team's expected points. Hence, one would assume that when the threshold is decreased, the expected value of the team also decreases. This would coincide to the \textit{efficient frontier} in portfolio optimization, where one obtains the optimal set of portfolios which gives the highest expected points for a certain level of risk, i.e. variance. In Figure \ref{fig:threshold_GW1}, the expected points, i.e. the objective value, obtained by the optimization model for for the first sub-problem is plotted against different variance thresholds. The curve exhibits the same behavior as the efficient frontier, but is not smooth. This is because in the FPLDP the one can either include a player, or not. That is, the decision is binary. In other words, opposed to the classic portfolio optimization problem, one can not hold a fraction of an asset in the FPLDP. 
+The mathematical model maximizes a team's expected points. Hence, one would assume that when the threshold is decreased, the expected value of the team also decreases. This would coincide to the \textit{efficient frontier} in portfolio optimization, where one obtains the optimal set of portfolios which gives the highest expected points for a certain level of risk, i.e. variance. In Figure \ref{fig:threshold_GW1}, the expected points, i.e. the objective value, obtained by the optimization model for for the first sub-problem is plotted against different variance thresholds. The curve exhibits the same behavior as the efficient frontier, but is not smooth. This is because in the FPLDP one can either include a player, or not. That is, the decision is binary. In other words, opposed to the classic portfolio optimization problem, one can not hold a fraction of an asset in the FPLDP. 
 
 \begin{figure}[H]
     \centering
@@ -622,9 +622,16 @@ The mathematical model maximizes a team's expected points. Hence, one would assu
 \end{figure}%
 
 
-In Figure \ref{fig:performance_varying_threshold}, the mean points of the 2017/2018 season is plotted for different variance threshold. It is observable that the trend is somewhat similar to that of the efficient frontier, but some clear outliers can be found. However, note that a portfolio's return does not necessarily follow the efficient frontier when an analysis of realized returns is done. The highest value is not reached for the unlimited threshold, but for N. For this point, the method would have achieved X points, earning a spot among the top 1.5\%. Furthermore, the interval between 
-between M and M the mean score is H. 
+In Figure \ref{fig:performance_varying_threshold}, the mean points of the 2017/2018 season is plotted for different standard deviation thresholds. It is observable that the plot deviates from that of the efficient frontier, but some similarities can be found. For instance are higher threshold associated with higher mean scores, and lower thresholds are associated with lower mean scores. Note, however, that a portfolio's return does not necessarily follow the efficient frontier when an analysis of realized returns is done.
 
+\newpar
+
+The best mean score is not reached for the unlimited threshold, but for a standard deviation of 55 points. For this point, the method would have achieved 57.?? points, earning a spot among the top 1.5\%. Furthermore, in the area with a standard deviation between 55-75 points, the solution outperforms the solution with an unlimited threshold. In this interval, the mean score is N. The threshold is perhaps higher than expected, as the standard deviation is higher than the mean points obtained.
+
+
+\newpar
+
+It is worth noting that when the constraint is not binding, the mean stabilizes at 54.3 points. Intuitively, the mean should have been that same as without the constraint. However, after examining the objective values, it is clear that there are different solutions with the same expected value for each run in gameweek 1. Thus, there is no guarantee that the solver selects the same solution. A possible way around is a different implementation of variance constraints. A \textit{trade-off approach} \citep{Speranza} is an interesting alternative, where instead of bounding the variance in constraints it is taken into consideration by moving it to the objective function. However, as the difference in terms of mean is small, this is not considered a major issue.
 
 \begin{figure}[H]
     \centering
@@ -634,14 +641,38 @@ between M and M the mean score is H.
 \end{figure}%
 
 
-It is worth noting that the value stabilizes at a value of 53.x, just below the value without the constraint, even for values such as 10M. This is because different solutions with the same expected value are selected by the solver.One explanation could be the handling of input for players which have not featured in the FPL before. This were handled by setting their variance to the average. In the first rounds, there is a big chance that there are players with the same expected points, and same empirical variance since we set the variance to average for the players we do not have data on. Hence, the model has several solutions with the same expected value and consequently when we set a unlimited threshold the results differs with the results without the threshold. This is a drawback with how we handle forecast and estimation on players we do not have data on, and an alternative approach which takes this issue into account wold be interesting. 
+In Figure \ref{fig:performance_varying_threshold}, the solution with a $\sigma_0^{2} = 55^2$ is plotted against the solution without taking variance into consideration. As observed, in terms of realized points, the variance is not reduced. In fact, the standard deviation is almost double. The same goes for the other solutions in the interval 55-75. Thus, in these cases, the constraint has not been successful in reducing variance. However, a higher mean is obtained. In Figure XX, the solutions in the interval 7.5-20 is plotted against the solution without taking variance into consideration. Table XX shows that for lower variance thresholds the goals of acheiveing lower variance in the solution is reached. However, one ah
+
+the solution at V is plotted against the unlimited solution. Here, the variance is. 
+
+
+To summarize, variance appears to have a positive effect on performance in terms of mean, but not in terms of stabilizing points and in achieving a high performance.
+
+
+\begin{table}[H]
+\centering
+\begin{tabular}{@{}llll@{}}
+\toprule
+ Threshold & Mean & St.dev \\ \midrule
+          &      &        \\
+          &      &        \\
+          &      &        \\ \bottomrule
+\end{tabular}
+\caption{Results for the high and low thresholds.}
+\label{tab_high_low_thresholds}
+\end{table}
+
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[scale=0.5]{fig/chapter_7/var_threshold.png}
+    \caption{Plot of the results with $\sigma_0^{2} = 55^2$ and without variance constraints.}
+\label{fig:performance_best_threshold}    
+\end{figure}%
+\newpar
 
 \newpar
 
-\textit{Here there will be a graph of a solution with expected points to see if there are less variance.}
-
-\newpar
-To summarize, variance appears to have a positive solution on the performance. Both in terms of stabilizing points and in achieving a high performance.
 
 
 \begin{comment}
@@ -649,18 +680,6 @@ In the end, it is interesting to investigate how different the teams actually ar
 \end{comment}
 
 
-
-
-
-\begin{comment}
-\begin{enumerate}
-    \item plot with the objective value and threshold. the objective value is the accumulated objective value of the model run over all gameweeks. 
-    \item explanation of the graph and discussion 
-    \item plot with the realized points and threshold. 
-    \item explanation of the graph and discussion. 
-    \item 
-\end{enumerate}
-\end{comment}
 
 
 
