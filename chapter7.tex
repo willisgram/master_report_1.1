@@ -7,7 +7,7 @@ In this chapter, a computational study based on the solution framework outlined 
 
 \newpar
 
-The mathematical model is written in the algebraic modelling language Mosel and implemented in FICO\textsuperscript {\textregistered} Xpress Optimization Suite 8.3, using a HP EliteDesk 800 G3 DM 65W computer with Intel\textsuperscript{\textregistered} Core\textsuperscript{\texttrademark} i7-7700 3.6 GHz processor and 32 GB RAM. The operating system in use is Windows 10 Education 64-bit. The input data to the mathematical model is structured and pre-processed in the statistical programming language R. Further, the results obtained from the mathematical model include decisions on selected squad, starting line-up, substitution priority, number of penalized transfers, captain, vice-captain and whether a gamechip is used in a gameweek. These are written to CSV files, which are exported back to R to calculate how many points the team obtained. In the end, these are further exported to Microsoft Excel to make the data more presentable in form of tables and plots. 
+The mathematical model is written in the algebraic modelling language Mosel and implemented in FICO\textsuperscript {\textregistered} Xpress Optimization Suite 8.3, using a HP EliteDesk 800 G3 DM 65W computer with Intel\textsuperscript{\textregistered} Core\textsuperscript{\texttrademark} i7-7700 3.6 GHz processor and 32 GB RAM. The operating system in use is Windows 10 Education 64-bit. The input data to the mathematical model is structured and pre-processed in the statistical programming language R. Further, the results obtained from the mathematical model include decisions on selected squad, starting line-up, substitution priority, number of penalized transfers, captain, vice-captain and whether a gamechip is used in a gameweek. These are written to CSV files, which are exported back to R to calculate how many points the team obtained. In the end, R is also used to make the data more presentable in form of tables and plots. 
 
 \section{Solution With Realized Points}\label{sec:exact}
 This section is divided into three parts. First, the initialization of sets and parameters is presented. Following is a discussion of the problem size and the results obtained by the mathematical model using realized points for the 2017/2018 season. Secondly, the solution is more thoroughly examined to discuss whether the decisions are sensible or not. Finally, the solution is compared against the best performing human managers. 
@@ -71,7 +71,7 @@ $\underline{Q}$                  & - & 1 free transfer given every gameweek.    
 \end{table}
 
  
-A season in FPL consists of 38 gameweeks, however because of restriction on time, an early decision was made to solve the model for the first 35 gameweeks. The season is divided in two halves, where the first half is from gameweek 1-21 and the second part is from gameweek 22-35. The transfer window closed after gameweek 26. Until then, 625 players had appeared in at least on game. Thus, the set consists of 625 players.
+A season in FPL consists of 38 gameweeks, however, because of restriction on time, an early decision was made to solve the model for the first 35 gameweeks. The transfer window closed after gameweek 26. Until then, 625 players had appeared in at least on game. Thus, the set consists of 625 players.
 
 \newpar
 
@@ -105,21 +105,6 @@ Running the FPLDP with realized points over 35 gameweeks is a big and complex pr
 
 \newpar
 
-\begin{figure}[H]
-\centering
-\begin{minipage}{.5\textwidth}
-  \centering
-  \includegraphics[width=.4\linewidth]{fig/chapter_7/solution_edit_found.png}
-  \captionof{figure}{A figure}
-  \label{fig:solution_found}
-\end{minipage}%
-\begin{minipage}{.5\textwidth}
-  \centering
-  \includegraphics[width=.4\linewidth]{fig/chapter_7/solution_found_edit_zoom_1.png}
-  \captionof{figure}{Another figure}
-  \label{fig:solution_found_zoom}
-\end{minipage}
-\end{figure}
 
 \begin{table}[H]
 \centering
@@ -135,6 +120,25 @@ Gap      & 0.75 \%   \\
 \label{tab:results_realized_points}
 \end{table}
 
+
+\begin{table}[H]
+\centering
+\resizebox{\columnwidth}{!}{%
+\begin{tabular}{@{}llllllll@{}}
+\toprule
+Number of gameweeks                 & 5       & 10       & 15       & 20       & 25       & 30       & 35      \\ \midrule
+Rows, without presolve    & 24043   & 48708    & 73373    & 98038    & 122704   & 147369   & 172 034 \\
+Rows, presolve            & 22787   & 47448    & 72108    & 96768    & 121429   & 146090   & 170 750 \\
+Columns, without presolve & 35275   & 71800    & 108325   & 144850   & 181375   & 217900   & 254 425 \\
+Columns,, presolve        & 28124   & 58045    & 87962    & 117897   & 147778   & 177640   & 206 689 \\
+Solution                  & 773.439 & 1380.951 & 2002.686 & 2660.418 & 3327.116 & 3956.755 & 4553.03 \\
+Gap                       & -       & -        & -        & -        & -        & 0.27 \%  & 0.75 \% \\
+Time to optimality        & 29      & 295      & 1103     & 2010     & 23692    & N/A      & N/A     \\ \bottomrule
+\end{tabular}%
+}
+\caption{Model run with different number of gameweeks.}
+\label{tab:realized_points_diff_gameweeks}
+\end{table}
 
 The results are given in Table \ref{tab:results_realized_points}. This the best solution found after running the model for 86 400 seconds. The optimal solution was not found in that time, but it is not far off. With a optimality gap of 0.75 \%, the solution is still much better than the best manager and hence regarded as sufficient. It is important to note that the objective value given in
 Table \ref{tab:results_realized_points} is from the model run, and hence not directly transferable to total points obtained in FPL. Next, the results from realized points will be discussed into more depth. 
@@ -324,7 +328,7 @@ The Odds method performs best over the first five gameweeks. As mentioned, the O
 
 \newpar
 
-It appears as if the Regression method is more varying in its performance than the two other methods. This is also evident from the standard deviation presented in Table \ref{tab:res_dis_gamechips}. One explanation is that the Regression method does not account for recent performance in as a direct manner as the Modified Average method does by averaging points in the last rounds. Hence the low variability is explainable. Moreover, the Odds method has the lowest standard deviation. A possible explanation is that the odds are set by the standard procedures of professional bookmakers, while the other methods are solely based on data and will to a larger degree incorporate extreme and unexpected previous events.
+It appears as if the Regression method is more varying in its performance than the two other methods. This is also evident from the standard deviation presented in Table \ref{tab:res_dis_gamechips}. One explanation is that the Regression method does not account for recent performance in as a direct manner as the Modified Average method does by averaging points in the last rounds. Moreover, the low standard deviation of the Odds method is that the odds are set by the standard procedures of professional bookmakers, while the other methods are solely based on data and will to a larger degree incorporate extreme and unexpected previous events.
 
 \newpar
 
@@ -376,7 +380,7 @@ Modified Average    & 1916         & 54.74 & 15.85 & Top 8\%   & 0.23       \\
 
 \subsection{Results Including Gamechips}
 
-In Table \ref{fig:res_comp_gamechips}, a summary of the performance of each model when including gamechips is presented. Furthermore, summarizing statistics for the Weekly Average and Top Manager is included for comparison. By comparing the mean obtained with and without gamechips, it is apparent that the effect of gamechips is not consistent for the methods.
+In Table \ref{fig:res_comp_gamechips}, a summary of the performance of each model when including gamechips is presented. Furthermore, summarizing statistics for the Weekly Average and Top Manager is included for comparison. By comparing the mean obtained with and without gamechips, it is apparent that the effect of gamechips is not consistent for the methods. The Regression method performs better, but both the Modified Average and Odds method perform worse.
 
 
 \begin{figure}[H]
@@ -408,7 +412,6 @@ Solution method     & Total points & Mean & Std.Dev  & Overall ranking & \makece
 Modified Average    & 1881         & 53.74 & 16.62 & Top 12\%   &  0.23   \\
 Regression          & 1901         & 54.31 & 20.32 & Top 10\%   &  1.20   \\
 Odds (31 gameweeks) & 1557         & 50.23 & 15.17 & Top 30\%   & 0.48   \\
-%Odds (28 gameweeks) & 1401         & 50.04 & 13.66 & Top 31\%   &  0.29   \\
 Weekly Average      & 1699         & 48.53 & - & Top 40\%   &  - \\
 Top Manager         & 2329      & 66.54 & 18.02 &  Top 1 ‰   & 0.11\\
 \hline
@@ -419,58 +422,93 @@ Top Manager         & 2329      & 66.54 & 18.02 &  Top 1 ‰   & 0.11\\
 \end{table}
 
 
-To discuss the effect of the first Wildcard, the performance in gameweek 7 to 28 are interesting. 
-
-To discuss the impact of the first Wildcard,  we compare performance from gameweek 7, as this is the first gameweek were decisions regarding the Wildcard are introduced. Moreover, we only measure the effect until gameweek 28, as decisions regarding the Free Hit are first introduced in gameweek 29. As seen in Table, all methods performs 
-
-\textit{Tabell med antall bytter og prestasjon med og uten WC gw7-28}
-
-
-For the Modified Average, 11 transfers were made using a Wildcard, the two teams' starting line-ups became significantly different from this point on. Unfortunately, the Wildcard had a poor impact for the upcoming gameweeks, being outperformed by the other model in 10 of the following 13 gameweeks. Further, in gameweek 22, the Triple Captain chip was used, selecting Harry Kane as the captain. However, since Kane performed poor in both matches of the double gameweek, the Triple Captain had a rather weak impact on the total points gained. From this point on, the model including the gamechips tends to outperform the other for the rest of the season. In gameweek 31, it plays the Free Hit due to a blank gameweek. For this particular gameweek, it greatly outperforms the other model as the Free Hit ensured that each player on the team was featured in that gameweek. In comparison, the model without the gamechips only had 5 players that were featured in gameweek 31. The second Wildcard was played in gameweek 33, preparing for the double gameweek 34 and the blank gameweek 35. From figure \ref{fig:avg_gc_no_gc} its observable that usage of the Bench Boost yielded a total of 88 points in gameweek 34. Thus, it outperformed the model disregarding  gamechips with 7 points in gameweek 34. 
-
-\textit{Tabell med antall bytter og prestasjon med og uten TC gw 20-22}
-
-\newpar
-
-\textit{Tabell med antall bytter og prestasjon med og uten FH gw 29-31}
-  
-\newpar
-
-\textit{Tabell med antall bytter og prestasjon med og uten W, BB gw 32-34} 
+To evaluate the impact of the first Wildcard,  we begin by comparing performances from gameweek 7, as this is the first gameweek were decisions regarding the Wildcard are introduced. Moreover, we only measure the effect until gameweek 19, as decisions regarding the Triple Captain are first introduced in this gameweek. As expected, Table \ref{tab:first_wildcard} shows that all methods perform a substantially higher number of transfers when the Wildcard is played. However, the effect of these transfers appear to be rater limited for the Modified Average and Odds method, as both performs worse in these gameweeks with the Wildcard. The Regression on the other hand, performs considerably better when the Wildcard is used.  
 
 \newpar
 
 
 
 
-\subsubsection{Discussion - effect of gamechips}
+\begin{table}[H]
+\centering
+\begin{tabular}{@{}lcc@{}}
+\toprule
+                Method  & Mean GW 7-19  & Transfers GW 9 \\ \midrule
+Modified Average w/gc   & 51.08 & 11             \\
+Modified Average w/o gc & 57    & 1              \\
+Regression w/gc         & 53.92 & 12             \\
+Regression w/o gc       & 48.15 & 5              \\
+Odds w/gc               & 46.62 & 11             \\
+Odds w/o gc             & 49.31 & 1              \\ \bottomrule
+\end{tabular}
+\caption{Performance from gameweek 7 to 19.}
+\label{tab:first_wildcard}
+\end{table}
 
 
+As can be seen in Table \ref{tab:performance_triple_captain}, all methods select either Harry Kane or Son Heung-min as Triple Captain in gameweek 22. First, it is worth noting that all players play for Tottenham, one of two teams that had a double gameweek. Furthermore, the Regression and Odds method had both players in their starting line-ups. Thus, both the Regression and Odds had a higher forecast for Son Heung-min than Harry Kane. A curious observation is that it was speculated in whether Kane would play both matches or not. Such events can be caught by the Regression method by the variables number of transfers in and transfers out, and by the odds set by the decisions of bookmakers. For the Modified Average method, however, there is no way to pick up such signals. By not being able to incorporate any qualitative information such as rumours, the Modified Average has a disadvantage when it comes to making the important decision as who to select for Triple Captain.
 
-In general, the methods with gamechips does not outperform the methods without. When considering the performance of each model in gameweek 1-21, it is hard to spot the difference. 
+\begin{table}[H]
+\centering
+\begin{tabular}{@{}lcc@{}}
+\toprule
+                 Method       & Triple Captain & Points \\ \midrule
+Modified Average w/gc   & Harry Kane           & 9      \\
+Modified Average w/o gc & Harry Kane           & 6      \\
+Regression w/gc         & Son Heung-min            & 36     \\
+Regression w/o gc       & Son Heung-min            & 24     \\
+Odds w/gc               & Son Heung-min            & 36     \\
+Odds w/o gc             & Son Heung-min            & 24     \\ \bottomrule
+\end{tabular}
+\caption{Performance of Triple Captain in gameweek 22.}
+\label{tab:performance_triple_captain}
+\end{table}
 
+\newpar 
 
-However, the models appear to perform better in the particular gameweeks where Triple Captain, Bench Boost and Free Hit are played. This is as expected, as these gamechips are used in order to boost the performance for one gameweek. However, as we only have odds for the first 31 gameweeks, the second Wildcard and Bench Boost are not considered for the Odds method. 
+From Figure \ref{fig:res_comp_gamechips} it is apparent that all methods perform better when the Free Hit is used in the blank gameweek 31 with a difference of approximately 20 points. Furthermore, it is notable that only the Odds method makes a substantial amount of transfers ahead of the blank gameweek. This can be explained by the sub-horizon of 1, as the other methods can plan 3 matches ahead. For the Modified Average there are large differences in the number of players playing with and without gamechips, compared to the other methods. 
+This can be due to the fact that the parameter tuning was done without taking the Free Hit into consideration. Hence, a penalty term of 16 is perhaps not optimal. It is worth noting that all methods obtain a relatively high score for the gameweek. This is mostly explained by the fact that Mohammed Salah earned 29 points for the particular gameweek. As all methods had him as captain, they earned a score of 58 points on him alone.
+
+\begin{table}[H]
+\centering
+\begin{tabular}{@{}lccc@{}}
+\toprule
+Method                  & Points GW31 & Transfers  & Players playing \\ \midrule
+Modified Average w/gc   & 92          & 14         & 11              \\
+Modified Average w/o gc & 74          & 0  & 5               \\
+Regression w/gc         & 104         & 13         & 11              \\
+Regression w/o gc       & 87          & 2  & 9               \\
+Odds w/gc               & 97          & 15         & 11              \\
+Odds w/o gc             & 61          & 10  & 11              \\ \bottomrule
+\end{tabular}
+\caption{Performance of Free Hit in gameweek 31.}
+\label{tab:performance_free_hit}
+\end{table}
+
 
 \newpar
 
-When regarding the Wildcards, it is noticeable from Figure \ref{fig:avg_gc_no_gc} that the first Wildcard have a negative impact on the Modified Average method. In fact, from gameweek 7 to gameweek 28 the model disregarding gamechips outperforms the one including them with 100 points. 
-\newpar
+As the second Wildcard and Bench Boost are played in cooperation, they are discussed together. The second Wildcard was played in gameweek 33, preparing for the double gameweek 34. As data for these gameweeks only are available for the Modified Average and Regression method, the discussion is limited to these methods. Since the Bench Boost is played in gameweek 34, it is considered by the model from gameweek 32. Since gameweek 31 is the gameweek when the Free Hit is played, we have considered gameweek 32-34 when evaluating the effect of the second Wildcard and Bench Boost. Table \ref{tab:performance_wildcard_and_bench_boost} shows that in terms of mean points obtained, the effect of the Wildcard and Bench Boost for gameweek 32-34 is positive only for the Regression method. In particular, the Modified Average again performs weaker in the week the Wildcard is played, while the Regression performs better. Furthermore, both methods improves in the week the Bench Boost is played. However, as 15 players are awarded points, this is not unexpected.
 
-When considering overall rank, it is worth noting that we have used all gamechips for the Modified Average and Regression, while this is not necessarily the case for other managers. 
+
+\begin{table}[H]
+\centering
+\begin{tabular}{@{}llccc@{}}
+\toprule
+Method                  & GW 32 & GW 33 (W) & GW 34 (BB) & Mean \\ \midrule
+Modified Average w/gc   & 37    & 31        & 88         & 52   \\
+Modified Average w/o gc & 48    & 42        & 81         & 57   \\
+Regression w/gc         & 42    & 32        & 91         & 55   \\
+Regression w/o gc       & 48    & 23        & 61         & 44   \\ \bottomrule
+\end{tabular}
+\caption{Performance of Wildcard and Bench Boost in GW32-34.}
+\label{tab:performance_wildcard_and_bench_boost}
+\end{table}
+
 
 \begin{comment}
-By performing 11 transfers, the new team differs significantly from that without gamechips. The poor performance in the following gameweeks are due to weak foorcasts of future performance. Hence, the effects of the Wildcard propagates throughout the season. 
-\end{comment} 
+\subsubsection{Discussion - effect of gamechips}
 
-\newpar
-In the Regression method, the inclusion of the first Wildcard has a slightly negative impact on the overall result. From gameweek 7 to gameweek 28, the model disregarding gamechips outperforms the one including them with 7 points. 
-
-\newpar
-
-As for the Odds method however, the inclusion of the first Wildcard significantly improve the performance. This is shown in Figure \ref{fig:odds_gc_no_gc}. Clearly, by comparison of Table \ref{fig:res_comp_dis_gamechips} and \ref{fig:res_comp_gamechips}, we see that the first Wildcard has a great positive effect for the Odds method. This can be stated as only the first Wildcard and the Triple Captain (which increased the captain's score by 5 points) were played in the Odds method. 
-
-\newpar
 
 - godt poeng: man ser i regresjonen at det er ikke tidseffekt av poeng, og det kan forklare hvorfor modified average kan gjøre dårlig siden man vil ha et stabilt lagt over en sesong. Og da, kan det også forklare hvorfor wildcard gjør det bedre på regresjonen. 
 
@@ -478,30 +516,57 @@ As for the Odds method however, the inclusion of the first Wildcard significantl
 
 - godt poeng: at man fikser modellen til å bruke gamechippene i visse uker og dermed minsker løsningsrommet og dermed er det ikke rart at man får sub-optimale løsninger. 
 
-Finally, from Figure \ref{fig:avg_gc_no_gc} and \ref{fig:reg_gc_no_gc} it is evident that the combination of the second Wildcard and the Bench Boost had a positive impact on both the Modified Average and the Regression method. This may provide evidence that combining the Second Wildcard and Bench Boost yields a positive result. Moreover, it is noticable that the second Wildcard had a great positive impact for the blank gameweek 35 in both methods. 
+\end{comment}
+
+
+
+
 
 \subsection{Summary}
-Here we present a table that summarizes the results from the three different approaches. 
+
+\begin{table}[H]
+\centering
+\resizebox{\columnwidth}{!}{%
+\def\arraystretch{1.5}
+\begin{tabular}{|l|c|c|c|c|c|}
+\hline
+Solution method            & Total points              & Mean                       & Std.Dev                    & Overall ranking               & \makecell{Mean penalized \\ transfers} \\ \hline
+Modified Average w/ gc     & 1881                      & 53.74                      & 16.62                      & Top 12\%                      & 0.23                                                                                \\ \hline
+Modified Average w/o gc    & 1916                      & 54.74                      & 15.85                      & Top 8\%                       & 0.23                                                          \\ \hline
+Regression w/ gc           & 1901                      & 54.31                      & 20.32                      & Top 10\%                      & 1.20                                                                                \\ \hline
+Regression w/o gc          & 1765                      & 50.43                      & 20.73                      & Top 30\%                      & 1.80                                                           \\ \hline
+Odds (31 gameweeks) w/ gc  & 1557                      & 50.23                      & 15.17                      & Top 30\%                      & 0.48                                                                                \\ \hline
+Odds (31 gameweeks) w/o gc & 1650                      & 53.23                      & 13.94                      & Top 13\%                      & 0.81                                                           \\ \hline
+Realized points            & ?                         & ?                          & ?                          & ?                             & ?  
+                             \\ \hline
+Weekly Average             & 1699                      & 48.53                      & 7.99                       & Top 40\%                      & -                                                                                   \\ \hline
+Top Manager                & 2329                      & 66.54                      & 18.02                      & Top 1 ‰                       & 0.11                                                                                \\ \hline
+\end{tabular}%
+}
+\caption{Summary of the results.}
+\label{tab:summary_of_results}
+\end{table}
+
+
+In Table \ref{tab:summary_of_results}, the results of all different methods with and without gamechips are presented. Furthermore, the solution with realized points are also given to use as a benchmark. However, the model with realized points significantly beats the forecast-based optimization model. Therefore, as a more realistic benchmark for top performance, the performance of the top manager is included. As a benchmark of average performance, the weekly average is used.
 
 \newpar
 
-As evident from Table \ref{tab:res_dis_gamechips} and \ref{tab:res_incl_gamechips}, the solution method disregarding gamechips outperforms that of including gamechips, obtaining mean scores of 54.74 and 53.74 respectively. Furthermore, in terms of the overall Fantasy Premier League rankings, they would finish among the top 8\% and 12\% respectively. 
+The best manager only manages to achieve ?\% of what the solution with realized points does. This speaks in volumes of the overall uncertainty in the FPL. Furthermore, it motivates the potential of data-driven models. With either the Modified Average forecasting approach, or the Regression based approach with gamechips, our forecast-based optimization model appears to have the potential to reach among the top 10\% of managers in the FPL. However, as we only have tested on one season, overly categorical statements should not be made. Regardless, a position in the top 30\% is achieved by all marks. Thus, beating the average weekly performance certainly appears to be obtainable. As the season consists of 38 gameweeks, comparing overall performance is somewhat biased when we only look at gameweek 1-35. For instance, some managers may still have gamechips left. This is also the case when comparing Odds to the other methods. Nevertheless, the results should be indicative as more than 5.5 million people play the game and plenty will already have played all the gamechips.
 
 \newpar
 
-Figure \ref{fig:reg_gc_no_gc} provides a comparison of the results from the Regression method when gamechips are included and disregarded. As evident from Table \ref{tab:res_dis_gamechips} and \ref{tab:res_incl_gamechips}, the solution method including gamechips outperforms that of disregarding them, obtaining mean scores of 53.97 and 50.43 respectively. Furthermore, in terms of the overall Fantasy Premier League rankings, they would finish among the top 11\% and 30\% respectively. 
+The effect of gamechips is not consistent for all methods. The Triple Captain and Free Hit appears to boost performance for all methods. The Second Wildcard in combination with Bench Boost appear to have a favorable effect on the Regression model, but not for the Modified Average. The same goes for the first Wildcard. This can be due to several reasons. First, for the Regression method in section \ref{exp_setup_reg}, it is found that time-series effect of points is rather limited. Hence, for the Regression, only variables such as total amount of goals, saves etc are considered. When playing the Wildcard, the entire selected squad can be changed, and the new selected squad is carried forwards. If the Wildcard is played and forecasts are based on the Regression method, the performances of players over all the previous gameweeks are considered. For the Modified Average, on the other hand, the forecasts are only based on the last 5 matches. When considering to change the entire selected squad, i.e. playing the Wildcard, taking the all previous gameweeks into consideration seems to be the preferable approach. Secondly, the parameter tuning is done without gamechips in mind. That is, neither track length nor sub-horizon are optimized with respect to the Wildcard.
 
 \newpar
 
-As evident from Table \ref{tab:res_dis_gamechips} and \ref{tab:res_incl_gamechips}, the solution method including gamechips outperforms that of disregarding gamechips, obtaining mean scores of 50.24 and 47.14 respectively. Furthermore, in terms of the overall Fantasy Premier League rankings, they would finish among the top 31\% and 47\% respectively. 
+Due to the limited data, a parameter tuning was only possible for the Modified Average. The Regression method has a mean of 1.80 and 1.20 penalized transfers each gameweek without and with gamechips respectively. Thus, a potential for parameter tuning exists for the method, and is an exciting topic for future research.
 
-\newpar
+\newpar 
 
-In general, a solution method using odds is expected to perform evenly throughout the season, due to the consistency of predictions. Compared to the Modified Average and the Regression methods, this is evident as the Odds method has lower vertices. Moreover, as shown in Table \ref{tab:res_incl_gamechips}, the Odds method has lower variance in terms of mean performance when disregarding gameweek 7 and gameweek 13.  
+In general, the methods exhibit different volatility. For one, the Odds method has the lowest standard deviation both with and without gamechips. In general, a solution method using odds is expected to perform evenly throughout the season, due to the consistency of predictions. Furthermore, the sub-horizon of one may also play a part. Moreover, the standard deviation is considerably higher for the Regression method than the other methods. 
 
-\newpar
 
-Again, we stress the fact that no general conclusion can be made as this is tested on data only for one season. However, the performance show that there are potential in both the problem and the solution method.  
 
 \begin{comment}
 \section{Recommendations for human FPL managers}
@@ -510,17 +575,6 @@ Again, we stress the fact that no general conclusion can be made as this is test
     * er budsjettet alltid oppfylt? og hvordan utvikler verdien til laget seg over sesongen? 
     
     - Tabell over Formasjon i optimal solution. 
-
-
-
-\begin{table}[H]
-\centering
-\caption{Results of total sum, average, total sum best player. Model without variance.}
-\begin{tabular}{llllllll}
-& Average Argentina & Average Improved & Odds & Regression  & Average Players & Best Player & Exact\\
-Total sum  & NA  & NA & NA & NA & NA & NA & NA \\
-\end{tabular}
-\end{table}
 \end{comment}
 
 \begin{comment}
@@ -534,58 +588,69 @@ Good discussion points:
 
 \section{Risk Handling}
 
-In this section the element of risk handling is added to the mathematical model to analyze its effect. The constraints \ref{eq:variance} to \ref{eq:variance_p_p_dash_beta} are included in the mathematical model formulated in Section \ref{mathematical_model} and run with changing $\sigma_{0}^2 \in [\underline{\sigma}, \overline{\sigma}]$. The objective of adding the constraints is the add on of \textit{diversification}, a risk management technique which as the purpose of on average yielding higher returns(expected points) and give a lower risk.
+In this section we present a computational study when risk handling is added to the mathematical model. That is, constraints \ref{eq:variance} to \ref{eq:variance_p_p_dash_beta} are included in the mathematical model formulated in Section \ref{mathematical_model}. Furthermore, we run the model with changing $\sigma_{0}^2 \in [\underline{\sigma^2}, \overline{\sigma^2}]$. Forecasts from the the Modified Average method are used when running the model. As the Regression method exhibits most variance, this method is best suited for risk handling. However, as outlined in Section \ref{exp_setup_Value_Variance}, the variance of each player is estimated as the empirical variance. The task of estimating variance is more complex for the regression model, as the explanatory variables are assumed to explain some of the variance. Therefore, forecasts from the Modified Average model is used.
 
 \newpar
 
-The method with the best results from previous sections is used as forecasting method. Hence, Modified average is used. The aim is to discuss its effect on the solution, and examine the performance to see if there are any similarities with the variance effect in portfolio optimization. It is important to emphasize that one can not take any general conclusions on the impact, as this is bases on realization of points in one season. Nevertheless, a season includes 35 data points on 625 players, and consequently useful insight is obtainable from such analysis.  
+\begin{comment}
+The aim is to discuss the effect of risk handling on the solution, and examine the performance to see if there are any similarities with the variance effect in portfolio optimization. It is important to emphasize that one can not take any general conclusions on the impact, as this is bases on realization of points in one season. Nevertheless, a season includes 35 data points on 625 players, and consequently useful insight is obtainable from such analysis.  
+\end{comment}
+
 
 \newpar
 
-There are two interesting dependencies to analyze: the effect the variation of threshold has on expected points, and the effect the variation of threshold has on realized points.
+The aim of the study is to discuss the effect risk handling has on the solution. Further, the performances are examined to observe if there are any similarities between the expected points and variance trade-off in the FPLDP and in portfolio optimization. Thus, there are two interesting dependencies to analyze: the effect the variation of threshold has on expected points, and the effect the variation of threshold has on performance.
 
 \newpar
 
-The computational time is increased considerably when including constraints \ref{eq:variance} to \ref{eq:variance_p_p_dash_beta}. This is explainable since these are quite heavy constraints. The computational time varies from 26 min to 17 min for the threshold $\underline{\sigma}$ to $\overline{\sigma}$, respectively. 
+\begin{comment}
+
+The computational time is increased considerably when including constraints \ref{eq:variance} to \ref{eq:variance_p_p_dash_beta}. This is explainable since these are quite heavy constraints. The computational time varies from 26 min to 17 min for the threshold $\underline{\sigma}$ to $\overline{\sigma}$, respectively.
+
+\end{comment}
+ 
 
 \newpar
 
-The mathematical model maximizes based on player's expected points, and the variance is estimated by the use of historical data. Hence, one would assume that when the threshold is decreased, the expected value of the team also decreases. This would coincide to the efficient frontier in portfolio optimization, where one obtains the optimal set of portfolios which gives the highest expected points for a certain level of risk, i.e. variance. In Figure \ref{fig:threshold_obj_value}, the expected points are plotted against threshold. From the figure one can see that it violates the prediction of a perfect curve, as there are some outliers. One explanation could be the handling of input for players which have not featured in the FPL before. This were handled by setting their variance to the average. In the first rounds, there is a big chance that there are players with the same expected points, and same empirical variance since we set the variance to average for the players we do not have data on. Hence, the model has several solutions with the same expected value and consequently when we set a unlimited threshold the results differs with the results without the threshold. This is a drawback with how we handle forecast and estimation on players we do not have data on, and an alternative approach which takes this issue into account wold be interesting. 
-
-\newpar
-
-An interesting question is how much is the impact the restriction on variance has on the expected value. It is reasonable to say that a steeper curve suggests a bigger impact, and the less steeper curve suggest a smaller impact. Figure \ref{fig:threshold_obj_value_linear_curve} suggests that the impact is not that severe. This moves to the discussion of how important it is actually to include variance in FPL decisions. This is difficult to say before we have examined the impact on the realized points, which will be further discussed. 
-
-\newpar
-
-The case with realized points is slightly different from expected value. One would expect a similar impact of the variance constraints, however there is naturally a bigger possibility of outliers. Figure \ref{fig:threshold_mean} shows that there is a negative trend when the thresholds is decreased. This coincides well with the logic of portfolio optimization. In addition, there is also one case of actually obtaining better results. Threshold of 5000 gives a mean of 54.7 which is better than without the variance constraints. 
-
-\newpar
-
-In the end, it is interesting to investigate how different the teams actually are with the introduction of variance constraints. Do the model choose players which are stable and always achieves a certain amount of points? And, do the model choose players which plays for opposing teams? Or the model always try to pick players which do not play against each other? In general, do the behaviour of the model imitate the analogy of diversification in portfolio management? If so, this is a great finding. 
-
+The mathematical model maximizes a team's expected points. Hence, one would assume that when the threshold is decreased, the expected value of the team also decreases. This would coincide to the \textit{efficient frontier} in portfolio optimization, where one obtains the optimal set of portfolios which gives the highest expected points for a certain level of risk, i.e. variance. In Figure \ref{fig:threshold_GW1}, the expected points, i.e. the objective value, obtained by the optimization model for for the first sub-problem is plotted against different variance thresholds. The curve exhibits the same behavior as the efficient frontier, but is not smooth. This is because in the FPLDP the one can either include a player, or not. That is, the decision is binary. In other words, opposed to the classic portfolio optimization problem, one can not hold a fraction of an asset in the FPLDP. 
 
 \begin{figure}[H]
     \centering
-    \includegraphics[scale=0.75]{fig/chapter_7/threshold_obj_value.png}
+    \includegraphics[scale=0.5]{fig/chapter_7/GW1_var.png}
     \caption{Threshold plotted against objective value in the mathematical model.}
-\label{fig:threshold_obj_value}    
-\end{figure}
+\label{fig:threshold_GW1}    
+\end{figure}%
 
-\begin{figure}[H]
-    \centering
-    \includegraphics[scale=0.75]{fig/chapter_7/GW1_var.png}
-    \caption{Linear curve of the data points in Figure \ref{fig:threshold_obj_value}.}
-\label{fig:threshold_obj_value_linear_curve}    
-\end{figure}
+
+In Figure \ref{fig:performance_varying_threshold}, the mean points of the 2017/2018 season is plotted for different variance threshold. It is observable that the trend is somewhat similar to that of the efficient frontier, but some clear outliers can be found. However, note that a portfolio's return does not necessarily follow the efficient frontier when an analysis of realized returns is done. The highest value is not reached for the unlimited threshold, but for N. For this point, the method would have achieved X points, earning a spot among the top 1.5\%. Furthermore, the interval between 
+between M and M the mean score is H. 
 
 
 \begin{figure}[H]
     \centering
-    \includegraphics[scale=0.75]{fig/chapter_7/threshold_mean.png}
-    \caption{Threshold plotted against realized points shown by mean.}
-\label{fig:threshold_mean}    
-\end{figure}
+    \includegraphics[scale=0.5]{fig/chapter_7/var.png}
+    \caption{Results of the performance when varying threshold.}
+\label{fig:performance_varying_threshold}    
+\end{figure}%
+
+
+It is worth noting that the value stabilizes at a value of 53.x, just below the value without the constraint, even for values such as 10M. This is because different solutions with the same expected value are selected by the solver.One explanation could be the handling of input for players which have not featured in the FPL before. This were handled by setting their variance to the average. In the first rounds, there is a big chance that there are players with the same expected points, and same empirical variance since we set the variance to average for the players we do not have data on. Hence, the model has several solutions with the same expected value and consequently when we set a unlimited threshold the results differs with the results without the threshold. This is a drawback with how we handle forecast and estimation on players we do not have data on, and an alternative approach which takes this issue into account wold be interesting. 
+
+\newpar
+
+\textit{Here there will be a graph of a solution with expected points to see if there are less variance.}
+
+\newpar
+To summarize, variance appears to have a positive solution on the performance. Both in terms of stabilizing points and in achieving a high performance.
+
+
+\begin{comment}
+In the end, it is interesting to investigate how different the teams actually are with the introduction of variance constraints. Do the model choose players which are stable and always achieves a certain amount of points? And, do the model choose players which plays for opposing teams? Or the model always try to pick players which do not play against each other? In general, do the behaviour of the model imitate the analogy of diversification in portfolio management? If so, this is a great finding. 
+\end{comment}
+
+
+
+
 
 \begin{comment}
 \begin{enumerate}
@@ -654,9 +719,8 @@ $100^2$     & 335.475             & 109.042            \\ \bottomrule
 
 \end{comment}
 
+\begin{comment}
 
-% Please add the following required packages to your document preamble:
-% \usepackage{booktabs}
 \begin{table}[H]
 \centering
 \begin{tabular}{@{}lll@{}}
@@ -706,10 +770,12 @@ $100^2$    & 335.475             & 28.626                       \\ \bottomrule
 \label{tab: threshold_expected_points_gw1}
 \end{table}
 
-- GRAFEN ER IKKE LINEAR SIDEN VALGET OM Å HA MED EN SPILLER ER BINARY OG IKKE FRACTION. 
+\end{comment}
 
-% Please add the following required packages to your document preamble:
-% \usepackage{booktabs}
+
+
+\begin{comment}
+
 \begin{table}[]
 \centering
 \begin{tabular}{@{}lll@{}}
@@ -738,6 +804,9 @@ Threshold & Expected Points GW1 & Computational Time \\ \midrule
 \caption{Expected points GW1 run with different thresholds}
 \label{tab: threshold_expected_points_gw1_halves}
 \end{table}
+
+
+\end{comment}
 
 
 
