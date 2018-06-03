@@ -50,7 +50,7 @@ $\mathcal{T}_{SH}$ & - & Gameweek 22 to 35 is in the second half of the season. 
 Parameters                       &   &                                                                                                \\ \midrule
 $\mathlarger{\rho_{pt}}$ & - & Realized points for a player $p$ in a gameweek $t$. \\
 $\epsilon$                       & - & Set to 0.1.                                                                     \\
-$\kappa_{1}, \kappa_{2}, \kappa_{3} $                     & - & Set to 0.01, 0.001 and 0.0001 respectively.                                               \\
+$\kappa_{1}, \kappa_{2}, \kappa_{3} $                     & - & Set to 0.01, 0.001 and 0.0001, respectively.                                               \\
 $C_{pt}^{B}$                     & - & Buy price collected from FPL homepage.  \\ 
 $R$                              & - & 4 points deducted if number of free transfers is exceeded.       \\
 $M^{K}$                          & - &  2 goalkeepers required in the selected squad.                                      \\
@@ -149,7 +149,7 @@ In the following, the provide the results for the model introduced in chapter \r
 
 \begin{figure}[H]
     \centering
-    \includegraphics[scale=0.75]{fig/chapter_7/perf_gc.png}
+    \includegraphics[scale=0.5]{fig/chapter_7/perf_gc.png}
     \caption{The graph shows the points per gameweek with perfect information}
 \label{Figure_Realized_points}    
 \end{figure}
@@ -181,7 +181,7 @@ Some readers may find value in comparing the optimal FPL solution to the perform
 \begin{figure}[H]
 \label{fig:Comparison}
     \centering
-    \includegraphics[scale=0.75]{fig/chapter_7/Comparison_colour.png}
+    \includegraphics[scale=0.75]{fig/chapter_7/perf_top_avg.png}
     \caption{The graph compares the weekly average and the top performer of each Gameweek to the optimal team with perfect information}
 \label{Figure_Comparison}    
 \end{figure}
@@ -325,7 +325,7 @@ The Regression method displays a higher variance than the other methods, and rea
 
 \subsubsection{Odds}
 \begin{comment}
-The Odds method reaches a total score of 1331 points for 30 gameweeks, and 1320 for 28 gameweeks, yielding a mean of 44.37 and 47.14 points per gameweek respectively. In terms of the overall FPL ranking, the Odds method finishes in the top 47\% when 28 gameweeks are considered.
+The Odds method reaches a total score of 1331 points for 30 gameweeks, and 1320 for 28 gameweeks, yielding a mean of 44.37 and 47.14 points per gameweek, respectively. In terms of the overall FPL ranking, the Odds method finishes in the top 47\% when 28 gameweeks are considered.
 \end{comment}
 
 
@@ -540,7 +540,7 @@ Odds (31 gameweeks) w/o gc & 1650                      & 53.23                  
 Realized points            & 4500                         & 128.57                          & 16.50                          & NA                             & 4.23  
                              \\ \hline
 Weekly Average             & 1699                      & 48.53                      & 7.99                       & Top 40\%                      & -                                                                                   \\ \hline
-Top Manager                & 2329                      & 66.54                      & 18.02                      & Top 1 ‰                       & 0.11                                                                                \\ \hline
+Top Manager                & 2329                      & 66.54                      & 18.28                      & Top 1 ‰                       & 0.11                                                                                \\ \hline
 \end{tabular}%
 }
 \caption{Summary of the results.}
@@ -571,8 +571,7 @@ In general, the methods exhibit different volatility. It appears as if the Regre
 
 The effect of gamechips is not consistent for all methods. The Triple Captain and Free Hit appears to boost performance for all methods. The Second Wildcard in combination with Bench Boost appear to have a favorable effect on the Regression model, but not for the Modified Average. The same goes for the first Wildcard. This can be due to several reasons. First, for the Regression method in Section \ref{exp_setup_reg}, it is found that time-series effect of points is rather limited. Hence, for the Regression, only variables such as total amount of goals, saves etc are considered. When playing the Wildcard, the entire selected squad can be changed, and the new selected squad is carried forwards. If the Wildcard is played and forecasts are based on the Regression method, the performances of players over all the previous gameweeks are considered. For the Modified Average, on the other hand, the forecasts are only based on the last 5 matches. When considering to change the entire selected squad, i.e. playing the Wildcard, taking the all previous gameweeks into consideration seems to be the preferable approach. Secondly, the parameter tuning is done without gamechips in mind. That is, neither track length nor sub-horizon are optimized with respect to the Wildcard.
 
-It is rather counter intuitive that the results is worse when including the gamechips. In the end, the varying results of the model run with gamechips is due to the implementation of the gamechips.  First, since the implementation chosen is rather based on strategy than data-driven, it is questionable in relation the mathematical model. Second, the bad results can be explained by that since one fixes the use of gamechips to be used in certain gameweeks, the solution space is decreased and hence the solutions found are sub-optimal. The implementation of gamechips is what is regarded as the major drawback of this thesis, and is the one area which is 
-to since the model is fixed to use the gamechips in certain game
+It is rather counter intuitive that the results are worse when including gamechips. In the end, the varying results of the model run with gamechips is due to the implementation of the gamechips.  First, since the implementation chosen is rather based on strategy than data-driven, it is questionable in relation to the mathematical model. Second, the bad results can be explained by that since one fixes the use of gamechips to be used in certain gameweeks, the solution space is decreased and hence the solutions found are sub-optimal. The implementation of gamechips is what is regarded as the biggest drawback of this thesis, and is the one area which is up for most improvement.
 
 
 \begin{comment}
@@ -613,7 +612,7 @@ The aim is to discuss the effect of risk handling on the solution, and examine t
 
 \newpar
 
-The aim of the study is to discuss the effect risk handling has on the solution. Therefore, it is interesting to examine what effect different  variance thresholds has on performance. One interesting assumption to investigate, is if there are any similarities between the expected points and variance trade-off in the FPLDP and in portfolio optimization. Therefore, we begin by studying the effect the variation of thresholds has on expected points in gameweek 1. The mathematical model maximizes a team's expected points. Hence, one would assume that when the threshold is decreased, the expected value of the team also decreases. This would coincide to the \textit{efficient frontier} in portfolio optimization, where one obtains the optimal set of portfolios which gives the highest expected points for a certain level of risk, i.e. variance. In Figure \ref{fig:threshold_GW1}, the expected points, i.e. the objective value, obtained by the optimization model for the first sub-problem is plotted against different variance thresholds. The curve exhibits the same behavior as the efficient frontier, but is not smooth. This is because in the FPLDP one can either include a player, or not. That is, the decision is binary. In other words, opposed to the classic portfolio optimization problem, one can not hold a fraction of an asset in the FPLDP. 
+The aim of the study is to discuss the effect risk handling has on the solution. Therefore, it is interesting to examine what effect different  variance thresholds has on performance. One interesting assumption to investigate, is if there are any similarities between the expected points and variance trade-off in the FPLDP and in portfolio optimization. Therefore, we begin by studying the effect the variation of thresholds has on expected points for the first sub-problem. The mathematical model maximizes a team's expected points. Hence, one would assume that when the threshold is decreased, the expected value of the team also decreases. This would coincide to the \textit{efficient frontier} in portfolio optimization, where one obtains the optimal set of portfolios which gives the highest expected points for a certain level of risk, i.e. variance. In Figure \ref{fig:threshold_GW1}, the expected points, i.e. the objective value, obtained by the optimization model for the first sub-problem is plotted against different variance thresholds. The curve exhibits the same behavior as the efficient frontier, but is not smooth. This is because in the FPLDP one can either include a player, or not. That is, the decision is binary. In other words, opposed to the classic portfolio optimization problem, one can not hold a fraction of an asset in the FPLDP. 
 \newpar
 
 \begin{comment}
@@ -630,7 +629,7 @@ The computational time is increased considerably when including constraints \ref
 \end{figure}%
 
 
-In Figure \ref{fig:performance_varying_threshold}, the mean points of the 2017/2018 season is plotted for different thresholds. It is observable that the plot deviates from that of the efficient frontier, but some similarities can be found. Higher thresholds are for instance associated with higher mean scores, and lower thresholds are associated with lower mean scores. Note, however, that a portfolio's return does not necessarily follow the efficient frontier when an analysis of realized returns is performed.
+In Figure \ref{fig:performance_varying_threshold}, the mean points of the 2017/2018 season is plotted for different thresholds. Due to computational difficulties in the software, Mosel Xpress-MP, the model was stopped when a solution within 2 \% optimality gap was found. From Figure \ref{fig:performance_varying_threshold}, it is observable that the plot deviates from that of the efficient frontier, but some similarities can be found. Higher thresholds are for instance associated with higher mean scores, and lower thresholds are associated with lower mean scores. Note, however, that a portfolio's return does not necessarily follow the efficient frontier when an analysis of realized returns is performed.
 
 \newpar
 
