@@ -103,18 +103,17 @@ Xpress Presolve Statistics  & 170 750 & 206 689   \\
 
 \subsection{Results of running the model with realized points}
 
-
-
 From Figure \ref{fig:solutions_found_realized_points}, it is observable that nearly optimal solutions are found after 1000 seconds, hence the maximum running time is set to 86 400 seconds, or 1 day. 
 
 \begin{figure}[H]
-\label{fig:solutions_found_realized_points}    
     \centering
-    \includegraphics[scale=0.75]{fig/chapter_7/solution_found_edit_zoom_1.png}
+    \includegraphics[scale=0.50]{fig/chapter_7/solution_found_edit_zoom_1.png}
     \caption{Graph of when the solutions are found in Mosel Xpress-MP.}
+    \label{fig:solutions_found_realized_points}
 \end{figure}
 
-As observed in Table \ref{tab:realized_points_diff_gameweeks}, the gap is 0.75\% after the runtime. The solution is regarded as sufficient to serve as a benchmark and to be compared with the top manager. It is important to note that the objective value given in Table \ref{tab:realized_points_diff_gameweeks} is from the model run, and hence not directly transferable to total points obtained in FPL. Next, the results from realized points will be discussed into more depth.
+As cane be observed in Table \ref{tab:realized_points_diff_gameweeks}, the optimal solution for 35 gameweeks was not found in maximum running time. The solution has a gap of 0.75 \%, and is regarded as sufficient to serve as a benchmark and to be compared with the top manager. It is important to note that the objective value given in Table \ref{tab:realized_points_diff_gameweeks} is from the model run, and hence not directly transferable to total points obtained in FPL. To test the model's scalability, the model was run for different number of gameweeks. The results are summarized in Table \ref{tab:realized_points_diff_gameweeks}, and illustrated in Figure \ref{fig:comp_time_diff_gameweeks}. It is notable that the solution time is increased significantly when solved for more than 20 gameweeks. Next, the results from realized points will be discussed into more depth.
+
 
 \begin{table}[H]
 \centering
@@ -136,19 +135,13 @@ Time to optimality        & 29      & 295      & 1 103     & 2 010     & 23 692 
 \end{table}
 
 \begin{figure}[H]
-\label{fig:solutions_found_realized_points}    
     \centering
-    \includegraphics[scale=0.75]{fig/chapter_7/comp_time.png}
-    \caption{Plot of computational time for model solved over different number of gameweeks.}
+    \includegraphics[scale=0.3]{fig/chapter_7/comp_time.png}
+    \caption{Plot of solution time when model is solved for different number of gameweeks.}
+    \label{fig:comp_time_diff_gameweeks}   
 \end{figure}
 
-\begin{comment}
-- vurdere å a ha med graf på løsningstid og gameweeks. 
-- modellen er kjørt for flere set av number of gameweeks 
-- man ser at antall rows ikke blir redusert så mye, men at antall constraints minker mer 
-- man ser at økningen i computational time ikke er så bratt når modellen løses for opptil 20 gameweeks, men etter det øker comp.time betraktelig og man klarer ikke å finne optimal løsning innenfor max tid.
-- allikevel er et gap på 0.75 nær optimal løsning og er mer enn nok til å brukes som et benchmark 
-\end{comment}
+
 
 
 \subsection{Performance in Fantasy Premier League}
@@ -156,7 +149,7 @@ In the following, the provide the results for the model introduced in chapter \r
 
 \begin{figure}[H]
     \centering
-    \includegraphics[scale=0.75]{fig/chapter_7/RealizedPoints_colour.png}
+    \includegraphics[scale=0.75]{fig/chapter_7/perf_gc.png}
     \caption{The graph shows the points per gameweek with perfect information}
 \label{Figure_Realized_points}    
 \end{figure}
@@ -328,7 +321,7 @@ The Regression method reaches a total score of 1765 points in the first 35 gamew
 \end{comment}
 
 
-The Regression method displays a higher variance than the other methods, and reaches the highest weekly realization. However, the method is outperformed by the two other in terms of mean. The weakest weekly performances are obtained in the beginning of the season. This is perhaps explained by the fact the each player is listed with low values for variables such as goals, assists,  saves etc, making it hard to distinguish the players from each other. Also, data for the newly promoted teams are scarce, thus limiting possibilities. The method achieves its highest weekly score in gameweek 20, earning 114 points. By comparison, the best overall manager earned 156 points, but played the Triple Captain. Adjusting for the gamechip use, the best manager earned 137 points, leaving a difference of 23 points.
+The Regression method displays a higher variance than the other methods, and reaches the highest weekly realization. However, the method is outperformed by the two other in terms of mean. The weakest weekly performances are obtained in the beginning of the season. This is perhaps explained by the fact the each player is listed with low values for variables such as goals, assists, saves etc, making it hard to distinguish the players from each other. Also, data for the newly promoted teams are scarce, thus limiting possibilities. The method achieves its highest weekly score in gameweek 20, earning 114 points. By comparison, the best overall manager earned 156 points, but played the Triple Captain. Adjusting for the gamechip use, the best manager earned 137 points, leaving a difference of 23 points.
 
 \subsubsection{Odds}
 \begin{comment}
@@ -525,15 +518,6 @@ Regression w/o gc       & 48    & 23        & 61         & 44   \\ \bottomrule
 \end{table}
 
 
-\begin{comment}
-\subsubsection{Discussion - effect of gamechips}
-
-- godt poeng: når human fpl managers bruker wildcard vil man ikke ha inn formspillere, som hegazi, og man vil til en større grad bygge et lag for mange uker fremover. med en subhorizon på 3 uker, er ikke dette helt gunstig. 
-
-- godt poeng: at man fikser modellen til å bruke gamechippene i visse uker og dermed minsker løsningsrommet og dermed er det ikke rart at man får sub-optimale løsninger. 
-
-\end{comment}
-
 
 
 
@@ -553,7 +537,7 @@ Regression w/ gc           & 1901                      & 54.31                  
 Regression w/o gc          & 1765                      & 50.43                      & 20.73                      & Top 30\%                      & 1.80                                                           \\ \hline
 Odds (31 gameweeks) w/ gc  & 1557                      & 50.23                      & 15.17                      & Top 30\%                      & 0.48                                                                                \\ \hline
 Odds (31 gameweeks) w/o gc & 1650                      & 53.23                      & 13.94                      & Top 13\%                      & 0.81                                                           \\ \hline
-Realized points            & ?                         & ?                          & ?                          & ?                             & ?  
+Realized points            & 4500                         & 128.57                          & 16.50                          & NA                             & 4.23  
                              \\ \hline
 Weekly Average             & 1699                      & 48.53                      & 7.99                       & Top 40\%                      & -                                                                                   \\ \hline
 Top Manager                & 2329                      & 66.54                      & 18.02                      & Top 1 ‰                       & 0.11                                                                                \\ \hline
@@ -564,7 +548,8 @@ Top Manager                & 2329                      & 66.54                  
 \end{table}
 
 
-In Table \ref{tab:summary_of_results}, the results of all different methods with and without gamechips are presented. Furthermore, the solution with realized points are also given to use as a benchmark. However, the model with realized points significantly beats the forecast-based optimization model. Therefore, as a more realistic benchmark for top performance, the performance of the top manager is included. As a benchmark of average performance, the weekly average is used.
+
+In Table \ref{tab:summary_of_results}, the results of all different methods with and without gamechips are summarized. Furthermore, the solution with realized points are also given to use as a benchmark. However, the model with realized points significantly beats the forecast-based optimization model. Therefore, as a more realistic benchmark for top performance, the performance of the top manager is included. As a benchmark of average performance, the FPL's weekly average is used.
 
 \newpar
 
@@ -580,13 +565,21 @@ As evident from Table \ref{tab:summary_of_results}, the number penalized transfe
 
 \newpar 
 
-In general, the methods exhibit different volatility. It appears as if the Regression method is more varying in its performance than the two other methods and the the Odds method has lowest variability. This is also evident from the standard deviations presented in Table \ref{tab:summary_of_results}. One explanation is that the Regression method does not account for recent performance in as a direct manner as the Modified Average method does by averaging points in the last rounds. Moreover, odds are set by the standard procedures of professional bookmakers, while the other methods are solely based on data and will to a larger degree incorporate extreme and unexpected past events. Moreover, the performance for all methods appear to fluctuates more in the second half of the season. One sensible reason is the emergence of blank and double gameweeks. 
+In general, the methods exhibit different volatility. It appears as if the Regression method is more varying in its performance than the two other methods and the Odds method has lowest variability. This is also evident from the standard deviations presented in Table \ref{tab:summary_of_results}. One explanation is that the Regression method does not account for recent performance in as a direct manner as the Modified Average method does by averaging points in the last rounds. Moreover, odds are set by the standard procedures of professional bookmakers, while the other methods are solely based on data and will to a larger degree incorporate extreme and unexpected past events. Moreover, the performance for all methods appear to fluctuates more in the second half of the season. One sensible reason is the emergence of blank and double gameweeks. 
 
 \newpar
 
 The effect of gamechips is not consistent for all methods. The Triple Captain and Free Hit appears to boost performance for all methods. The Second Wildcard in combination with Bench Boost appear to have a favorable effect on the Regression model, but not for the Modified Average. The same goes for the first Wildcard. This can be due to several reasons. First, for the Regression method in Section \ref{exp_setup_reg}, it is found that time-series effect of points is rather limited. Hence, for the Regression, only variables such as total amount of goals, saves etc are considered. When playing the Wildcard, the entire selected squad can be changed, and the new selected squad is carried forwards. If the Wildcard is played and forecasts are based on the Regression method, the performances of players over all the previous gameweeks are considered. For the Modified Average, on the other hand, the forecasts are only based on the last 5 matches. When considering to change the entire selected squad, i.e. playing the Wildcard, taking the all previous gameweeks into consideration seems to be the preferable approach. Secondly, the parameter tuning is done without gamechips in mind. That is, neither track length nor sub-horizon are optimized with respect to the Wildcard.
 
+It is rather counter intuitive that the results is worse when including the gamechips. In the end, the varying results of the model run with gamechips is due to the implementation of the gamechips.  First, since the implementation chosen is rather based on strategy than data-driven, it is questionable in relation the mathematical model. Second, the bad results can be explained by that since one fixes the use of gamechips to be used in certain gameweeks, the solution space is decreased and hence the solutions found are sub-optimal. The implementation of gamechips is what is regarded as the major drawback of this thesis, and is the one area which is 
+to since the model is fixed to use the gamechips in certain game
 
+
+\begin{comment}
+\subsubsection{Discussion - effect of gamechips}
+- godt poeng: at man fikser modellen til å bruke gamechippene i visse uker og dermed minsker løsningsrommet og dermed er det ikke rart at man får sub-optimale løsninger. 
+
+\end{comment}
 
 
 \begin{comment}
