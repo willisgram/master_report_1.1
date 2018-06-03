@@ -101,11 +101,11 @@ Rolling horizon is an appropriate solution method for FPLDP as managers are prov
 
 In the rolling horizon heuristic, each sub-problem is solved over shorter sub-horizons for the whole season. This corresponds well to the FPLDP, as FPL managers often consider several gameweeks when making decisions. Each sub-horizon is split in two time periods ($TP$). The two \textit{TP}s are $TP_k^{C}$, which is the central period that will be implemented in sub-problem $k$, and the forecasting period $TP_k^{F}$. Before solving sub-problem $k+1$, variables $x$, $v$ and $q$ are frozen and used as input. The sub-horizon is shifted so that the first part of $TP_k^{F}$ becomes $TP_{k+1}^{C}$. If the central period and the forecasting period have equal length, the forecasting period becomes the new central period. 
 
-\begin{itemize}[label=(\roman*)]
+\begin{enumerate}[label=(\roman*)]
     \item \textbf{Fixed period (FP)}. A gameweek where decisions have been implemented and used as input for the next sub-problem. These decisions are the players that are selected in a gameweek, $x$, the remaining budget variable, $v$, and the number of free transfers available, $q$.
     \item \textbf{Central period (CP)}. A gameweek where new decisions are implemented. The decisions include which players to include in the selected squad, $x$, determining the starting line-up, $y$, the choice of captain, $f$,  vice-captain, $h$, whether to use a gamechip or not and which substitution priority, $g$, to assign.  
     \item \textbf{Forecasting period (PP)}. To avoid making too myopic decisions, a predefined number of gameweeks are selected and input data such as expected points, variance and correlation are generated based on information available at that point in time. Decisions are made for these gameweeks, but not implemented.  The decisions are subject to change when new and updated information is available. 
-\end{itemize}
+\end{enumerate}
 
 The FP, CP and PP in a sub-problem are illustrated graphically in figure \ref{fig:rolling_horizon}. In the figure, the predicted part overlaps the central part in order to illustrate that the input data in the central part is also predicted. The sub-horizon is set to 4 gameweeks in the figure. 
 
@@ -175,18 +175,22 @@ The solution framework suggested is based on using forecasting player performanc
 
 \subsection{Forecasts Using Modified Average} \label{Sol_approach_Modified_Average}
 
-The solution approach suggested by \cite{Bonomo} can be used for the English Fantasy Premier League as well as for the Argentinian Fantasy League. In general, \cite{Bonomo} use the average points performance for the three last gameweeks to forecast the performance in the next gameweek. As mentioned in Section \ref{Forecasting_of_player_performance}, the forecast is further accounted weighting it on four factors: team opponent, home advantage, whether a player is on a good performance streak and whether a player is assumed to be in the starting line-up. 
+The solution approach suggested by \cite{Bonomo} can be used for the English Fantasy Premier League as well as for the Argentinian Fantasy League. In general, \cite{Bonomo} use the average points performance for the three last gameweeks to forecast the performance in the next gameweek. As mentioned in Section \ref{Forecasting_of_player_performance}, the forecast is further weighted on four factors: team opponent, home advantage, whether a player is on a good performance streak and whether a player is assumed to be in the starting line-up. 
 
 \newpar
 
 In general, a player's point prediction is calculated according to the following equation:
-\begin{align}
-    \hat{\rho} = & \textrm{\textit{Adjusted avg. points}} \times \textrm{\textit{Team strength}} \times \textrm{\textit{Home advantage}} 
+\begin{equation}
+\begin{split}
+    \hat{\rho}  = & \textrm{\textit{Adjusted avg. points}} \times \textrm{\textit{Team strength}} \times \textrm{\textit{Home advantage}} \\
         & \times \textrm{\textit{Point streak}} \times \textrm{\textit{Starting line-up factor}}
-\end{align}
+\end{split}
+\end{equation}
 
 \newpar
-First, the solution approach suggested by \cite{Bonomo} is replicated for Fantasy Premier League using their numerical weights. However, in this solution method the starting line-up factor is disregarded. This factor was decided upon coaches' announcements, press reports and information posted on the website of the Argentinian Fantasy league \citep{Bonomo}. As our solution method only considers numerical data, the starting line-up factor is consequently disregarded. In addition to replicate their model, we modify and improve it by using different weights adjusted for historical performance in the English Premier League. For instance, we consider averaging over more than 3 gameweeks. The number of gameweeks we look back when we forecast is hereby referred to as the \textit{track-length}. Thus, \cite{Bonomo} use a sub-horizon of 1 gameweeks and a track-length of 3 gameweeks when solving for the Argentinian Fantasy League. 
+
+Further, the starting line-up factor is disregarded. In \cite{Bonomo}, this factor was decided upon coaches' announcements, press reports and information posted on the website of the Argentinian Fantasy league. 
+As this approach aims to consider numerical data as much as possible, the starting line-up factor is consequently disregarded. In addition to replicate their model, we modify and improve it by using different weights adjusted for historical performance in the English Premier League. For instance, we consider averaging over more than 3 gameweeks. The number of gameweeks we look back when we forecast is hereby referred to as the \textit{track-length}. Thus, \cite{Bonomo} use a sub-horizon of 1 gameweeks and a track-length of 3 gameweeks when solving for the Argentinian Fantasy League. 
 
 \newpar
 
@@ -195,7 +199,9 @@ Although \cite{Bonomo} use league table position for measuring the relative stre
 \subsubsection{The Elo system}
 
 The Elo system introduced in section \ref{Strength_of_football_teams} is a rating system used for measuring the relative strength level of sport teams and individual athletes. Within football, the Elo system can be used in order to determine a club's Elo value. The great advantage of the Elo system lies in its simplicity: there is only one value per club at each point in time, the higher the better. 
+
 \newpar
+
 The performance of a team is not measured absolutely, but inferred from wins, losses and draws against other teams. If team A has a Elo value of $R_A$ and team B has a Elo value of $R_B$, team A has an expected score of 
 \begin{equation}\label{eq5.2}
     E_A = \frac{1}{1+10^{\frac{R_B - R_A}{400}}}
@@ -210,37 +216,54 @@ When teams play each other and win or lose, they exchange points. Hence, the clu
 \begin{equation} \label{eq5.4}
     R^{'}_A = R_A + (S_A-E_A) \times k
 \end{equation}
-where $S_A$ is the result (1 for win, 0.5 for draw and 0 for loss). Further, $k$ is a factor which determines the adjustments of the Elo value. A higher k-value will increase the changes in the rating and thus the Elo values suffer from more variation. For smaller k-values, more stable Elo values are created. In chess, the World Chess Federation suggest that a value of k=20 should be used for players with an Elo value below 2400. 
+where $S_A$ is the result (1 for win, 0.5 for draw and 0 for loss). Further, $k$ is a factor which determines the adjustments of the Elo value. A higher k-value will increase the changes in the rating and thus the Elo values suffer from more variation. For smaller k-values, more stable Elo values are created. In chess, the World Chess Federation suggest that a value of $k = 20$ should be used for players with an Elo value below 2400. 
+
 \newpar
+
 Similarly, team B's updated Elo value is given by
 \begin{equation} \label{eq5.5}
     R^{'}_B = R_B + (S_B-E_B) \times k
 \end{equation}
+
 \newpar
+
 In the following, an illustrative example provides how Elo values of two teams are updated once a match between them has been played:
+
 \newpar
+
 Assume that team A has an Elo value of 1881 and that team B has a value of 1650. If team A faces team B, team A has an expected score according to equation \ref{eq5.2}:
+
 \begin{equation*}
     E_A = \frac{1}{1+10^{\frac{1650-1881}{400}}} = 0.791
 \end{equation*}
+
 while team B has an expected score of
+
 \begin{equation*}
     E_B = \frac{1}{1+10^{\frac{1881-1650}{400}}} = 0.209
 \end{equation*}
+
 Further, if team A won the match, its Elo value will increase to a value according to equation \ref{eq5.4}: 
 \begin{equation*}
    R^{'}_A= 1881 + (1-0.791) \times 20 = 1885
 \end{equation*}
+
 As for team B, its Elo value decreases to
+
 \begin{equation*}
    R^{'}_B = 1650 + (0-0.209) \times 20 = 1646 
 \end{equation*}
 
 \subsubsection{Using Elo values to rate Premier League teams}
+
 The Elo values provide a sophisticated measurement of the relative strength between the Premier League teams. Further, as the values are updated once a match has been played, the Elo system somehow catches which teams that are in a good form. Elo values can be obtained according to equation \ref{eq5.2} and \ref{eq5.4}. Clubelo.com provide historical Elo values for most of the professional football teams in the world, including teams in the English Premier League, English 1st division etc. These values are used in order to compute the relative team strength in this project, using a k-value of 20. A great advantage of the ratings provided by Clubelo is the fact that these values are modified, taking into account home field advantage, goal difference and inter-league adjustments. In addition, the Elo values from Clubelo incorporate all fixtures and not only league matches.
+
 \newpar
+
 Once the Elo values are obtained, they can be used in order to weight the previous performance of each Fantasy Premier League player. It is likely to suggest that a player playing for a top-rated team has a greater probability of scoring many points than a player playing for a poor team. In addition, a player is more likely to gain many points against a weak opponent than against a top-rated team. Hence, one should consider both the opponent and the team of a player when calculating his previous average. 
+
 \newpar
+
 In Table \ref{Elo.1617} some Elo values for the first gameweeks of the English Premier League 2016/17 season are listed. Note that the values are calculated ahead of each gameweek, so that the values in the GW1 column are the Elo values of the teams before gameweek 1 has been played. 
 
 \begin{table}[H]

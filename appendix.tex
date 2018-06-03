@@ -9,8 +9,7 @@ $\\[0.5cm]$
 
 \begin{table}[H]
 \centering
-\caption{Bonus Point System}
-\begin{tabular}{|l|l|}
+\begin{tabular}{|l|c|}
 \hline
 \textbf{Action}                                                                   & \textbf{BPS} \\
 \hline
@@ -48,10 +47,66 @@ Being caught offside                                                     & -1  \
 Shot off target                                                          & -1 \\
 \hline
 \end{tabular}
+\caption{Bonus Point System}
 \end{table}
 
 
-\section{A2 - Elo values}
+\section{A2 - The Elo System}
+\label{A2_Elo_System}
+
+The performance of a team is not measured absolutely, but inferred from wins, losses and draws against other teams. If team A has a Elo value of $R_A$ and team B has a Elo value of $R_B$, team A has an expected score of 
+\begin{equation}\label{eq5.2}
+    E_A = \frac{1}{1+10^{\frac{R_B - R_A}{400}}}
+\end{equation}
+when facing team B. Similarly, team B has an expected score of
+\begin{equation}\label{eq5.3}
+    E_B = \frac{1}{1+10^{\frac{R_A - R_B}{400}}}
+\end{equation}
+
+\newpar
+When teams play each other and win or lose, they exchange points. Hence, the club's Elo value is updated once a match has been played. Using the expected scores from equation \ref{eq5.2}, team A's updated Elo value is calculated according to
+\begin{equation} \label{eq5.4}
+    R^{'}_A = R_A + (S_A-E_A) \times k
+\end{equation}
+where $S_A$ is the result (1 for win, 0.5 for draw and 0 for loss). Further, $k$ is a factor which determines the adjustments of the Elo value. A higher k-value will increase the changes in the rating and thus the Elo values suffer from more variation. For smaller k-values, more stable Elo values are created. In chess, the World Chess Federation suggest that a value of $k = 20$ should be used for players with an Elo value below 2400. 
+
+\newpar
+
+Similarly, team B's updated Elo value is given by
+\begin{equation} \label{eq5.5}
+    R^{'}_B = R_B + (S_B-E_B) \times k
+\end{equation}
+
+\newpar
+
+In the following, an illustrative example provides how Elo values of two teams are updated once a match between them has been played:
+
+\newpar
+
+Assume that team A has an Elo value of 1881 and that team B has a value of 1650. If team A faces team B, team A has an expected score according to equation \ref{eq5.2}:
+
+\begin{equation*}
+    E_A = \frac{1}{1+10^{\frac{1650-1881}{400}}} = 0.791
+\end{equation*}
+
+while team B has an expected score of
+
+\begin{equation*}
+    E_B = \frac{1}{1+10^{\frac{1881-1650}{400}}} = 0.209
+\end{equation*}
+
+Further, if team A won the match, its Elo value will increase to a value according to equation \ref{eq5.4}: 
+\begin{equation*}
+   R^{'}_A= 1881 + (1-0.791) \times 20 = 1885
+\end{equation*}
+
+As for team B, its Elo value decreases to
+
+\begin{equation*}
+   R^{'}_B = 1650 + (0-0.209) \times 20 = 1646 
+\end{equation*}
+
+In the following, the Elo values used for 2017/2018 season is presented in form of tables.
 
 \begin{table}[H]
 \centering
