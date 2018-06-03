@@ -3,7 +3,7 @@
 
 \chapter{Solution Framework} \label{chapter_solution_approach}
 
-The FPLDP is a complex problem with a high degree of uncertainty. In each gameweek a large range of decisions must be optimized. Compared to other Fantasy Sports, the gamechips makes it even more complicated. The objective of the model presented in Chapter 4 is to maximize the number of expected points. If the model is run ex-post, the model yields the optimal solution as the realized points are known. However, in order to compete in FPL, decisions must be made ex-ante. Thus, estimations of expected points and strategies for when the gamechips should be played are required. The aim of this chapter is to provide such input and propose a solution method in order to maximize performance over the entire season. 
+The FPLDP is a complex problem with a high degree of uncertainty. In each gameweek a large range of decisions must be optimized. Compared to other Fantasy Sports, the gamechips make it even more complicated. The objective of the model presented in Chapter 4 is to maximize the number of expected points. If the model is run ex-post, the model yields the optimal solution as the realized points are known. However, in order to compete in FPL, decisions must be made ex-ante. Thus, estimations of expected points and strategies for when the gamechips should be played are required. The aim of this chapter is to provide such input and propose a solution method in order to maximize performance over the entire season. 
 
 \newpar
 In the first section of this chapter, we present an overview of the solution approach suggested. In Section \ref{Player_Performance}, three different methods for forecasting player performance are described. Finally, in the Sections \ref{Ch.5_Game_chips} and \ref{Ch.5_Variance_tradeoff}, respectively, methods for implementing gamechips and handling risk are proposed.
@@ -11,7 +11,7 @@ In the first section of this chapter, we present an overview of the solution app
 
 \section{Solution Approach}
 
-As stochastic programming models seek to leverage probability distribution of uncertain parameters, they are regarded as more computational demanding than deterministic programming models \citep{Shapiro}. A common method for solving a stochastic model is by use of scenario generation. For the FPLDP, the number of scenarios explodes even for a modest number of scenarios. With only two scenarios in a gameweek, the number of scenarios already reaches over 1 million for 20 gameweeks ($2^{20} = 1\,048\,576$). Therefore, solving a stochastic model over a whole season is computational infeasible. Hence, we have decided to solve the FPLDP with a deterministic approach. It is solved in a rolling horizon framework where decisions are implemented for one gameweek at a time. When decisions are optimized for a given gameweek, a certain number of gameweeks ahead is considered and forecasts of realized points are generated. Furthermore, strategies for when to use gamechips and a method for incorporating risk are added to the mathematical model.
+As stochastic programming models seek to leverage probability distribution of uncertain parameters, they are regarded as more computational demanding than deterministic programming models \citep{Shapiro}. A common method for solving a stochastic model is by use of scenario generation. For the FPLDP, the number of scenarios explodes even for a modest number of scenarios. With only two scenarios in a gameweek, the number of scenarios already reaches over 1 million for 20 gameweeks ($2^{20} = 1\,048\,576$). Therefore, solving a stochastic model over a whole season is infeasible. Hence, we have decided to solve the FPLDP with a deterministic approach. It is solved in a rolling horizon framework where decisions are implemented for one gameweek at a time. When decisions are optimized for a given gameweek, a certain number of gameweeks ahead is considered and forecasts of realized points are generated. Furthermore, strategies for when to use gamechips and a method for incorporating risk are added to the mathematical model.
 \newpar
 
 
@@ -81,7 +81,7 @@ Gamechip strategies are actions developed to decide when it is optimal to use th
 
 \newpar
 
-As described in Section \ref{Other_Relevant_Research}, there is a large resemblance between the FPLDP and the well known Markowitz portfolio selection problem in financial theory. This is taken advantage of as risk is handled in an analogous manner as it is in a portfolio selection problem.
+As described in Section \ref{Other_Relevant_Research}, there is a large resemblance between the FPLDP and the well known portfolio selection problem in financial theory. This is taken advantage of as risk is handled in an analogous manner.
 
 
 \subsection{Rolling horizon}
@@ -101,8 +101,8 @@ Rolling horizon is an appropriate solution method for FPLDP as managers are prov
 
 In the rolling horizon heuristic, each sub-problem is solved over shorter sub-horizons for the whole season. This corresponds well to the FPLDP, as FPL managers often consider several gameweeks when making decisions. Each sub-horizon is split in two time periods ($TP$). The two \textit{TP}s are $TP_k^{C}$, which is the central period that will be implemented in sub-problem $k$, and the forecasting period $TP_k^{F}$. Before solving sub-problem $k+1$, variables $x$, $v$ and $q$ are frozen and used as input. The sub-horizon is shifted so that the first part of $TP_k^{F}$ becomes $TP_{k+1}^{C}$. If the central period and the forecasting period have equal length, the forecasting period becomes the new central period. 
 
-\begin{itemize}
-    \item \textbf{Fixed period (FP)}. A gameweek where decisions have been implemented and are fixed for the next sub-problem. These decisions are the players that are selected in a gameweek, $x$, the remaining budget variable, $v$, and the number of free transfers available, $q$.
+\begin{itemize}[label=(\roman*)]
+    \item \textbf{Fixed period (FP)}. A gameweek where decisions have been implemented and used as input for the next sub-problem. These decisions are the players that are selected in a gameweek, $x$, the remaining budget variable, $v$, and the number of free transfers available, $q$.
     \item \textbf{Central period (CP)}. A gameweek where new decisions are implemented. The decisions include which players to include in the selected squad, $x$, determining the starting line-up, $y$, the choice of captain, $f$,  vice-captain, $h$, whether to use a gamechip or not and which substitution priority, $g$, to assign.  
     \item \textbf{Forecasting period (PP)}. To avoid making too myopic decisions, a predefined number of gameweeks are selected and input data such as expected points, variance and correlation are generated based on information available at that point in time. Decisions are made for these gameweeks, but not implemented.  The decisions are subject to change when new and updated information is available. 
 \end{itemize}
@@ -122,7 +122,7 @@ An important decision is that of determining the length of the sub-horizon. Idea
 
 \newpar
 
-By including forecasting, gamechip strategies and variance, we have arrived at a \textit{forecast-based optimization model} for the Fantasy Premier League Decisions Problem. Algorithm \ref{alg:forecast_based_opt_model} gives a pseudo code for the forecast-based optimization model.
+By including forecasting, gamechip strategies and variance, we have arrived at a \textit{forecast-based optimization model} for the Fantasy Premier League Decision Problem. Algorithm \ref{alg:forecast_based_opt_model} gives a pseudo code for the forecast-based optimization model.
 
 
 \newpar
@@ -171,21 +171,25 @@ The optimization model presented in chapter \ref{chapter_model_formulation} uses
 
 \section{Forecast of Player Performance} \label{Player_Performance}
 
-
+The solution framework suggested is based on using forecasting player performance as input to the optimization model. There are many ways to do a forecast, and following the description of three forecasting methods are presented. 
 
 \subsection{Forecasts Using Modified Average} \label{Sol_approach_Modified_Average}
 
-The solution approach suggested by \cite{Bonomo} can be used for the English Fantasy Premier League as well as for the Argentinian Fantasy League. In general, \cite{Bonomo} use the average points performance for the 3 last gameweeks to forecast the performance in the next gameweek. In order to improve the forecast, \cite{Bonomo} account for team opponent, home advantage, whether a player is on a good performance streak and whether a player is assumed to be in the starting line-up. This is done by weighting a player's performance by four factors as mentioned in section \ref{Forecasting_of_player_performance}.
+The solution approach suggested by \cite{Bonomo} can be used for the English Fantasy Premier League as well as for the Argentinian Fantasy League. In general, \cite{Bonomo} use the average points performance for the three last gameweeks to forecast the performance in the next gameweek. As mentioned in Section \ref{Forecasting_of_player_performance}, the forecast is further accounted weighting it on four factors: team opponent, home advantage, whether a player is on a good performance streak and whether a player is assumed to be in the starting line-up. 
 
 \newpar
 
 In general, a player's point prediction is calculated according to the following equation:
-\begin{equation}
-    \textrm{Expected points} = \textrm{Adjusted avg. points} \times \textrm{Team strength} \times \textrm{Home advantage} \times \textrm{Point streak} \times \textrm{Starting line-up factor}
-\end{equation}
+\begin{align}
+    \hat{\rho} = & \textrm{\textit{Adjusted avg. points}} \times \textrm{\textit{Team strength}} \times \textrm{\textit{Home advantage}} 
+        & \times \textrm{\textit{Point streak}} \times \textrm{\textit{Starting line-up factor}}
+\end{align}
+
 \newpar
-First, the solution approach suggested by \cite{Bonomo} is replicated for Fantasy Premier League using their numerical weights. However, in this solution method the starting line-up factor is disregarded. This factor was decided upon coaches' announcements, press reports and information posted on the website of the Argentinian Fantasy league \citep{Bonomo}. As our solution method only considers numerical data, the starting line-up is consequently disregarded. In addition to replicate their model, we modify and improve it by using different weights adjusted for historical performance in the English Premier League. For instance, we consider averaging over more than 3 gameweeks. The number of gameweeks we look back when we forecast is hereby referred to as the \textit{track-length}. As both models are run, a comparison of the results is provided in Chapter \ref{sec:inexact}. 
+First, the solution approach suggested by \cite{Bonomo} is replicated for Fantasy Premier League using their numerical weights. However, in this solution method the starting line-up factor is disregarded. This factor was decided upon coaches' announcements, press reports and information posted on the website of the Argentinian Fantasy league \citep{Bonomo}. As our solution method only considers numerical data, the starting line-up factor is consequently disregarded. In addition to replicate their model, we modify and improve it by using different weights adjusted for historical performance in the English Premier League. For instance, we consider averaging over more than 3 gameweeks. The number of gameweeks we look back when we forecast is hereby referred to as the \textit{track-length}. Thus, \cite{Bonomo} use a sub-horizon of 1 gameweeks and a track-length of 3 gameweeks when solving for the Argentinian Fantasy League. 
+
 \newpar
+
 Although \cite{Bonomo} use league table position for measuring the relative strength between adversaries, league position suffers from numerous drawbacks which make it unreliable for prediction. For example, the league table suffers from high variation in the early stage of the season and low variation in the late stage of the season. Further, competing teams may not share the equivalent number of matches during the season due to postponements, thus providing errors for many rounds. Additionally, the league table does not capture the fixtures during the season, hence it is inherently biased until the final match of the season has been played \citep{Constantinou}. Therefore, instead of weighting the teams based on their league position, we can utilize an Elo-rating in order to weight the relative team strengths in the league. In addition, an empirical value of home field advantage in the Premier League is used as a factor for the home advantage. In order to measure a player's recent performance, decisions are made on whether a player is on a positive or negative point streak.
 
 \subsubsection{The Elo system}
@@ -376,7 +380,7 @@ Commonly used error measures include the Mean Absolute Error (MAE, Equation \ref
 
 
 \subsubsection{\textit{k}-fold cross validation}
-\textit{k}-fold cross validation involves randomly dividing a set of observations into \textit{k} groups, or \textit{folds}, of equal size \citep{ISLR}. The first fold is treated as a test set, and the remaining $k-1$ folds are used to train a model. The procedure is repeated \textit{k} times, and for each repetition, a new fold makes up the test set. The process results in \textit{k} estimates of the test-error, $MSE_1$, $MSE_2$ ..., $MSE_k$. Finally, a \textit{k}-fold average MSE is computed by averaging the values, as shown in Equation \ref{eq:cv} \citep{ISLR}.
+\textit{k}-fold cross validation involves randomly dividing a set of observations into \textit{k} groups, or \textit{folds}, of equal size \citep{ISLR}. The first fold is treated as test set, and the remaining $k-1$ folds are used to train a model. The procedure is repeated \textit{k} times, and for each repetition, a new fold makes up the test set. The process results in \textit{k} estimates of the test-error, $MSE_1$, $MSE_2$ ..., $MSE_k$. Finally, a \textit{k}-fold average MSE is computed by averaging the values, as shown in Equation \ref{eq:cv} \citep{ISLR}.
 
 \begin{equation}\label{eq:cv}
     CV_{(k)} = \frac{1}{k}\sum_{i=1}^{k} MSE_i
@@ -442,7 +446,7 @@ In order to test for autocorrelation, the Ljung-Box test and the Durbin-Watson t
 
 \subsubsection{Variable selection}
 
-As seen previously, a number of explanatory variables are available. If all were to be used to build a regression model, the model could be subject to over-fitting \citep{ISLR}. Therefore, in order to limit the number of explanatory variables, a variable selection approach is undertaken. To perform the variable selection, lasso regression is used. In this thesis, only a brief introduction of the concept of lasso regression is given. For a more comprehensive review, the reader is referred to "An Introduction to Statistical Learning" by \cite{ISLR}.\newpar
+As seen previously, a number of explanatory variables are available. If all were to be used to build a regression model, the model could be subject to over-fitting \citep{ISLR}. Therefore, in order to limit the number of explanatory variables, a variable selection is undertaken. To perform the variable selection, lasso regression is used. In this thesis, only a brief introduction of the concept of lasso regression is given. For a more comprehensive review, the reader is referred to "An Introduction to Statistical Learning" by \cite{ISLR}.\newpar
 
 Lasso regression is a shrinkage method used in order to perform variable selection \citep{ISLR}. The aim is to have the lasso coefficients $\hat{\beta}_{\lambda}^{L}$ minimize the quantity:
 
@@ -458,7 +462,7 @@ In order to decide the value of $\lambda$, and subsequently what variables to in
 
 It is important to note that lasso regression is only conducted in order to perform variable selection. The $\beta$-values from the regression are not carried forward. Instead, we have decided to forecast points by use of linear regression on the variables selected by the lasso regression. Linear regression has an advantage over a lasso regression as it has more easily interpreted coefficients and well-defined variance. This makes the calculation of p-values possible. Moreover, it makes the results more accessible for readers from different disciplines as it is widely known. Furthermore, a linear regression model has an advantage compared to for instance logistic regressions, as points can be negative, which is a possibility in FPL.
 \newpar 
-Only one variable explicitly related to points is considered. This variable is previous points. We have decided not to include variables such as total points in the season so far and points from the Bonus Point System. These variables would be highly correlated with variables such as goals, and are excluded as not to over-complicate the regression model. Since the bonus points to a large degree are decided by the same factors as "regular" points (e.g. goals, assists, clean sheets etc) their effect are included in the coefficients for these explanatory variables. 
+Only one variable explicitly related to points is considered. This variable is \textit{previous points}. We have decided not to include variables such as total points in the season so far and points from the Bonus Point System. These variables would be highly correlated with variables such as goals, and are excluded as not to over-complicate the regression model. Since the bonus points to a large degree are decided by the same factors as "regular" points (e.g. goals, assists, clean sheets etc) their effect are included in the coefficients for these explanatory variables. 
 
 
 \subsection{Forecasting using odds}
@@ -654,7 +658,7 @@ where, $w_i$ is the portfolio weight of asset $i$, $\sigma_{i}^2$ is the varianc
 
 \newpar
 
-In our case, the mathematical model optimizes over the starting line-up variable, $y$. We are interested in finding the variance of the sum of total points obtained rather than the variance in percentage return, which is often the case in finance. Hence, we can rewrite equation \ref{eq:port_var} by utilizing the fact that each "portfolio weight" is either 1 or 0. If we also substitute the expression for covariance with correlation, the expression simplifies to
+In our case, the mathematical model optimizes over the starting line-up variable, $y$. We are interested in finding the variance of the sum of total points obtained rather than the variance in percentage return, which is often the case in finance. Hence,  equation \ref{eq:port_var} can be rewritten by utilizing the fact that each "portfolio weight" is either 1 or 0. If the expression for covariance is also substituted with correlation, the expression simplifies to
 
 \begin{comment}
 \begin{equation}
