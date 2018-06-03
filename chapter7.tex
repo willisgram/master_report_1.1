@@ -114,7 +114,7 @@ From Figure \ref{fig:solutions_found_realized_points}, it is observable that nea
     \caption{Graph of when the solutions are found in Mosel Xpress-MP.}
 \end{figure}
 
-As observed in Table \ref{tab:realized_points_diff_gameweeks}, the gap is 0.75\% after the runtime. The solution is regarded as sufficient to serve as a benchmark and to be compared with the top manager. It is important to note that the objective value given in Table \ref{tab:results_} is from the model run, and hence not directly transferable to total points obtained in FPL. Next, the results from realized points will be discussed into more depth.
+As observed in Table \ref{tab:realized_points_diff_gameweeks}, the gap is 0.75\% after the runtime. The solution is regarded as sufficient to serve as a benchmark and to be compared with the top manager. It is important to note that the objective value given in Table \ref{tab:realized_points_diff_gameweeks} is from the model run, and hence not directly transferable to total points obtained in FPL. Next, the results from realized points will be discussed into more depth.
 
 \begin{table}[H]
 \centering
@@ -135,6 +135,12 @@ Time to optimality        & 29      & 295      & 1 103     & 2 010     & 23 692 
 \label{tab:realized_points_diff_gameweeks}
 \end{table}
 
+\begin{figure}[H]
+\label{fig:solutions_found_realized_points}    
+    \centering
+    \includegraphics[scale=0.75]{fig/chapter_7/comp_time.png}
+    \caption{Plot of computational time for model solved over different number of gameweeks.}
+\end{figure}
 
 \begin{comment}
 - vurdere å a ha med graf på løsningstid og gameweeks. 
