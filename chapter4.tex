@@ -2,7 +2,7 @@
 
 \chapter{Model Formulation} \label{chapter_model_formulation}
 
-In this chapter the mathematical optimization model of the Fantasy Premier League Decision Problem (FPLDP) is presented. In Section \ref{def_sets_ind_par_var}, the sets, indices, parameters and variables used in the model are defined. Finally, the mathematical formulation is presented in Section \ref{mathematical_model} with explanations of the objective function and constraints. 
+In this chapter, the mathematical optimization model of the Fantasy Premier League Decision Problem (FPLDP) is presented. In Section \ref{def_sets_ind_par_var}, the sets, indices, parameters and variables used in the model are defined. Finally, the mathematical formulation is presented in Section \ref{mathematical_model} with explanations of the objective function and constraints. 
 
 
 \newpar
@@ -11,7 +11,7 @@ FPLDP is modelled as a stochastic mixed integer linear program. The points a pla
 
 \newpar
 
-The only simplification made from the original problem is the feature of a sell-on fee. Remember, that as more managers select a player, his selling price increases. This is simplified by assuming denoting that the sell price is the same as the current purchase price. 
+The only simplification made from the original problem is the feature of a sell-on fee. Remember, that as more managers select a player, his selling price increases. This is simplified by 
 
 
 \begin{comment}
@@ -493,69 +493,5 @@ The last constraints \eqref{eq:trans_min} and \eqref{eq:trans_max} impose an upp
 
 Constraints \eqref{eq:bin_x} - \eqref{eq:int_alpha} impose binary, integer and non-negativity constraints on the decision variables.
 
-\newpage
-
-\subsection{Value increase/decrease constraint}
-
-\begin{equation*}
-    S_{p,t_{2}} = V_{p,t_{2}}(1-x_{p,t_{2}}) + (V_{p,t_{1}} + \triangle V_{p,t_{1},t_{2}}) (\sum_{\tau:\{ t_{1} \dots t_{2}\}} e_{p\tau}) x_{pt_{2}} \qquad\qquad t_{1}, t_{2} \in \mathcal{T}, t_{2} > t_{1}, \enskip p \in \mathcal{P}
-\end{equation*}
-
-where 
 
 
-\begin{table}[H]
-\centering
-\caption{Explanation.}
-\begin{tabular}{@{}lll@{}}
-\toprule
-$S_{p,t_{2}}$ & - & Sales price for a player p in gameweek $t_{2}$.\\
-$\triangle V_{p,t_{1},t_{2}}$  & - & the rounded half price increase from gameweek $t_{1}$ to $t_{2}$ for a player p. \\ 
-$V_{p,t_{1}}$   & - & Value of player p in gameweek $t_{1}$.                                             \\
-$V_{p,t_{2}}$   & - & Value of player p in gameweek $t_{2}$.                                             \\
-$e_{p\tau}$     & - & 1 if a player $p$ is transferred in a gameweek $\tau$, 0 otherwise                  \\
-\bottomrule
-\end{tabular}
-\end{table}
-
-Some words: I know the constraint is non-linear. There is a difference between sales price and value of a player. A player on the team can be bought for a price $V_{p,t_{1}}$ in a earlier gameweek $t_{1}$ and sold for a sales price $S_{p,t_{2}}$ in a later gameweek $t_{2}$.
-
-\newpar
-
-Issue: It is possible that a player can be bought and sold more than one time. Hence, when you stand in gameweek $t_{2}$, the sum $\sum_{\tau:\{ t_{1} \dots t_{2}\}} e_{p\tau})$ can be higher than 1 and hence the sales price too high. Do you understand the problem? If so, how can the constraint be adjusted? 
-
-\begin{comment}
-
-\subsection{Suggested solution}
-
-\subsubsection{Budget Constraints}
-
-\begin{equation} 
-    B^{S} - \sum_{p \in \mathcal{P}} C_{p1}^{B}x_{p1} = v_{1}
-\end{equation}
-
-\begin{equation} 
-    v_{t_{2}-1} + \sum_{p \in \mathcal{P}}S_{pt_{1}t_{2}}s_{pt_{1}pt_{2}} - \sum_{p \in \mathcal{P}}C_{pt}^{B}e_{pt_{2}} = v_{t_{2}} \qquad\qquad t_{1}, t_{2} \in \mathcal{T}\setminus\{1\}, \quad t_{2} > t_{1}
-\end{equation}
-
-\begin{equation}
-\sum_{t_{1} < t_{2}} s_{p,t_{1},t_{2}} = u_{pt_{2}}    \qquad\qquad t_{1}, t_{2} \in \mathcal{T}\setminus\{1\} \enskip p \in \mathcal{P}
-\end{equation}
-
-\begin{equation}
-    \sum_{t_{2} > t_{1}} s_{p,t_{1},t_{2}} \leq e_{p,t_{1}} \qquad\qquad t_{1}, t_{2} \in \mathcal{T}\setminus\{1\}, \enskip p \in \mathcal{P}
-\end{equation}
-
-\begin{equation}
-    \sum_{t_{A} < t_{1}} \sum_{t_{B}} s_{p,t_{A},t_{B}} -     \sum_{t_{A}} \sum_{t_{B} < t_{1}} s_{p,t_{A},t_{B}} = M(1-e_{pt_{1}}) \quad\quad p \in \mathcal{P}, \enskip t_{1} \in \mathcal{T}
-\end{equation}
-
-\begin{equation} 
-  x_{p,(t-1)} + e_{pt} - u_{pt} = x_{pt} \qquad\qquad p \in \mathcal{P}, \enskip t \in \mathcal{T}\setminus\{1\} 
-\end{equation}
-
-\begin{equation} 
-   e_{pt} + u_{pt} \leq 1  \qquad\qquad p \in \mathcal{P}, \enskip t \in \mathcal{T} 
-\end{equation}
-
-\end{comment}
