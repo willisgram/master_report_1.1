@@ -10,6 +10,10 @@ The chapter begins with a presentation and discussion of the data in Section \re
 \section{Data} \label{exp_setup_data}
 We have used data provided by the official website of Fantasy Premier League. A detailed record of such data for both the 2016/2017- and the 2017/2018 season is kept by www.fantasyoverlord.com. As we only have data for two seasons, we can only train the model on one season, and test it on the other. This is a drawback, since it is reasonable to assume that if more data were available the model could be improved further and more robust statements could be made. Elo values for each Premier League team are obtained from www.clubelo.com. In addition, Sportradar has provided odds and probabilities for the fixtures of the 2017/2018 season. 
 
+\newpar
+
+A season in FPL consists of 38 gameweeks, however, because of restriction on time, an early decision was made to solve the model for the first 35 gameweeks. The transfer window closed after gameweek 26. Until then, 625 players had appeared in at least on game. Thus, the set consists of 625 players.
+
 \subsection{Processing of Player's Data}
 
 \subsubsection{Injuries and suspensions}
