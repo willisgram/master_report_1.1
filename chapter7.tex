@@ -509,7 +509,7 @@ Regression w/ gc           & 1901                      & 54.31                  
 Regression w/o gc          & 1765                      & 50.43                      & 20.73                      & Top 30\%                      & 1.80                                                           \\ \hline
 Odds (31 gameweeks) w/ gc  & 1557                      & 50.23                      & 15.17                      & Top 30\%                      & 0.48                                                                                \\ \hline
 Odds (31 gameweeks) w/o gc & 1650                      & 53.23                      & 13.94                      & Top 13\%                      & 0.81                                                           \\ \hline
-Realized points            & 4500                         & 128.57                          & 16.50                          & NA                             & 4.23  
+Realized points            & 4500                         & 128.57                          & 16.50                          & N/A                             & 4.23  
                              \\ \hline
 Weekly Average             & 1699                      & 48.53                      & 7.99                       & Top 40\%                      & -                                                                                   \\ \hline
 Top Manager                & 2329                      & 66.54                      & 18.28                      & Top 1 ‰                       & 0.11                                                                                \\ \hline
@@ -585,7 +585,7 @@ The aim is to discuss the effect of risk handling on the solution, and examine t
 
 \newpar
 
-In Chapter , it is discussed how the FPLDP resembles a classic portfolio optimization problem. Therefore, it is interesting to investigate if there are any similarities between the expected points and variance trade-off in the FPLDP and in portfolio optimization. Accordingly, the effect variation of thresholds has on expected points for the first sub-problem is studied. The mathematical model maximizes a team's expected points. Hence, one would assume that when the threshold is decreased, the expected value of the team also decreases. This would coincide with the \textit{efficient frontier} found in portfolio optimization, consists of the optimal set of portfolios that gives the highest expected points for a certain level of risk, i.e. variance. In Figure \ref{fig:threshold_GW1}, the expected points, i.e. the objective value, obtained by the optimization model for the first sub-problem is plotted against different variance thresholds. The curve exhibits a similar behavior as the efficient frontier, but is not smooth. This is because in the FPLDP one can either include a player, or not. That is, the decision is binary. In other words, opposed to the classic portfolio optimization problem, one can not hold a fraction of an asset in the FPLDP. 
+In Chapter , it is discussed how the FPLDP resembles a classic portfolio optimization problem. Therefore, it is interesting to investigate if there are any similarities between the expected points and variance trade-off in the FPLDP and in portfolio optimization. Accordingly, the effect variation of thresholds has on expected points for the first sub-problem is studied. The mathematical model maximizes a team's expected points. Hence, one would assume that when the threshold is decreased, the expected value of the team also decreases. This would coincide with the \textit{efficient frontier} found in portfolio optimization. The efficient frontier consists of the optimal set of portfolios that gives the highest expected points for a certain level of risk, i.e. variance. In Figure \ref{fig:threshold_GW1}, the expected points, i.e. the objective value, obtained by the optimization model for the first sub-problem is plotted against different variance thresholds. The curve exhibits a similar behavior as the efficient frontier, but is not smooth. This is because in the FPLDP one can either include a player, or not. That is, the decision is binary. In other words, opposed to the classic portfolio optimization problem, one can not hold a fraction of an asset in the FPLDP. 
 \newpar
 
 \begin{comment}
@@ -602,11 +602,15 @@ The computational time is increased considerably when including constraints \ref
 \end{figure}%
 
 
+In Figure \ref{fig:performance_varying_threshold}, the mean points of the 2017/2018 season is plotted for different thresholds. Due to computational considerations related to how Mosel Xpress-MP handles floats, the model was stopped when a solution within a 2\% optimality gap was found. The results are assumed to be highly indicative of the optimal results, but could in the worst scenarios, this could effect the mean by approximately 1 point. From Figure \ref{fig:performance_varying_threshold}, it is observable that the plot deviates from that of the efficient frontier. However, some similarities can be found. Higher thresholds are for instance associated with higher mean scores, and lower thresholds are associated with lower means. Note, however, that a portfolio's return does not necessarily follow the efficient frontier when an analysis of realized returns is performed. Note that when the constraint is not binding, the mean stabilizes at 54.3 points. Intuitively, the mean should have been that same as without the constraints. However, after examining the objective values, it is clear that there are different solutions with the same expected value for the first sub-problem. Thus, there is no guarantee that the solver selects the same solution. A possible way around is a different implementation of variance constraints. A \textit{trade-off approach} \citep{Speranza} is an interesting alternative, where instead of bounding the variance it is rather taken into consideration by moving it to the objective function. However, as the difference in terms of mean is small, this is not considered a major issue.
+
+
+\begin{comment}
 In Figure \ref{fig:performance_varying_threshold}, the mean points of the 2017/2018 season is plotted for different thresholds. Due to computational difficulties in the software, Mosel Xpress-MP, the model was stopped when a solution within 2 \% optimality gap was found. From Figure \ref{fig:performance_varying_threshold}, it is observable that the plot deviates from that of the efficient frontier, but some similarities can be found. Higher thresholds are for instance associated with higher mean scores, and lower thresholds are associated with lower mean scores. Note, however, that a portfolio's return does not necessarily follow the efficient frontier when an analysis of realized returns is performed.
 
-\newpar
+\end{comment}
 
-It is worth noting that when the constraint is not binding, the mean stabilizes at 54.3 points. Intuitively, the mean should have been that same as without the constraints. However, after examining the objective values, it is clear that there are different solutions with the same expected value for each run in gameweek 1. Thus, there is no guarantee that the solver selects the same solution. A possible way around is a different implementation of variance constraints. A \textit{trade-off approach} \citep{Speranza} is an interesting alternative, where instead of bounding the variance it is rather taken into consideration by moving it to the objective function. However, as the difference in terms of mean is small, this is not considered a major issue.
+\newpar
 
 \begin{figure}[H]
     \centering
@@ -616,7 +620,10 @@ It is worth noting that when the constraint is not binding, the mean stabilizes 
 \end{figure}%
 
 
-As seen in Figure \ref{fig:performance_varying_threshold}, the best mean score is not reached for an unlimited threshold, but for a standard deviation of 55 points. For this point, the method would have achieved mean of 57.5? points, earning a spot among the top 1.5\%. Furthermore, in the area with a standard deviation between 55-70 points, the solutions outperform the solution with an unlimited threshold. Moreover, in the area of a standard deviation between 7.5 and 15 points, the mean score is lower than that of the unlimited case. 
+As seen in Figure \ref{fig:performance_varying_threshold}, the best mean score is not reached for an unlimited threshold, but for a standard deviation of 55 points. For this point, the method would have achieved mean of 57.5? points, earning a spot among the top 1.5\% of all managers. In general, the solutions outperform the solution with an unlimited threshold in the area with a standard deviation between 55-70 points. In Figure \ref{fig:performance_different_threshold}, the solutions with threshold 55 and 7.5 are plotted against the solution without a variance threshold. It is noticeable that the variance appears to be higher than for the unlimited case when the threshold is 55, but not 7.5. In Table \ref{tab_high_low_thresholds}, the mean and standard deviation for thresholds 7.5-12.5 and 55-65 are shown. Based on the table, it is clear that the goal of achieving lower variance in the solution is reached with lower thresholds. Furthermore, the mean is reduced, analogous to the case of portfolio optimization. Observe, however, that when the thresholds are between 7.5-12.5, they are unable to keep the realized standard deviations below the thresholds. The variance for the thresholds in the region 55-65 exceeds the variance of the unlimited case. For threshold between 55-65, however, the standard deviation is well below the threshold. Yet, as the threshold is approximately as high as the mean points obtained, it is counter intuitive that such a threshold should be binding. Thus, the positive effect in mean is probably related to the nature of the problem, not to the variance reduction per se. That is, having a factor decide how many players of the same and opposing teams to include in the selected squad can be a beneficial strategy in terms of improving mean score, even if it does not necessarily reduce the standard deviation of points obtained.
+
+
+
 
 \begin{figure}[H]
     \centering
@@ -626,7 +633,7 @@ As seen in Figure \ref{fig:performance_varying_threshold}, the best mean score i
 \end{figure}%
 \newpar
 
-In Figure \ref{fig:performance_different_threshold}, the solutions with threshold 55 and 7.5 are plotted against the solution without a variance threshold. It is noticeable that the variance appears to be higher than for the unlimited case when the threshold is 55, but not 7.5. In Table \ref{tab_high_low_thresholds}, the mean, and standard deviation for thresholds 7.5-15 and 55-70 are shown. Based on the table, it is clear that the goal of achieving lower variance in the solution is reached with lower thresholds. However, the mean is reduced, analogous to the case of portfolio optimization. Furthermore, the variance for the thresholds in the region 55-70 exceeds the variance of the unlimited case. Observe that when the thresholds are between 7.5-15, even if the thresholds lower variance, there is a mismatch between the thresholds and the realized standard deviations. For threshold between 55-70, however, the standard deviation is well below the threshold. Yet, as the threshold is approximately as high as the mean points obtained, it can be argued that it is counter intuitive that such a threshold should be binding.
+
 
 \begin{table}[H]
 \centering
@@ -636,12 +643,10 @@ Threshold & Mean & St.dev \\ \midrule
 7.5       & 51.7 & 15.7   \\
 10        & 50.7 & 14.6   \\        %Mean = 51.9
 12.5      & 51.5 & 15.9   \\
-15        & 53.6 & 17.1   \\
 Unlimited & 53.7 & 16.8   \\
 55        & 57.5 & 20.8   \\
 60        & 55.7 & 18.1   \\
-65        & 55.5 & 18.8   \\
-70        & 56.5 & 17.4   \\ \bottomrule 
+65        & 55.5 & 18.8   \\ \bottomrule 
 \end{tabular}
 \caption{Results for the high and low thresholds.}
 \label{tab_high_low_thresholds}
