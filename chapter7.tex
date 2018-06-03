@@ -1,13 +1,12 @@
 %===================================== CHAP 7 =================================
 
-\chapter{Computational Study} \label{chapter_computational_study}
+\chapter{Results} \label{chapter_computational_study}
 
-
-In this chapter, a computational study based on the solution framework outlined in Chapter \ref{chapter_solution_approach} and the experimental setup in Chapter \ref{chapter_experimental_setup} is presented. First, in Section \ref{sec:exact}, the optimal ex-post decisions are presented. Secondly, in Section \ref{sec:inexact}, the performance of each of different solution approaches are presented. Finally, an ex-post analysis of the risk handling constraints are discussed and presented. 
+In this chapter, the results of the solution framework outlined in Chapter \ref{chapter_solution_approach} implemented with the numerical values for parameters computed in Chapter \ref{chapter_experimental_setup} run on the 2017/2018 season is presented. First, in Section \ref{sec:exact}, the optimal ex-post decisions are presented. Secondly, in Section \ref{sec:inexact}, the performance of the forecast-based optimization model for the FPL with the three different forecasting methods is presented. Finally, an ex-post analysis of the risk handling constraints is given. 
 
 \newpar
 
-The mathematical model is written in the algebraic modelling language Mosel and implemented in FICO\textsuperscript {\textregistered} Xpress Optimization Suite 8.3, using a HP EliteDesk 800 G3 DM 65W computer with Intel\textsuperscript{\textregistered} Core\textsuperscript{\texttrademark} i7-7700 3.6 GHz processor and 32 GB RAM. The operating system in use is Windows 10 Education 64-bit. The input data to the mathematical model is structured and pre-processed in the statistical programming language R. Further, the results obtained from the mathematical model include decisions on selected squad, starting line-up, substitution priority, number of penalized transfers, captain, vice-captain and whether a gamechip is used in a gameweek. These are written to CSV files, which are exported back to R to calculate how many points the team obtained. In the end, R is also used to make the data more presentable in form of tables and plots. 
+The mathematical model is written in the modelling language Mosel and implemented in FICO\textsuperscript {\textregistered} Xpress Optimization Suite 8.3, using a HP EliteDesk 800 G3 DM 65W computer with Intel\textsuperscript{\textregistered} Core\textsuperscript{\texttrademark} i7-7700 3.6 GHz processor and 32 GB RAM. The operating system in use is Windows 10 Education 64-bit. The input data to the mathematical model is structured and pre-processed in the statistical programming language R. Further, the results obtained from the mathematical model include decisions on selected squad, starting line-up, substitution priority, number of penalized transfers, captain, vice-captain and whether a gamechip is used in a gameweek. These are written to CSV files, which are exported back to R to calculate how many points the team obtained. In the end, R is also used to make the data more presentable in form of tables and plots. 
 
 \newpar
 
@@ -16,7 +15,7 @@ As mentioned in Section \ref{exp_setup_data}, the model is solved for the first 
 \section{Solution With Realized Points}\label{sec:exact}
 
 
-Before the performance of the forecast-based optimization model for the FPLDP is examined, it is interesting to study the optimal solution ex-post. Firstly, the solution serves as a benchmark for the performance of the forecast-based optimization model for the FPLDP. Further, the optimal solution is compared to that of the top-performing manager, in order to see how close the best manager performs, and if there are potential for improvement. This section is divided into three parts. First, the initialization of sets and parameters is presented. Following is a discussion of the results obtained by the mathematical model using realized points for the 2017/2018 season. Secondly, the solution is more thoroughly examined to discuss whether the decisions are sensible or not. Finally, the solution is compared against the best performing human managers. 
+Before the performance of the forecast-based optimization model for the FPLDP is examined, it is interesting to study the optimal solution ex-post. Firstly, the solution serves as a benchmark for the performance of the forecast-based optimization model for the FPLDP. Further, the optimal solution is compared to that of the top-performing manager, in order to see how close the best manager performs, and if there exists a potential for improvement. This section is divided into three parts. First, the initialization of sets and parameters is presented. Following is a discussion of the results obtained by the mathematical model using realized points for the 2017/2018 season. Secondly, the solution is more thoroughly examined to discuss whether the decisions are sensible or not. Finally, the solution is compared against the best performing human managers. 
 
 
 \subsection{Initialization of parameters}    
@@ -83,7 +82,7 @@ All the parameters specifically stated in the rules of FPL are set accordingly. 
 
 \subsection{Problem Size}
 
-Table \ref{tab:computational_statistics} displays the problem size of FPLDP with input data from the 2017/2018 season. The problem size is given before and after the function Presolve is run. This is a function integrated in Xpress Optimizer where its objectives are to reduce redundant variables, eliminate redundant constraints and remove linearly dependent constraints, which consequently reduces the complexity of the problem and improve the computing time. From the table it can be observed that the Presolve function is successful in eliminating variables, but the reduction of constraints is not that severe. A reason for this could be that most of the constraints are linearly independent, and that there is a limited presence of empty rows in the FPLDP. In addition, a large part of the variables $x_{pt}$, $x_{pt}^{freehit}$ and $y_{pt}$ are redundant, as many of them are defined even though only a few of them are used in the starting line-up and selected squad constraints. Thus, in order to reduce the solution time, an effort could have been put into reducing redundant variables in the procedure of implementation. However, since the model only has to be solved once, this can be disregarded. 
+Table \ref{tab:computational_statistics} displays the problem size of FPLDP with input data from the 2017/2018 season. The problem size is given before and after the function Presolve is run. This is a function integrated in Xpress Optimizer where its objectives are to reduce redundant variables, eliminate redundant constraints and remove linearly dependent constraints, which consequently reduces the complexity of the problem and improve the computing time. From the table it can be observed that the Presolve function is successful in eliminating variables, but the reduction of constraints is not that severe. A reason for this could be that most of the constraints are linearly independent, and that there is a limited presence of empty rows in the FPLDP. In addition, a large part of the variables $x_{pt}$, $x_{pt}^{freehit}$ and $y_{pt}$ are redundant, as many of them are defined even though only a few of them are used in the starting line-up and selected squad constraints. Thus, in order to reduce the solution time, an effort could have been put into reducing redundant variables in the procedure of implementation. However, since the model only has to be solved once, this is disregarded. 
 
 
 \begin{table}[H]
@@ -112,7 +111,7 @@ From Figure \ref{fig:solutions_found_realized_points}, it is observable that nea
     \label{fig:solutions_found_realized_points}
 \end{figure}
 
-As cane be observed in Table \ref{tab:realized_points_diff_gameweeks}, the optimal solution for 35 gameweeks was not found in maximum running time. The solution has a gap of 0.75 \%, and is regarded as sufficient to serve as a benchmark and to be compared with the top manager. It is important to note that the objective value given in Table \ref{tab:realized_points_diff_gameweeks} is from the model run, and hence not directly transferable to total points obtained in FPL. To test the model's scalability, the model was run for different number of gameweeks. The results are summarized in Table \ref{tab:realized_points_diff_gameweeks}, and illustrated in Figure \ref{fig:comp_time_diff_gameweeks}. It is notable that the solution time is increased significantly when solved for more than 20 gameweeks. Next, the results from realized points will be discussed into more depth.
+In Table \ref{tab:realized_points_diff_gameweeks} one can observe that the optimal solution for 35 gameweeks was not found within maximum running time. As the solution found only has a gap of 0.75 \%, it is regarded as sufficient to serve as a benchmark and compare against the top manager. It is important to note that the objective value given in Table \ref{tab:realized_points_diff_gameweeks} is from the model run, and hence not directly transferable to total points obtained in FPL. To test the model's scalability, the model was run for different number of gameweeks. The results are summarized in Table \ref{tab:realized_points_diff_gameweeks}, and illustrated in Figure \ref{fig:comp_time_diff_gameweeks}. It is notable that the solution time increases significantly when solved for more than 20 gameweeks. %Next, the results from realized points will be discussed into more depth.
 
 
 \begin{table}[H]
@@ -145,7 +144,7 @@ Time to optimality        & 29      & 295      & 1 103     & 2 010     & 23 692 
 
 
 \subsection{Performance in Fantasy Premier League}
-In the following, the provide the results for the model introduced in chapter \ref{chapter_model_formulation} when solved with realized points, i.e. with perfect information. Figure \ref{Figure_Realized_points} gives an overview of how many points the model obtained in each gameweek. The coloured dots represents gameweeks where the gamechips were used. 
+In the following, the performance of the model introduced in chapter \ref{chapter_model_formulation} when solved with realized points, i.e. with perfect information, is presented. Figure \ref{Figure_Realized_points} gives an overview of how many points the model obtained in each gameweek. The coloured dots represents gameweeks where the different gamechips were used. 
 
 \begin{figure}[H]
     \centering
@@ -157,8 +156,12 @@ In the following, the provide the results for the model introduced in chapter \r
 \begin{comment}
 We find it necessary to comment on the choices made for selecting when to play the gamechips.
 \end{comment}
-As observed, the first Wildcard was used one week ahead of the Bench Boost was played. This is reasonable as it is wisely to ensure that you select 15 players that will earn lots of points when playing the Bench Boost. Further, the Free Hit chip was used in gameweek 21, which was a blank gameweek containing only 9 fixtures. It is reasonable to assume that the Free Hit should either be used ahead of a blank or ahead of a double gameweek in order to ensure that all your selected players are featured at least once for that particular gameweek. Finally, the Triple Captain chip was used in gameweek 31 which is reasonable as Mohammed Salah scored 4 goals and had 1 assist in this particular gameweek, yielding a score of 29 points. This was the highest score obtained in one gameweek by any Premier League players. As for the second Wildcard, there is no obvious reason why it was played in gameweek 26, except the fact that it was optimal for the entire solution. 
-\newpar
+
+As observed from Figure \ref{Figure_Realized_points} both Wildcards were used at early stages after it was allowed to play them. Further, the Triple Captain was played in gameweek 31, which is reasonable as Mohammed Salah scored 4 goals and had 1 assist in this particular gameweek, yielding a score of 29 points. This was the highest score obtained in one gameweek by any Premier League players. The Free Hit was played in gameweek 26, a "normal" gameweek, while the Bench Boost was played in gameweek 34, a double gameweek. Thus, the only gamechip that was used in a way consistent with the implementation in the forecast based optimization model was the Bench Boost. 
+
+\begin{comment}
+As observed, the first Wildcard was used one week ahead of the Bench Boost was played. This is reasonable as it is wisely to ensure that you select 15 players that will earn lots of points when playing the Bench Boost. Further, the Free Hit chip was used in gameweek 21, which was a blank gameweek containing only 9 fixtures. It is reasonable to assume that the Free Hit should either be used ahead of a blank or ahead of a double gameweek in order to ensure that all your selected players are featured at least once for that particular gameweek. Finally, the  As for the second Wildcard, there is no obvious reason why it was played in gameweek 26, except the fact that it was optimal for the entire solution. 
+\end{comment}
 
 
 \begin{comment}
@@ -176,30 +179,44 @@ Figure \ref{Figure_Transfers} shows how many transfers the model made ahead of e
 
 
 
-Some readers may find value in comparing the optimal FPL solution to the performance of human managers. Figure \ref{Figure_Comparison} provides a weekly comparison of the weekly average score and the maximum score obtained by human managers to the optimal solution.
+In Figure \ref{Figure_Comparison} a comparison of the weekly average score among all managers, the score obtained by the top manager and the optimal solution is compared gameweek for gameweek.
 
 \begin{figure}[H]
 \label{fig:Comparison}
     \centering
-    \includegraphics[scale=0.75]{fig/chapter_7/perf_top_avg.png}
+    \includegraphics[scale=0.5]{fig/chapter_7/perf_top_avg.png}
     \caption{The graph compares the weekly average and the top performer of each Gameweek to the optimal team with perfect information}
 \label{Figure_Comparison}    
 \end{figure}
 
  
-It is notable that the optimal solution performs well ahead of the weekly average managers, scoring at least twice as many points in every gameweek. Further, it is worth noticing that the optimal overall solution may be beaten by the best manager in individual gameweeks. This is due to the fact that the optimal solution maximizes the points over the entire season, and not only over one particular gameweek. Further, managers that finish top of the gameweek often use a gamechip in order to maximize their weekly score. 
+From Figure \ref{Figure_Comparison} it is clear that the optimal solution substantially out-performs both weekly average managers, and the top manager in each gameweek. In Table \ref{Optimal_Human} the performance of the top manager as well as the performnce required to reach different rankings among all manager are compared against the optimal solution. It is clear that even the top manager only manages to achieve approximately 50\% of the points obtained by the optimal solution. One implication is that it is extremely hard to compete optimally in FPL, given the nature of the uncertainty of the problem. Moreover, the result can motivate the use of optimization based tools, as there appears to exist a space for improvement.
+
+\begin{table}[H]
+\centering
+\caption{Comparing human managers to optimal solution}
+\label{Optimal_Human}
+\begin{tabular}{llc}
+\hline
+                 & Mean   & \multicolumn{1}{l}{Percentage of optimal solution} \\
+\hline                 
+Optimal solution & 133.63 & 100.00 \%                                          \\
+Top Manager           & 66.54  & 49.80 \%                                           \\
+Top 5 \%         & 55.83  & 41.78 \%                                           \\
+Top 10 \%        & 54.30  & 40.64 \%                                           \\
+Top 20 \%        & 52.20  & 39.06 \%                                           \\
+Top 30 \%        & 50.40  & 37.72 \%                                           \\
+Top 40 \%        & 48.50  & 36.29 \%                                           \\
+Top 50 \%        & 46.50  & 34.80 \%                                           \\
+\hline
+\end{tabular}
+\end{table}
 
 \newpar
 
-\begin{comment}
 
-\end{comment}
 
-There seem to be some positive correlation between the optimal solution and both the weekly top performers as well as the weekly average scores. From table \ref{Figure_Comparison} one can see that the weekly average and the optimal solution have a tendency of moving in the same direction. Hence, when the optimal solution receive a high score, the weekly average have a tendency of doing the same. This might be due to highly selected players performing well in those particular gameweeks. For instance, if a player that has performed well over the entire season receives an abnormal high score during a gameweek, it is anticipated that the weekly average will increase as most managers select this player. Consider Mohamed Salah, who has had an incredible season. At some point he was selected by more than 63\% of the human managers. Thus, when he performs well it is reasonable to assume that both the average and the optimal solution earn numerous points.
 
-\newpar
-
-As stated in chapter \ref{introduction} it is interesting to compare the optimal solution strategy to that of the manager of leads the overall ranking. Figure \ref{Top_Manager} provides a weekly overview of this comparison.
 
 \begin{figure}[H]
 \label{fig:Top_Manager}
@@ -213,27 +230,7 @@ As suggested in the introduction, the optimal solution strategy largely outperfo
 
 \newpar
 
-An interesting comparison is that of the optimal solution to other human managers. Table \ref{Optimal_Human} provides an overview of how the optimal solution strategy performs compared to the top 50\% of the managers. 
 
-\begin{table}[H]
-\centering
-\caption{Comparing human managers to optimal solution}
-\label{Optimal_Human}
-\begin{tabular}{llc}
-\hline
-                 & Mean   & \multicolumn{1}{l}{Percentage of optimal solution} \\
-\hline                 
-Optimal solution & 133.63 & 100.00 \%                                          \\
-Winner           & 66.54  & 49.80 \%                                           \\
-Top 5 \%         & 55.83  & 41.78 \%                                           \\
-Top 10 \%        & 54.30  & 40.64 \%                                           \\
-Top 20 \%        & 52.20  & 39.06 \%                                           \\
-Top 30 \%        & 50.40  & 37.72 \%                                           \\
-Top 40 \%        & 48.50  & 36.29 \%                                           \\
-Top 50 \%        & 46.50  & 34.80 \%                                           \\
-\hline
-\end{tabular}
-\end{table}
 
 As observed, it is an enormous difference between the optimal solution strategy and that of the other human managers. It is remarkable that the difference in mean between the top 50\% and the winner is only slightly above 20 points per round, while the difference between the optimal solution and the winner is above 67 points. Further, it is notable that the difference between finishing in the top 10 percentile to the top 5 percentile is rather low as it only separates 1.43 points per gameweek. In comparison, the difference between the winner and the 5th percentile is as much as 10.71 points per gameweek. Moreover, an interesting point is that this difference is actually larger than the one between the 50th percentile and the 5th percentile. Hence, it provides reason to assume that in order to finish among the absolute best managers, one have to perform extremely well compared to others. 
 \newpar

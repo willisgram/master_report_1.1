@@ -2,9 +2,20 @@
 \chapter{Concluding Remarks}
 
 This thesis describes an optimization model for the Fantasy Team Composition Problem as it suggests an approach for optimization of Fantasy Premier League decisions. The model maximizes the expected points gained by real players in the English top division. As the uncertainty in this problem lies in the expected points gained, the model has been solved deterministic by predictions of expected points. In contradict to other Fantasy Sports, Fantasy Premier League contains gamechips which can be used in order to improve the performances in particular gameweeks. These gamechips are considered in our optimization model. Forecasts of player performances are generated in three different ways. The first approach consists of weighting the average of previous performances. Another is generated through linear regression of important FPL variables. The last approach utilizes bookmakers' odds for predictions of player performances. 
+
 \newpar
+
 The model has been solved in a rolling horizon fashion, where each sub-problem considers decisions for a given number of gameweeks. Hence, it attempts to maximize the performance over each sub-problem. As new information is available ahead of each gameweek, the model accounts for what happened in previous gameweeks when making decisions. 
 \newpar
-The model has been tested for the first 35 gameweeks of this year's Fantasy Premier League season, once for each of the solution approaches suggested for player predictions. The Modified Average forecast yields the best performance, finishing among the top 8th percentile in the overall rankings. The regression approach performs significantly worse, only finising among the top 36th percentile in the overall rankings. \textit{Skrive om hvordan odds presterer. Tar gjerne litt mer om resultatene når alle resultater er presentert i kap.7}. As for the Modified Average and the Regression approaches, they have a tendency of performing better over the duration of the season. Hence, it seems like the models' predictions improve as gameweeks are played. 
 
+The model has been tested for the first 35 gameweeks of this year's Fantasy Premier League season, once for each of the solution approaches suggested for player predictions. The Modified Average forecast yields the best performance, finishing among the top 8th percentile in the overall rankings. The regression approach performs significantly worse, only finishing among the top 36th percentile in the overall rankings. 
+\newpar
+
+\textit{Skrive om hvordan odds presterer. Tar gjerne litt mer om resultatene når alle resultater er presentert i kap.7}. As for the Modified Average and the Regression approaches, they have a tendency of performing better over the duration of the season. Hence, it seems like the models' predictions improve as gameweeks are played. 
+
+\begin{comment}
 - computational study tyder på at performance i siste delen av 2016 ikke er en indikator på performance i første delen av sesongen i 2017/2018
+\end{comment}
+
+
+@
