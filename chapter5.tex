@@ -3,7 +3,7 @@
 
 \chapter{Solution Framework} \label{chapter_solution_approach}
 
-The FPLDP is a complex problem with a high degree of uncertainty. In each gameweek a large range of decisions must be optimized. Compared to other Fantasy Sports, the gamechips make it even more complicated. The objective of the model presented in Chapter 4 is to maximize the number of expected points. If the model is run ex-post, the model yields the optimal solution as the realized points are known. However, in order to compete in FPL, decisions must be made ex-ante. Thus, estimations of expected points and strategies for when the gamechips should be played are required. The aim of this chapter is to provide such input and propose a solution method in order to maximize performance over the entire season. 
+The FPLDP is a complex problem with a high degree of uncertainty. In each gameweek a large range of decisions must be optimized. Compared to other Fantasy Sports, the gamechips make it even more complicated. The objective of the model presented in Chapter 4 is to maximize the number of expected points. If the model is run ex-post, the model yields the optimal solution as the realized points are known. However, in order to compete in FPL, decisions must be made ex-ante. Thus, estimations of expected points and strategies for when the gamechips should be played are required. The aim of this chapter is to propose a solution framework designed to maximize performance over the entire season. Furthermore, we present techniques with the aim of providing input for the framework.
 
 \newpar
 In the first section of this chapter, we present an overview of the solution approach suggested. In Section \ref{Player_Performance}, three different methods for forecasting player performance are described. Finally, in the Sections \ref{Ch.5_Game_chips} and \ref{Ch.5_Variance_tradeoff}, respectively, methods for implementing gamechips and handling risk are proposed.
@@ -11,11 +11,11 @@ In the first section of this chapter, we present an overview of the solution app
 
 \section{Solution Approach}
 
-As stochastic programming models seek to leverage probability distribution of uncertain parameters, they are regarded as more computational demanding than deterministic programming models \citep{Shapiro}. A common method for solving a stochastic model is by use of scenario generation. For the FPLDP, the number of scenarios explodes even for a modest number of scenarios. With only two scenarios in a gameweek, the number of scenarios already reaches over 1 million for 20 gameweeks ($2^{20} = 1\,048\,576$). Therefore, solving a stochastic model over a whole season is infeasible. Hence, we have decided to solve the FPLDP with a deterministic approach. It is solved in a rolling horizon framework where decisions are implemented for one gameweek at a time. When decisions are optimized for a given gameweek, a certain number of gameweeks ahead is considered and forecasts of realized points are generated. Furthermore, strategies for when to use gamechips and a method for incorporating risk are added to the mathematical model.
+As stochastic programming models seek to leverage probability distribution of uncertain parameters, they are regarded as more computational demanding than deterministic programming models \citep{Shapiro}. A common method for solving a stochastic model is by use of scenario generation. For the FPLDP, the number of scenarios explodes even for a modest number of scenarios. With only two scenarios in a gameweek, the number of scenarios already reaches over 1 million for 20 gameweeks ($2^{20} = 1\,048\,576$). Therefore, solving a stochastic model over a whole season is infeasible. Hence, we have decided to solve the FPLDP with a deterministic approach. It is solved in a rolling horizon framework where decisions are implemented for one gameweek at a time. When decisions are optimized for a given gameweek, a certain number of gameweeks ahead is considered and forecasts of player points are generated. Furthermore, strategies for when to use gamechips and a method for incorporating risk are added to the mathematical model.
 \newpar
 
 
-When using a forecast to estimate the expected value of a player's points, the objective function described in Section \ref{mathematical_model} is simplified from: 
+When solving for the expected value of a player's points, the objective function described in Section \ref{mathematical_model} is simplified from: 
 
 \begin{equation*}
 \smaller
@@ -42,9 +42,6 @@ where $\hat{\rho}_{pt}$ denotes an estimation of expected points of each player 
 
 \newpar
 
-\begin{comment}
-The solution approach is divided into three different elements, as depicted in Figure \ref{fig:solution_approach}. The elements are:
-\end{comment}
 
 The solution approach is divided into three different elements. The elements are:
 
@@ -54,7 +51,7 @@ The solution approach is divided into three different elements. The elements are
     \item Risk handling
 \end{itemize}
 
-The forecasts are estimations of player performance, while the gamechip strategies are decisions regarding when to play the various gamechips. In order account for risk, additional constraints are introduced. By risk, we refer to the variance in overall team performance. The variance is induced by the variance in an individual player's predicted performance and from correlation in points obtained by players in the same or opposing teams.
+The forecasts are estimations of player performance used as input in the mathematical model, while the gamechip strategies are decisions regarding which gameweeks to play the various gamechips. In order account for risk, additional constraints are introduced. By risk, we refer to the variance in overall team performance. The variance is induced by the variance in an individual player's predicted performance and from correlation in points obtained by players in the same or opposing teams.
 
 \begin{comment}
 
@@ -127,7 +124,7 @@ By including forecasting, gamechip strategies and variance, we have arrived at a
 
 \newpar
 
-\begin{algorithm}
+\begin{algorithm}[H]
 \setstretch{1.35}
 \caption{Forecast-based optimization model}
 \begin{algorithmic}
@@ -149,127 +146,46 @@ By including forecasting, gamechip strategies and variance, we have arrived at a
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-\begin{comment}
-\section{Forecast of player performance} \label{Player_performance_prediction}
-The optimization model presented in chapter \ref{chapter_model_formulation} uses expected fantasy points as an input. A major uncertainty lies in prediction of football players performances. In this section, we initially present a brief discussion regarding evaluation of forecasting accuracy. Furthermore, we introduce three different methods of predicting future player performance. First, we present a regression model based on the historical Fantasy Premier League performance. Secondly, we replicate and modify the approach suggested by \cite{Bonomo}. Finally, we introduce an approach using bookmakers' odds in order to predict each player's expected points. 
-\end{comment}
-
-\newpage
-
-
-
 \section{Forecast of Player Performance} \label{Player_Performance}
 
-The solution framework suggested is based on using forecasting player performance as input to the optimization model. There are many ways to do a forecast, and following the description of three forecasting methods are presented. 
+The solution framework suggested is based on forecasts of player performance as input to the optimization model. Thus, the forecasting method is not a part of the framework per se, but rather a way of generating input. However, forecasts constitutes a substantial part of the forecast-based optimization model. With this in mind, and for the purpose of readability, we have decided to include a section devoted to forecast of player performance in the chapter describing the solution framework. Thus, in the following, the three different forecasting methods used in the thesis are presented. 
 
-\subsection{Forecasts Using Modified Average} \label{Sol_approach_Modified_Average}
+\subsection{Modified Average} \label{Sol_approach_Modified_Average}
 
-The solution approach suggested by \cite{Bonomo} can be used for the English Fantasy Premier League as well as for the Argentinian Fantasy League. In general, \cite{Bonomo} use the average points performance for the three last gameweeks to forecast the performance in the next gameweek. As mentioned in Section \ref{Forecasting_of_player_performance}, the forecast is further weighted on four factors: team opponent, home advantage, whether a player is on a good performance streak and whether a player is assumed to be in the starting line-up. 
+As discussed in the literature study, \cite{Bonomo} suggests a solution approach for the Argentinian Premier League and achieves promising results. Therefore, the first forecast method is based on their solution approach. However, the methodology is modified in order to make it applicable for the English Fantasy Premier League rather than the Argentinian Fantasy League. Moreover, some modifications are made as an effort to improve the method. Hence, the first forecasting method is called the Modified Average method.
 
 \newpar
 
-In general, a player's point prediction is calculated according to the following equation:
+As mentioned in \ref{Forecasting_of_player_performance}, \cite{Bonomo} use the average points for the three last gameweeks to forecast the performance in the upcoming gameweek. The forecast is further weighted by four factors: upcoming opponent strength, home advantage, whether a player is on a good performance streak and whether a player is assumed to be in the starting line-up. More generally, \cite{Bonomo} estimate a player's expected points for the next gameweek according to Equation \ref{eq:bonomo}. In the following, we discuss how each element of the equation is decided by \cite{Bonomo} and the modifications made.
+
 \begin{equation}
 \begin{split}
-    \hat{\rho}  = & \textrm{\textit{Adjusted avg. points}} \times \textrm{\textit{Team strength}} \times \textrm{\textit{Home advantage}} \\
+    \hat{\rho}  = & \textrm{\textit{Adjusted avg. points}} \times \textrm{\textit{Upcoming opponent strength}} \times \textrm{\textit{Field factor}} \\
         & \times \textrm{\textit{Point streak}} \times \textrm{\textit{Starting line-up factor}}
 \end{split}
+\label{eq:bonomo}
 \end{equation}
 
-\newpar
+\subsubsection{Adjusted average points and upcoming opponent strength}
 
-Further, the starting line-up factor is disregarded. In \cite{Bonomo}, this factor was decided upon coaches' announcements, press reports and information posted on the website of the Argentinian Fantasy league. 
-As this approach aims to consider numerical data as much as possible, the starting line-up factor is consequently disregarded. In addition to replicate their model, we modify and improve it by using different weights adjusted for historical performance in the English Premier League. For instance, we consider averaging over more than 3 gameweeks. The number of gameweeks we look back when we forecast is hereby referred to as the \textit{track-length}. Thus, \cite{Bonomo} use a sub-horizon of 1 gameweeks and a track-length of 3 gameweeks when solving for the Argentinian Fantasy League. 
-
-\newpar
-
-Although \cite{Bonomo} use league table position for measuring the relative strength between adversaries, league position suffers from numerous drawbacks which make it unreliable for prediction. For example, the league table suffers from high variation in the early stage of the season and low variation in the late stage of the season. Further, competing teams may not share the equivalent number of matches during the season due to postponements, thus providing errors for many rounds. Additionally, the league table does not capture the fixtures during the season, hence it is inherently biased until the final match of the season has been played \citep{Constantinou}. Therefore, instead of weighting the teams based on their league position, we can utilize an Elo-rating in order to weight the relative team strengths in the league. In addition, an empirical value of home field advantage in the Premier League is used as a factor for the home advantage. In order to measure a player's recent performance, decisions are made on whether a player is on a positive or negative point streak.
-
-\subsubsection{The Elo system}
-
-The Elo system introduced in section \ref{Strength_of_football_teams} is a rating system used for measuring the relative strength level of sport teams and individual athletes. Within football, the Elo system can be used in order to determine a club's Elo value. The great advantage of the Elo system lies in its simplicity: there is only one value per club at each point in time, the higher the better. 
+\cite{Bonomo} calculate an \textit{adjusted average} by averaging the points obtained in the 3 previous gameweeks. The first modification suggested is to consider averages over more than 3 previous gameweeks. The number of previous gameweeks taken into consideration when forecasting is hereby referred to as the \textit{track-length}. In addition, \cite{Bonomo} optimizes for 1 gameweek ahead when decisions are set in a current gameweek. Thus, \cite{Bonomo} use a sub-horizon of 1 gameweek and a track-length of 3 gameweeks when solving for the Argentinian Fantasy League.
 
 \newpar
 
-The performance of a team is not measured absolutely, but inferred from wins, losses and draws against other teams. If team A has a Elo value of $R_A$ and team B has a Elo value of $R_B$, team A has an expected score of 
-\begin{equation}\label{eq5.2}
-    E_A = \frac{1}{1+10^{\frac{R_B - R_A}{400}}}
-\end{equation}
-when facing team B. Similarly, team B has an expected score of
-\begin{equation}\label{eq5.3}
-    E_B = \frac{1}{1+10^{\frac{R_A - R_B}{400}}}
-\end{equation}
+Considering different track-lengths is not the only modification made with respect to adjusted average points. Another adjustment is to weigh the averages based on the strength of the opposition faced in the previous matches. \cite{Bonomo} does not account for the strength of the opposition faced when averaging previous points. However, they use league table position for measuring the relative strength between adversaries when predicting future points. That is, when they determine \textit{upcoming opponent strength}. Yet, league position suffers from numerous drawbacks which makes it unreliable for prediction. For example, the league table suffers from high variation in the early stage of the season and low variation in the late stage of the season. Further, competing teams may not share the equivalent number of matches during the season due to postponements. Additionally, the league table does not capture when fixtures are played during the season. Hence it is inherently biased until the final match of the season has been played \citep{Constantinou}. Therefore, instead of weighting the teams based on their league position, measuring team strength with basis in Elo rankings are suggested. 
 
-\newpar
-When teams play each other and win or lose, they exchange points. Hence, the club's Elo value is updated once a match has been played. Using the expected scores from equation \ref{eq5.2}, team A's updated Elo value is calculated according to
-\begin{equation} \label{eq5.4}
-    R^{'}_A = R_A + (S_A-E_A) \times k
-\end{equation}
-where $S_A$ is the result (1 for win, 0.5 for draw and 0 for loss). Further, $k$ is a factor which determines the adjustments of the Elo value. A higher k-value will increase the changes in the rating and thus the Elo values suffer from more variation. For smaller k-values, more stable Elo values are created. In chess, the World Chess Federation suggest that a value of $k = 20$ should be used for players with an Elo value below 2400. 
 
 \newpar
 
-Similarly, team B's updated Elo value is given by
-\begin{equation} \label{eq5.5}
-    R^{'}_B = R_B + (S_B-E_B) \times k
-\end{equation}
+The Elo system introduced in Section \ref{Strength_of_football_teams} is a rating system used for measuring the relative strength level of sport teams and individual athletes. Clubelo.com provides historical Elo values for most of the professional football teams in the world, including teams in the English Premier League. The Elo values provide a sophisticated measurement of the relative strength between the Premier League teams. Further, as the values are updated once a match has been played, the Elo system considers the aspect of form. In addition, the ratings account for goal difference and inter-league adjustments. The Elo values also incorporate all fixtures, not only league matches. In Appendix \ref{appendix_elo_values_pl}, it is shown how Elo ratings are transformed into a factor of team strength. 
 
 \newpar
 
-In the following, an illustrative example provides how Elo values of two teams are updated once a match between them has been played:
 
-\newpar
-
-Assume that team A has an Elo value of 1881 and that team B has a value of 1650. If team A faces team B, team A has an expected score according to equation \ref{eq5.2}:
-
-\begin{equation*}
-    E_A = \frac{1}{1+10^{\frac{1650-1881}{400}}} = 0.791
-\end{equation*}
-
-while team B has an expected score of
-
-\begin{equation*}
-    E_B = \frac{1}{1+10^{\frac{1881-1650}{400}}} = 0.209
-\end{equation*}
-
-Further, if team A won the match, its Elo value will increase to a value according to equation \ref{eq5.4}: 
-\begin{equation*}
-   R^{'}_A= 1881 + (1-0.791) \times 20 = 1885
-\end{equation*}
-
-As for team B, its Elo value decreases to
-
-\begin{equation*}
-   R^{'}_B = 1650 + (0-0.209) \times 20 = 1646 
-\end{equation*}
-
-\subsubsection{Using Elo values to rate Premier League teams}
-
-The Elo values provide a sophisticated measurement of the relative strength between the Premier League teams. Further, as the values are updated once a match has been played, the Elo system somehow catches which teams that are in a good form. Elo values can be obtained according to equation \ref{eq5.2} and \ref{eq5.4}. Clubelo.com provide historical Elo values for most of the professional football teams in the world, including teams in the English Premier League, English 1st division etc. These values are used in order to compute the relative team strength in this project, using a k-value of 20. A great advantage of the ratings provided by Clubelo is the fact that these values are modified, taking into account home field advantage, goal difference and inter-league adjustments. In addition, the Elo values from Clubelo incorporate all fixtures and not only league matches.
-
-\newpar
-
-Once the Elo values are obtained, they can be used in order to weight the previous performance of each Fantasy Premier League player. It is likely to suggest that a player playing for a top-rated team has a greater probability of scoring many points than a player playing for a poor team. In addition, a player is more likely to gain many points against a weak opponent than against a top-rated team. Hence, one should consider both the opponent and the team of a player when calculating his previous average. 
-
-\newpar
-
-In Table \ref{Elo.1617} some Elo values for the first gameweeks of the English Premier League 2016/17 season are listed. Note that the values are calculated ahead of each gameweek, so that the values in the GW1 column are the Elo values of the teams before gameweek 1 has been played. 
+Once Elo values are obtained, they can be used in order to weight the previous performance of each Fantasy Premier League player. In Table \ref{Elo.1617}, some Elo values for the first gameweeks of the English Premier League 2016/2017 season are listed. Note that the values are calculated ahead of each gameweek, so that the values in the GW1 column are the Elo values of the teams before gameweek 1 has been played. 
 
 \begin{table}[H]
 \centering
-\caption{Elo ratings for Premier League 2016/2017}
-\label{Elo.1617}
 \begin{tabular}{|l|l|l|l|l|l|}
 \cline{2-6}
 \multicolumn{1}{l|}{} & \multicolumn{1}{l|}{} & \multicolumn{4}{c|}{Elo value}  \\ \cline{2-6} 
@@ -289,125 +205,67 @@ In Table \ref{Elo.1617} some Elo values for the first gameweeks of the English P
 20                    & Sunderland            & 1655   & 1654   & 1636 & 1641   \\
 \hline
 \end{tabular}
+\caption{Elo ratings for Premier League 2016/2017.}
+\label{Elo.1617}
 \end{table}
 
-Values from table \ref{Elo.1617} can be used in order to weight the performance of a player. For instance, if a forward received many points against Chelsea, that is more impressive than if the same player received equal points against Sunderland. Hence, one should weight the performances appropriately. In the following, an approach for weighting historical performance is suggested. For instance, let's assume that Paul Pogba, a midfielder at Manchester United received the following points for the first three gameweeks: 
+Values from Table \ref{Elo.1617} can be used in order to weight the performance of a player. For instance, receiving 9 points against Chelsea is more impressive than receiving 9 points against Sunderland. Hence, a suggestion is to weight the performances accordingly. Equation \ref{eq:adj_avg} shows how a player's adjusted average points is computed when the track-length is $m$ and realized points in gameweek $i$ is denoted $p_i$. In a similar manner, relative Elo values, rather than values based on the league table, are used to determine upcoming opponent strength, as seen in Equation \ref{eq:opp_str}. Thus, both previous performance and future expected points account for faced and upcoming opposition. Notice that in Equation \ref{eq:adj_avg}, Elo values for both opponent and team is denoted by $i$. This is because the Elo values are updated every gameweek. In Appendix \ref{app_walk_through}, a detailed walk-through of the calculations can be found.
 
-
-\begin{table}[H]
-\centering
-\caption{Paul Pogba imaginary points}
-\label{my-label}
-\begin{tabular}{|l|l|l|l|l|}
-\hline
-\multicolumn{1}{|c|}{} & \multicolumn{4}{c|}{Points Gained} \\ \hline
-Opponent               & GW1        & GW2       & GW3    & GW4   \\
-\hline
-Chelsea                & 6          &           &        &       \\
-Sunderland             &            & 9         &        &       \\
-Watford                &            &           & 10     &         \\
-Tottenham              &            &           &        & ?      \\
-\hline
-\end{tabular}
-\end{table}
-
-If one simply used his average score for the past three gameweeks in order to predict his performance for the next gameweek, one would predict Pogba to gain 8.33 points in gameweek 4. However, in this case one does not account for the fact that Manchester United were facing teams of different quality. In addition, one does not consider the fact that Pogba plays for Manchester United, a team that in general performs better than most other teams. As mentioned above, these factors should be considered. Hence, it is necessary to weight the previous performance taking into account the opponent team and the player's team. This can be solved in the following way: 
-\newpar
-In gameweek 1, Manchester United were facing Chelsea and Pogba earned 6 points. In order to account for the fact that Pogba plays for Manchester United and was facing Chelsea (a higher ranked team), one simply multitplies his score with Chelseas Elo value and divides it by Manchester Uniteds Elo value. Thus, Paul Pogba's expected points should be set to:
-\begin{equation*}
-    \textrm{Paul Pogba GW1} = 6 \times \frac{1793}{1789} = 6.013 
-\end{equation*}
-As can be observed, his modified points increase when facing an opponent that is assumed to be better than his team. On the contrary, when facing a weaker team, for instance Sunderland his modified points decrease: 
-\begin{equation*}
-    \textrm{Paul Pogba GW2} = 9 \times \frac{1654}{1797} = 8.284 
-\end{equation*}
-
-In general a players expected points gained can be calculated by the following equation: 
-\begin{equation} \label{actualpoints}
-\textrm{Expected points} = \textrm{Modified points} \times \frac{\textrm{Opponent Elo value}}{\textrm{Player's team Elo value}}    
-\end{equation}
-
-By calculating expected points according to equation \ref{actualpoints}, Paul Pogbas adjusted average for the first three gameweeks would be 7.764. The following equation is used in order to calculate the expected points for an upcoming gameweek: 
 \begin{equation}
-    \textrm{Expected points} = \textrm{Modified average} \times \frac{\textrm{Player's team Elo value}}{\textrm{Opponent Elo value}}
+\textrm{\textit{Adjusted avg.points}} = \frac{1}{m}\sum_{i=1}^m p_i \cdot \frac{(\mathrm{Opponent \ Elo \ value})_i}{(\mathrm{Team \ Elo \ value})_i}
+\label{eq:adj_avg}
 \end{equation}
-In this way, players are rewarded with an increased expected points when playing for a team with a higher Elo value than its opponent. Hence, his expected performance against Tottenham in the upcoming gameweek 4 would be: 
-\begin{equation*}
-    \textrm{Expected points for Pogba GW4} = 7.764 \times \frac{1804}{1798} = 7.790
-\end{equation*}
+
+\begin{equation}
+\textrm{\textit{Upcoming opponent strength}} = \frac{\textrm{Team Elo value}}{\textrm{Opponent Elo value}}
+\label{eq:opp_str}
+\end{equation}
 
 
-\subsubsection{Home field advantage}
-As pointed out in section \ref{Forecasting_of_future_performance} numerous studies have proven that some kind of home field advantage exists in football matches. Football teams have a tendency of performing better when playing at their home field than when playing at their opponents ground. This home field advantage has to be considered when one is to forecast the upcoming performance of the Premier League players. 
+\begin{comment}
+can utilize an Elo-rating in order to weight the relative team strengths in the league. In addition, an empirical value of home field advantage in the Premier League is used as a factor for the home advantage. In order to measure a player's recent performance, decisions are made on whether a player is on a positive or negative point streak.
+
+
+
+ 
+\end{comment}
+
+\subsubsection{Field factor}
+As pointed out in Section \ref{Forecasting_of_future_performance}, numerous studies have proven that home field advantage exists in football matches. That is, football teams have a tendency of performing better when playing at their home field than when playing at opponent's ground. In order to distinguish between home field advantage and away field (dis)advantage, we have called the variable for \textit{field factor}. \cite{Bonomo} set the home field factor to 1.05 and away field factor to 0.95 without further elaboration. 
+
 \newpar
-Usually when one is to determine the home field advantage in a football league, one focuses on the outcome of the game, i.e.  win, draw or loss. In Fantasy Premier League, the outcome of a match has no impact in the point system. As the most important point-factor in FPL is goals scored, the home field advantage has to be calculated in terms of goals. 
-\newpar
-The home field advantage can be calculated according to the approach suggested by \cite{Pollard}. However, instead of focusing of match outcomes, one determine the advantage by looking into goals. Imagine that each team plays 38 matches during the season, equally divided between home and away games. With 20 teams facing each other twice a season, that implies a total of 380 matches a season. Further, assume that a total of 1000 goals were scored during a particular season. If there were no home field advantage, one would expect that 500 of the goals were scored by the home team and 500 by the away team, yielding a factor of 0.5. However, the results show that 620 of the goals were scored by the home team, which represents 62 \% of the goals scored. With an expected value of 50 \% and an actual value of 62 \% the home field advantage in terms of goals scored can be calculated by: 
+
+Studies of home field advantages in a football, e.g. \cite{Pollard}, often concentrate on the outcome of the game, i.e. win, draw or loss. In Fantasy Premier League, however, the outcome of a match has no direct impact in the point system. Further, an important point-factor in FPL is goals scored. Thus, a decision was taken to calculate the home field advantage with basis in goals. The factors are calculated for the entire Premier League, not for each team. The idea is that the field factor alongside the relative team strengths calculated by the Elo system will complement each other. The home field factor for a particular season is calculated as:
+
 \begin{equation*}
-    \textrm{Home field advantage} = \frac{\textrm{Actual goals scored home}}{\textrm{Expected goals scored away}} = \frac{0.62}{0.5} = 1.24 
+    \textrm{Home field factor} = \frac{\textrm{Total number of goals scored home}}{\textrm{Total number of goals scored}} 
 \end{equation*}
 
-Similarly, the away field advantage is calculated according to:
+Similarly, the away field factor is calculated as:
+
 \begin{equation*}
-    \textrm{Away field advantage} = \frac{\textrm{Actual goals scored away}}{\textrm{Expected goals scored away}} = \frac{0.38}{0.5} = 0.76
+    \textrm{Away field factor} = \frac{\textrm{Total number of goals scored away}}{\textrm{Total number of goals scored}}
 \end{equation*}
-\newpar
-In this thesis the home field advantage is calculated as an empirical value for the entire Premier League. Hence, each team's home field advantage is not considered. The idea is that the empirical home field advantage along with the relative team strengths calculated by use of the Elo system will give an appropriate representation of a team's performance both home and away. 
-\newpar
-In order to find an appropriate empirical value for the home field advantage, several previous seasons should be considered. In this project thesis, the empirical value is set to the average of the home field advantage over the past five Premier League seasons. This is due to the fact that the home field advantage value has been stabilized over the past seasons. 
+
+In order to find an appropriate empirical value for the home field advantage, number of goals in several previous seasons are considered.
+
 
 \subsubsection{Player point streak}
-Fantasy Premier League managers have a tendency of selecting players that are on a great point streak. As mentioned in section \ref{Forecasting_of_player_performance} \cite{Bonomo} add a factor in order to account for players point streak. This factor can take a value between 0.95 and 1.05, depending on the duration of a player's point streak. Unfortunately, they do not describe how they determine whether a player is on a point streak or not. Therefore, we choose to determine a player's point streak in the following way: 
-\newpar
-If a player receives more than X points for 2 gameweeks in a row, his point streak value will be set to 1.01. Further, if the streak continues, the value will increase by 0.01 for each match that his points exceed the X number of points. When a player has received more than X points 6 gameweeks in a row, his point streak value is set to the maximum of 1.05. Hence, the value does not increase if his streak exceeds 6 matches. The same rule applies for players scoring less than Y points 2 gameweeks in a row; then his streak value will be set to 0.99. When scoring less than Y points 6 matches in a row, the point streak value is set to a minimum of 0.95. Once the scoring streak is broken, the player's value is set to 1. 
+\cite{Bonomo} adjust their forecasts with a value between 0.95 and 1.05 to account for a player's \textit{point streak}. They do not describe further how the point streak factor was determined. Therefore, we choose to determine a player's point streak in the following way: If a player receives more than \textit{X} points for 2 gameweeks in a row, his point streak value will be set to 1.01. Further, if the streak continues, the value will increase by 0.01 for each match that his points exceed the \textit{X} number of points. When a player has received more than \textit{X} points 6 gameweeks in a row, his point streak value is set to the maximum of 1.05. Hence, the value does not increase if his streak exceeds 6 matches. The same rule applies for players scoring less than \textit{Y} points 2 gameweeks in a row, then his streak value will be set to 0.99. When scoring less than \textit{Y} points 6 matches in a row, the point streak value is set to a minimum of 0.95. Once a streak is broken, the player's point streak is set to 1. In Section \ref{Exp_setup_Player_Performance_Prediction}, a method for determining the values \textit{X} and \textit{Y} is proposed.
 
+\subsubsection{Starting line-up factor}
 
-\subsection{Player forecast using regression}
+\cite{Bonomo} decide the \textit{starting line-up factor} by considering coaches' announcements, press reports and information posted on the website of the Argentinian Fantasy league. As the forecast-based optimization model is solely data-driven, an explicit attempt of implementing this factor for the FPL is not undertaken. Rather, as seen later in Section \ref{exp_setup_data}, we adjust all forecasts by data provided about injuries and suspensions.
+
+\subsection{Regression}
 \label{Sol_approach_regression}
 
-A second way of forcasting Fantasy Premier League points is by use of regression. In order to create a regression model, we have undertaken the following steps:
+As seen in the literature study, forecasting player performance in football has had promising results (kilde). Therefore, as a second way of forecasting Fantasy Premier League points, we suggest a regression based method. In order to create a regression model, the following steps are undertaken:
 \begin{enumerate} [label=(\roman*)]
     \item separate players based on position,
     \item perform a variable selection,
     \item fit a linear regression model.
 \end{enumerate}
-Before the approach is further introduced, a brief discussion of the theory applied is presented.
-
-
-\subsubsection{Training and test sets}
-In order to determine the accuracy of a forecast, out-of-sample forecasts should be evaluated \citep{Hyndman}. To accomplish this, available data are separated into two portions: training and test data. A model is first fitted using the training data only. Then, the model's forecast accuracy is determined by comparing forecasts from the model with actual realizations contained in the test data. 
-If the model that is the best fit on all available data is chosen as forecasting model, the model would be subject to over-fitting \citep{Hyndman}. That is, the model performs well on the data in the training set, but does not necessarily forecast well.
-
-\subsubsection{Forecast errors}
-A forecast error is the difference between an observed value and its forecast \citep{Hyndman}, as defined as in Equation \ref{eq:f_err}. Here, \{$ y_{1},...,y_{T} $\} is the training set data, \{$ y_{T+1},,y_{T+2},...$\} is the test set data and $\hat{y}_{t+h|T}$ is the forecast at time \textit{T+h}, given \textit{T}. 
-
-\begin{equation}\label{eq:f_err}
-    e_{T+h} = y_{T+h} - \hat{y}_{T+h|T}
-\end{equation}
-
-\subsubsection{Scale-dependent errors}
-
-Commonly used error measures include the Mean Absolute Error (MAE, Equation \ref{eq:MAE}), Mean Squared Error (MSE, Equation \ref{eq:MSE}) and Root Mean Squared Error (RMSE, Equation \ref{eq:RMSE}) \citep{Hyndman}.
-
-\begin{equation}\label{eq:MAE}
-    MAE = mean(|e_t|)
-\end{equation}
-
-\begin{equation}\label{eq:MSE}
-    MSE = mean(e_t^2)
-\end{equation}
-
-\begin{equation}\label{eq:RMSE}
-    RMSE = \sqrt{MSE}
-\end{equation}
-
-
-\subsubsection{\textit{k}-fold cross validation}
-\textit{k}-fold cross validation involves randomly dividing a set of observations into \textit{k} groups, or \textit{folds}, of equal size \citep{ISLR}. The first fold is treated as test set, and the remaining $k-1$ folds are used to train a model. The procedure is repeated \textit{k} times, and for each repetition, a new fold makes up the test set. The process results in \textit{k} estimates of the test-error, $MSE_1$, $MSE_2$ ..., $MSE_k$. Finally, a \textit{k}-fold average MSE is computed by averaging the values, as shown in Equation \ref{eq:cv} \citep{ISLR}.
-
-\begin{equation}\label{eq:cv}
-    CV_{(k)} = \frac{1}{k}\sum_{i=1}^{k} MSE_i
-\end{equation}
 
 \subsubsection{Variables}
 In order to perform a regression and estimate expected points in the next gameweek, numerous numerical and categorical explanatory variables are considered. In the following, all variables considered are presented: 
@@ -440,7 +298,7 @@ In order to perform a regression and estimate expected points in the next gamewe
     \item \textbf{Transfers out} - The amount of FPL managers that sold the player ahead of a given gameweek.
     \item \textbf{Minutes Played} - Minutes played in the previous gameweek.
     \item \textbf{Yellow Cards} - Total amount of yellow cards received in the previous gameweeks.
-    \item \textbf{Red Cards} - The amount of red cards received in the previous gameweeks.
+    \item \textbf{Red Cards} - Total amount of red cards received in the previous gameweeks.
     \item \textbf{Goals} - Total amount of goals scored in the previous gameweeks.
     \item \textbf{Assists} - The amount of assists in the previous gameweeks.
     \item \textbf{Penalties Missed} - The amount of penalties missed in the previous gameweeks.
@@ -454,7 +312,11 @@ In order to perform a regression and estimate expected points in the next gamewe
 
 %Seperate analysis by positions because of different eccects of covariates (betas)
 
-As described in Chapter \ref{chapter_problem_description}, points are awarded based on different criteria for players in different positions. For instance, goalkeepers, defenders and midfielders are rewarded points for keeping a clean sheet, but forwards are not. Based on this knowledge, we have decided to segment the players into their respective positions before continuing the regression procedure. If we were to regress on all available variables, such a distinction would perhaps not be necessary, as the coefficient related to the categorical variable could compensate the differences. However, we aim to limit the number of explanatory variables for each position by use of variable selection. In order to provide further justification for the categorization, a box-plot and scatter-plots are assessed in Section \ref{exp_setup_reg}.
+As described in Chapter \ref{chapter_problem_description}, points are awarded based on different criteria to players in different \textit{positions}. For instance, goalkeepers, defenders and midfielders are rewarded points for keeping a clean sheet, but forwards are not. Based on this knowledge, we have decided to segment the players into their respective positions before continuing the regression procedure. If we were to regress on all available variables, such a distinction would perhaps not be necessary, as the coefficient related to the categorical variable position could compensate the differences. However, we aim to limit the number of explanatory variables for each position by use of variable selection. Therefore, the separation is done. 
+
+\newpar
+
+In order to provide further justification for the categorization based on position, a box-plot and scatter-plots are assessed in Section \ref{exp_setup_reg}. For example, in the box-plot, we investigate whether the empirical distribution in points obtained differs between positions. Moreover, in the scatter plot, we visually inspect the relation between for instance total points, goals and position.
 
 \subsubsection{Times series effect of points}
 
@@ -469,57 +331,82 @@ In order to test for autocorrelation, the Ljung-Box test and the Durbin-Watson t
 
 \subsubsection{Variable selection}
 
-As seen previously, a number of explanatory variables are available. If all were to be used to build a regression model, the model could be subject to over-fitting \citep{ISLR}. Therefore, in order to limit the number of explanatory variables, a variable selection is undertaken. To perform the variable selection, lasso regression is used. In this thesis, only a brief introduction of the concept of lasso regression is given. For a more comprehensive review, the reader is referred to "An Introduction to Statistical Learning" by \cite{ISLR}.\newpar
+In order to select variables, we perform a \textit{k-folk cross validation} in combination with a \textit{lasso regression}. Before these topics are treated, a brief discussion of training and test sets and forecast error measurement is presented.
 
-Lasso regression is a shrinkage method used in order to perform variable selection \citep{ISLR}. The aim is to have the lasso coefficients $\hat{\beta}_{\lambda}^{L}$ minimize the quantity:
 
-\begin{equation*}
+\subsubsection{Training and test sets}
+Generally speaking, in order to determine the accuracy of a forecast, out-of-sample forecasts should be evaluated \citep{Hyndman}. To accomplish this, available data should separated into two portions: training and test data. A model is first fitted using the training data only. Then, the model's forecast accuracy is determined by comparing forecasts from the model with actual realizations contained in the test data. Furthermore, in general, if a model is fit on all available data, rather than separated into a training- and test set, the model would be subject to over-fitting \citep{Hyndman}. That is, the model performs well on the sample data, but does not necessarily forecast well out of sample.
+
+\subsubsection{Forecast error measurement}
+A forecast error is the difference between an observed value and its forecast \citep{Hyndman}, as defined as in Equation \ref{eq:f_err}. Here, \{$ y_{1},...,y_{T} $\} is the training set data, \{$ y_{T+1},,y_{T+2},...$\} is the test set data and $\hat{y}_{t+h|T}$ is the forecast at time \textit{T+h}, given \textit{T}. 
+
+\begin{equation}\label{eq:f_err}
+    e_{T+h} = y_{T+h} - \hat{y}_{T+h|T}
+\end{equation}
+
+Commonly used error measures include the Mean Squared Error (MSE, Equation \ref{eq:MSE}) and Root Mean Squared Error (RMSE, Equation \ref{eq:RMSE}) \citep{Hyndman}.
+
+\begin{equation}\label{eq:MSE}
+    MSE = mean(e_t^2)
+\end{equation}
+
+\begin{equation}\label{eq:RMSE}
+    RMSE = \sqrt{MSE}
+\end{equation}
+
+
+\subsubsection{\textit{k}-fold cross validation}
+\textit{k}-fold cross validation involves randomly dividing a set of observations into \textit{k} groups, or \textit{folds}, of equal size \citep{ISLR}. The first fold is treated as the test set, and the remaining $k-1$ folds are used to train a model. The procedure is repeated \textit{k} times, and for each repetition, a new fold makes up the test set. The process results in \textit{k} estimates of the test-error, $MSE_1$, $MSE_2$ ..., $MSE_k$. Finally, a \textit{k}-fold average MSE, denoted $CV_{(k)}$ is computed by averaging the values, as shown in Equation \ref{eq:cv} \citep{ISLR}.
+
+\begin{equation}\label{eq:cv}
+    CV_{(k)} = \frac{1}{k}\sum_{i=1}^{k} MSE_i
+\end{equation}
+
+\subsubsection{Lasso Regression}
+
+As seen previously, a number of explanatory variables are available. If all were to be used to build a regression model, the model could be subject to over-fitting \citep{ISLR}. Therefore, in order to limit the number of explanatory variables, a \textit{variable selection} is undertaken. That is, a subset of variables, believed to be related to the dependent variable \textit{realized points}, is selected. To perform the variable selection, lasso regression is used. In this thesis, only a brief introduction of the concept of lasso regression is given. For a more comprehensive review, the reader is referred to "An Introduction to Statistical Learning" by \cite{ISLR}.
+
+\newpar
+
+According to \cite{ISLR}, lasso regression is a \textit{shrinkage method} used in order to perform variable selection. By shrinkage method, the authors refer to methods were coefficients are sunken towards zero relative to least squares estimates. This shrinkage has the effect of reducing variance. Depending on what type of shrinkage is performed, some of the coefficients may be estimated to be exactly zero. Lasso regression is such a shrinkage method. Hence, lasso regression can perform
+variable selection. The aim of lasso regression is to find the lasso coefficients $\hat{\beta}_{\lambda}^{L}$ that minimize the quantity:
+
+\begin{equation}
     \sum_{i=1}^n\Big (y_i-\beta_0-\sum_{j=1}^p\beta_jx_{ij}\Big)^2 + \lambda \sum_{j=1}^p|\beta_j| = RSS + \lambda \sum_{j=1}^p|\beta_j|
-\end{equation*}
+    \label{eq:lasso}
+\end{equation}
 
-Here, RSS is the Residual Sum of Squares, the quantity minimized in multiple linear regression. However, in contrast to linear regression, Lasso regression does not only minimize RSS. It also penalize the sum of the $\beta$-coefficients by absolute value. Or, more precisely, it uses an $l_1$ penalty. This has the desired effect of forcing some of the coefficient estimates to be exactly equal to zero when the tuning parameter $\lambda$ is sufficiently large \citep{ISLR}. Hence, lasso regression performs variable selection.\newpar 
+Here, RSS is the Residual Sum of Squares, the quantity minimized in multiple linear regression. However, in contrast to linear regression, Lasso regression does not only minimize RSS. It also penalizes the sum of the $\beta$-coefficients by absolute value. Or, more precisely, it uses an $l_1$ penalty. This has the desired effect of forcing some of the coefficient estimates to be exactly equal to zero when the tuning parameter $\lambda$ is sufficiently large \citep{ISLR}. Hence, lasso regression performs variable selection.
 
-In order to decide the value of $\lambda$, and subsequently what variables to include in the model, \textit{k}-fold cross validation is used. The average \textit{k}-fold cross validation MSE based on the coefficients obtained from the lasso is plotted against different values of $\lambda$. In order to select a model, two considerations are made. First, the model with the smallest error is considered. However, if such a model includes a large number of explanatory variables, it can be subject to over-fitting. Therefore, the model with a MSE one standard deviation higher than that of the minimum is also considered. Subsequently, variables are selected. That is, the variables associated with a non-zero $\beta$ are chosen. 
+\newpar 
+
+In order to decide the value of $\lambda$, and subsequently what variables to include in the model, \textit{k}-fold cross validation is used. In Section \ref{exp_setup_reg}, the average \textit{k}-fold cross validation MSE, $CV_{(k)}$, accociated with the coefficients $\hat{\beta}_{\lambda}^{L}$, is plotted against corresponding values of $\lambda$. As suggested by \cite{ISLR}, two considerations are made when selecting a value of $\lambda$. First, the model with the smallest error is considered. However, if such a model includes a large number of explanatory variables, it can be subject to over-fitting. Therefore, the model with a MSE one standard deviation higher than that of the minimum is also considered. Afterwards, a variable selection is performed. That is, the variables associated with a non-zero $\hat{\beta}_{\lambda}^{L}$ are chosen. 
 
 \subsubsection{Model Selection}
 
-It is important to note that lasso regression is only conducted in order to perform variable selection. The $\beta$-values from the regression are not carried forward. Instead, we have decided to forecast points by use of linear regression on the variables selected by the lasso regression. Linear regression has an advantage over a lasso regression as it has more easily interpreted coefficients and well-defined variance. This makes the calculation of p-values possible. Moreover, it makes the results more accessible for readers from different disciplines as it is widely known. Furthermore, a linear regression model has an advantage compared to for instance logistic regressions, as points can be negative, which is a possibility in FPL.
+It is important to note that lasso regression is only conducted in order to perform variable selection. The  $\hat{\beta}_{\lambda}^{L}$-values from the regression are \textit{not} carried forward. Instead, we have decided to forecast points by use of linear regression on the variables selected by the lasso regression. Linear regression has an advantage over a lasso regression as it has more easily interpreted coefficients and well-defined variance \citep{ISLR}. This makes the calculation of \textit{p}-values possible. Moreover, the use of linear regression makes the results more accessible for readers from different disciplines as it is a widely known procedure. Furthermore, a linear regression model has an advantage compared to for instance logistic regressions, as points can be negative, which is a possibility in FPL.
+
 \newpar 
-Only one variable explicitly related to points is considered. This variable is \textit{previous points}. We have decided not to include variables such as total points in the season so far and points from the Bonus Point System. These variables would be highly correlated with variables such as goals, and are excluded as not to over-complicate the regression model. Since the bonus points to a large degree are decided by the same factors as "regular" points (e.g. goals, assists, clean sheets etc) their effect are included in the coefficients for these explanatory variables. 
+
+The variable \textit{previous points} is the only variable explicitly related to points earned. We have decided not to include other variables such as total points in the season so far and points from the Bonus Point System. These variables would be highly correlated with variables such as goals. Thus, one rational for excluding them is not to over-complicate the regression model. Furthermore, since the bonus points to a large degree are decided by the same factors as "regular" points (e.g. goals, assists, clean sheets etc) their effects are assumed included in the coefficients for these explanatory variables. 
 
 
-\subsection{Forecasting using odds}
-A scoreline prediction gives the probability of a result outcome to occur. For instance, it could tell that there was 0.1044 probability that Leicester would beat Burnley 1-0 on April 4th (Table \ref{Prob.Lei-Bur}). Moreover, scoreline predictions can be used in order to calculate the expected goals scored by both teams featured in a match. \cite{Gupta} created a scoreline prediction for the fixtures of the Premier League. Further, they used this scoreline prediction in order to forecast future performance of the players in FPL. However, they found their scoreline predictions far less accurate than those of bookmakers' odds. Moreover, as stated in Section \ref{Strength_of_football_teams}, \cite{Hvattum} found that Elo ratings appeared to be considerably less accurate than market odds when used for forecasts. Therefore, we find it interesting to adapt an approach based on bookmakers' odds. By acquiring the result outcomes odds for each Premier League match, a scoreline prediction can be obtained. By summing all the result odds and dividing each individual result odds by that sum, one can obtain the probability of each exact result to occur. A great drawback with this approach, is the fact that bookmakers only provide odds for the upcoming gameweek. Hence, the odds can only be used in order to predict the fantasy points one gameweek ahead.  
+\subsection{Odds}
 
-\newpar
-
-\begin{comment}
-It is reasonable to assume that bookmakers provide a realistic odds distribution for the different scorelines, in order to avoid profitable gambling.
-
-
-\textit{Få med avsnitt om hvordan hva som ligger bak scoreline prediction og expected goals, referer til Maher etc.}
-
-\subsubsection{Scoreline Prediction}
-
-In order obtain predication of a scoreline, 
-
-\subsubsection{Expected goals}
-\end{comment}
-\newpar
-
-
+In Section \ref{Strength_of_football_teams}, scoreline prediction was briefly discussed. A scoreline prediction gives the probability of a result outcome to occur. The amount of goals scored is argued to follow a Poisson Distribution, where match results are generated by attack- and defence parameters of the two competing teams. In their project report, \cite{Gupta} created a scoreline prediction for the fixtures of the Premier League and used it in order to forecast future performance of the players in FPL. However, they found their scoreline predictions far less accurate than those of bookmakers' odds. Therefore, we find it interesting to adapt an approach based on bookmakers' odds. Instead of trying to estimate parameters of a Poisson distribution, scoreline probabilities are directly inferred from odds. As stated in Section \ref{Strength_of_football_teams}, \cite{Hvattum} found that Elo ratings appeared to be considerably less accurate than market odds when used for forecasts. Thus, the method serves as complement to the Elo based Modified Average method.
 
 \newpar
 
-When the scoreline predictions are acquired by use of result odds, one has to link these predictions to player performances. In order to determine the probability for a defender or midfielder to keep a clean sheet, one sum the probabilities of each match outcome where its team does not concede a goal. Further, bookmakers provide odds for each individual player to score a goal or have an assist in a particular match. By summing the goalscorers odds, one can obtain the cumulative probability distribution of the goalscorers. Once the cumulative distribution is obtained, one multiplies the goalscoring probabilities with the result probabilities in order to assign goalscoring points for each player. As for the assist, a similar approach may be used. However, some of the goals scored are unassisted which must be taken into account when predicting the assist points. This can be done by multiplying a players assist points with a factor representing the amount of goals being assisted. Finally, as for the yellow cards, one use the odds in order to calculate the probability of a player receiving a yellow card. For instance, if a player has a probability of 0.3 for receiving a yellow card in a particular match, his expected points is penalized with -0.3 as a yellow card deducts 1 point. 
+In order to obtain predictions of player performances, odds must be transferred into expected points. Odds can be separated into \textit{team odds} and \textit{individual player odds}. Team odds include all odds related to a team's performance such as result odds. Individual player odds include odds related to an individual player's performance such as goals scored, assists provided and bookings. 
+
 \newpar
-The largest bookmaking companies offer odds for all the items mentioned in the paragraph above. As goals scored are the greatest point factor in Fantasy Premier League, this area is of great interest. As mentioned, it is necessary to obtain the probabilities for each result outcome in a given match. The following example provides Unibet's result odds for a match-up between Leicester and Burnley on April 14th 2018. 
+
+The team odds adopted is related to scorelines, and serve two purposes. First, it is used to calculate the probability of a team keeping a clean sheet. Moreover, it is used in order to calculate the expected goals scored by a team. By summing all the result odds and dividing each individual result odds by that sum, the probability of each exact result can be obtained. In Table \ref{tab:odds_probabilities}, an example is given for the odds and the corresponding probabilities. By summing all the probabilities for the scorelines where Leicester has a clean sheet, it can be found that the probability of Leicester keeping a clean sheet is 0.316. Thus, in order to calculate expected points from clean sheets, the probability is multiplied with points received for a clean sheet, i.e. 4 points for goalkeepers and defenders and 1 point for midfielders. Secondly, team odds is used to obtain a team's expected goals. This is done by multiplying goals scored in each scoreline with the probability of that scoreline occurring.
 
 \begin{table}[H]
+\begin{subtable}{1\textwidth}
 \centering
-\caption{Result odds for Leicester-Burnley 14.04.18}
-\label{Leicester-Burnley}
-\begin{tabular}{|ll|ll|ll|}
+\begin{tabular}{|lc|lc|lc|}
 \multicolumn{6}{c}{Odds}                   \\
 \hline
 1-0 & 7.00   & 0-0 & 7.50   & 0-1 & 8.00   \\
@@ -537,81 +424,65 @@ The largest bookmaking companies offer odds for all the items mentioned in the p
 5-2 & 276.00 &     &        &     &        \\
 \hline
 \end{tabular}
+\end{subtable}
+\bigskip
+\begin{subtable}{1\textwidth}
+\centering
+\begin{tabular}{|ll|ll|ll|}
+\multicolumn{6}{c}{Probabilities}                         \\
+\hline
+1-0 & 0.1043 & 0-0 & 0.0974 & 0-1 & 0.0913  \\
+2-0 & 0.0664 & 1-1 & 0.1218 & 0-2 & 0.0562 \\
+2-1 & 0.0769 & 2-2 & 0.0487 & 1-2 & 0.0696 \\
+3-0 & 0.0318  & 3-3 & 0.0109 & 0-3 & 0.0251 \\
+3-1 & 0.0348 & 4-4 & 0.0024 & 1-3 & 0.0318  \\
+3-2 & 0.0236 &     &          & 2-3 & 0.0209 \\
+4-0 & 0.0120 &     &          & 0-4 & 0.0090 \\
+4-1 & 0.0130 &     &          & 1-4 & 0.0109 \\
+4-2 & 0.0090 &     &          & 2-4 & 0.0080  \\
+4-3 & 0.0040 &     &          & 3-4 & 0.0036 \\
+5-0 & 0.0036 &     &          & 0-5 & 0.0026 \\
+5-1 & 0.0040 &     &          & 1-5 & 0.0032 \\
+5-2 & 0.0026 &     &          &     &         \\
+\hline
+\end{tabular}
+\end{subtable}
+\caption{Result odds for Leicester-Burnley 14.04.18 and the corresponding probabilities.}
+\label{tab:odds_probabilities}
 \end{table}
 
-The odds provided in table \ref{Leicester-Burnley} can be translated into match result probabilities. This is done by summing all the inverse odds and afterwards dividing each inverse odds by the sum. The results are shown in table \ref{Prob.Lei-Bur}.
+
+
+In an analogous manner as with team odds, individual odds can be transformed into expected points. However, there is no straightforward way of transferring an individual odds into a probability. Thus, we have decided to calculate the probability as the inverse of the odds. Thus, if the odds of the player Jamie Vardy to score one or more is 2, his probability is $\frac{1}{2}=50\%$. If the odds were set in a "fair" way, i.e. the odds market was perfect, such a conversion would resemble reality. However, bookmakers are profit-seekers. Thus, if bookmakers are to profit, the odds they set must transfer into probabilities lower than the real ones. Moreover, the probabilities is transferred into expected points by multiplying both with expected goals and points obtained for a goal. The same goes for assists. In football, not all goals are assisted and consequently should be accounted for in the probability to give an assist. It is assumed that the odds are set taken this factor into consideration. For cards as well, but here one does not have to take the scoreline into account. In the example from Table \ref{tab:odds_probabilities} Leicester's expected goals is found to be 1.310. 
 
 
 \begin{table}[H]
 \centering
-\caption{Probabilities for Leicester-Burnley 14.04.18}
-\label{Prob.Lei-Bur}
-\begin{tabular}{|ll|ll|ll|}
-\multicolumn{6}{c}{Odds}                         \\
-\hline
-1-0 & 0.104388 & 0-0 & 0.097429 & 0-1 & 0.09134  \\
-2-0 & 0.066429 & 1-1 & 0.121786 & 0-2 & 0.056209 \\
-2-1 & 0.076918 & 2-2 & 0.048714 & 1-2 & 0.069592 \\
-3-0 & 0.03177  & 3-3 & 0.010906 & 0-3 & 0.025197 \\
-3-1 & 0.034796 & 4-4 & 0.002428 & 1-3 & 0.03177  \\
-3-2 & 0.023571 &     &          & 2-3 & 0.020878 \\
-4-0 & 0.011979 &     &          & 0-4 & 0.009021 \\
-4-1 & 0.013049 &     &          & 1-4 & 0.010906 \\
-4-2 & 0.009021 &     &          & 2-4 & 0.00803  \\
-4-3 & 0.004037 &     &          & 3-4 & 0.003635 \\
-5-0 & 0.003635 &     &          & 0-5 & 0.002648 \\
-5-1 & 0.004037 &     &          & 1-5 & 0.003233 \\
-5-2 & 0.002648 &     &          &     &         \\
-\hline
+\begin{tabular}{@{}lll@{}}
+\toprule
+            & Odds & Probability \\ 
+            \midrule
+Goal        & 4    & 0.25        \\
+Assist      & 2.5  & 0.40         \\
+Yellow Card & 8    & 0.125       \\ 
+\bottomrule
 \end{tabular}
+\caption{Fictive individual odds for Riyad Mahrez.}
+\label{tab:ind_odds_riyad_mahrez}
 \end{table}
 
-Once these probabilities are obtained, it is possible to calculate the expected goals scored by Leicester. This is done by multiplying the probability of a result occuring by the amount of goals scored by Leicester in that particular result. Further, one have to sum all the probabilities in order to find Leicester's expected goals scored. In the example from table \ref{Prob.Lei-Bur} Leicester's expected goals is found to be 1.234. 
-\newpar
-Further, it is necessary to assign expected goalscoring- and assist points to each player. For instance, if Jamie Vardy has a cumulative probability of 0.26 of scoring a goal for Leicester, his expected goalscoring odds is found by multiplying 0.26 with the expected goals scored by Leicester. 
-\begin{equation*}
-    \textrm{Jamie Vardy expected goals scored} = 1.234 \times 0.26 = 0.321
-\end{equation*}
 
-Finally, his expected points gained from scoring goals is calculated according to the Fantasy Premier League point system: 
-
-\begin{equation*}
-    \textrm{Goal points Jamie Vardy} = 0.321 \times \textrm{4 points} = \textrm{1.284 points}
-\end{equation*}
-
-A similar approach can be used in order to calculate a player's expected points from assists. However, one have to consider the fact that not all goals are assisted: 
-
-\begin{equation*}
-    \textrm{Expected assist points} = \textrm{Expected goals} \times \textrm{Player's assist probability} \times \textrm{Assist probability}
-\end{equation*}
-
-As for the clean sheets, the probability of a team keeping a clean sheet is found by summing the probabilities of all the result outcomes were the team does not concede a goal. According to table \ref{Prob.Lei-Bur} Leicester has got a probability of 0.316 for keeping a clean sheet. Hence, the starting defenders and the  goalkeeper are expected to gain
-
-\begin{equation*}
-    0.316 \times \textrm{4 points} = \textrm{1.264 points}
-\end{equation*}
-from keeping a clean sheet. 
-
-\newpar
-In addition, one can use odds for yellow cards in order to calculate a player's expected deducted points for receiving a yellow card. On the bookings sites each player is listed with an odds for a probability of being booked. The probability of receiving a yellow card is simply the inverse of the odds. For instance, if a player is listed with an odds of 3.00 for receiving a yellow card, it is a probability of
-
-\begin{equation*}
-    \frac{1}{3.00} = 0.333 
-\end{equation*}
-
-that the player receives a yellow card. Hence, his expected points is deducted with:
-
-\begin{equation*}
-    0.333 \times \textrm{1 point} = \textrm{0.333 points.} 
-\end{equation*}
-
-\begin{comment}
-Kanskje skrive noe om format og behandling av dataen. Dette gjøres når all data fra Sportradar er på plass...
-\end{comment}
+Finally, the expected points of a player can be computed. In Table \ref{tab:ind_odds_riyad_mahrez}, a fictive set of individual odds and probabilities is given for the Leicester midfield player, Riyad Mahrez. In equation \ref{eq:riyad_mahrez_odds}, it is shown that he is expected to obtain 2.641 points for the Leicester-Burnley match.
 
 
-\newpage
-\section{Gamechips}\label{Ch.5_Game_chips}
+\begin{equation} \label{eq:riyad_mahrez_odds}
+    5 \cdot 1.310 \cdot 0.25 + 3 \cdot 1.310 \cdot 0.4 + 1 \cdot 0.316 - 1 \cdot 0.125 \approx 3.401
+\end{equation}
+
+Note that the probability of starting is not explicitly handled. Nor is points awarded for playing over 60 minutes. However, one can argue that the probability of starting is incorporated in individual odds, i.e. as the probability of scoring a goal or providing an assists. Regardless, an improvement of the Odds might incorporate these points more directly.
+
+\section{Gamechips} \label{Ch.5_Game_chips}
+
 In the following we present how the gamechips are implemented in the model. Human FPL managers have to make decisions on when to use their gamechips, i.e. they have to decide whether it is best to play them in a given gameweek or if it is optimal to wait. As the model is solved using a rolling horizon heuristic, a strategy for when to use the gamechips is required. Since the model is solved over a sub-horizon, there is nothing that prevents the model from not using the gamechips in the current sub-problem, unless the strategy addresses this issue. Many different approaches can be undertaken in order to develop such a strategy. One strategy is to base the decisions on intuition and well known strategies among human FPL managers. Another interesting approach would be to consider a type of punishment in terms of penalized points for the use of gamechips. Furthermore, an alternative approach would be to implement the gamechips analogous to the exercise of a financial option. We have decided to undertake the first-mentioned qualitative approach. A lot of theories have emerged on when it is optimal to use the chips (kilder). Regardless, more quantitative approaches have huge potential and are exciting topics for future research.
 
 \subsection{First Wildcard}

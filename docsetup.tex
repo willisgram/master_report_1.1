@@ -21,6 +21,11 @@
 \usepackage[Lenny]{fncychap}
 \usepackage[pdftex,bookmarks=true]{hyperref}
 \usepackage[pdftex]{hyperref}
+
+\usepackage{dcolumn}% for å få negative tall i tabeller.
+\newcolumntype{d}[1]{D{.}{.}{#1}}% for å få negative tall i tabeller.
+\usepackage{siunitx} % for å få negative tall i tabeller.
+
 \hypersetup{
     colorlinks,%
     citecolor=black,%
@@ -28,6 +33,10 @@
     linkcolor=black,%
     urlcolor=blue
 }
+
+%appendix
+\usepackage[toc,page]{appendix}
+
 \usepackage[font=small,labelfont=bf]{caption}
 \usepackage{fancyhdr}
 \usepackage{times}
@@ -36,6 +45,8 @@
 %\makenomenclature
 \usepackage{natbib}
 \usepackage{setspace}
+
+
 
 
 % ShareLaTeX does not support glossaries now. Sorry...

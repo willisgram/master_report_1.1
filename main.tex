@@ -41,6 +41,12 @@
 
 %% PART 4
 \include{references}	%% Edit your references in "mylib.bib"
-\include{appendix}		%% Optional
+%\appendix
+%\include{appendix}		%% Optional
+\begin{appendices}
+\addtocontents{toc}{\protect\setcounter{tocdepth}{1}}
+\input{appendix.tex}
+\end{appendices}
+
 
 \end{document}

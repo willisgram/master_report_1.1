@@ -1,0 +1,146 @@
+\section{Forecast of Player Performance} \label{Player_Performance}
+
+The solution framework suggested is based on forecasts of player performance as input to the optimization model. Thus, the forecasting method is not a part of the framework per se, but rather a way of generating input. However, forecasts constitutes a substantial part of the forecast based optimization model. With this in mind, and for the purpose of readability, we have decided to include a section devoted to forecast of player performance in the chapter describing the solution framework. Thus, in the following, three different forecasting methods used in the thesis are presented. 
+
+\subsection{Forecasts Using Modified Average} \label{Sol_approach_Modified_Average}
+
+As discussed in the literature study, \cite{Bonomo} suggests a solution approach for the Argentinian Premier League and achieves promising results. Therefore, the first forecast method is based on their solution approach. However, the methodology is modified in order to make it applicable for the English Fantasy Premier League rather than the Argentinian Fantasy League. Moreover, some modifications are made as an effort to improve the method. Hence, the first forecasting method is called the Modified Average method.
+
+\newpar
+
+As mentioned in \ref{Forecasting_of_player_performance}, \cite{Bonomo} use the average points for the three last gameweeks to forecast the performance in the upcoming gameweek. The forecast is further weighted on four factors: team opponent, home advantage, whether a player is on a good performance streak and whether a player is assumed to be in the starting line-up. More generally, \cite{Bonomo} estimate a player's expected points for the next gameweek according to Equation \ref{eq:bonomo}. In the following, we discuss how each element of the equation is decided by \cite{Bonomo} and the modifications made.
+
+\begin{equation}
+\begin{split}
+    \hat{\rho}  = & \textrm{\textit{Adjusted avg. points}} \times \textrm{\textit{Team strength}} \times \textrm{\textit{Home advantage}} \\
+        & \times \textrm{\textit{Point streak}} \times \textrm{\textit{Starting line-up factor}}
+\end{split}
+\label{eq:bonomo}
+\end{equation}
+
+\subsubsection{Adjusted Average Points}
+
+\cite{Bonomo} calculates an adjusted average by averaging the points obtained in the 3 previous gameweeks. The first modification suggested, is to consider averages over more than 3 previous gameweeks. The number of previous gameweeks taken into consideration when forecasting is hereby referred to as the \textit{track-length}. Thus, \cite{Bonomo} use a sub-horizon of 1 gameweek and a track-length of 3 gameweeks when solving for the Argentinian Fantasy League.
+
+\newpar
+
+Considering different track-lengths is not the only modification made with respect to adjusted average points. 
+
+Their method is modified due to several reasons. Further, the starting line-up factor is disregarded. In \cite{Bonomo}, this factor was decided upon coaches' announcements, press reports and information posted on the website of the Argentinian Fantasy league. As this approach aims to consider numerical data as much as possible, the starting line-up factor is consequently disregarded. In addition to replicate their model, we modify and improve it by using different weights adjusted for historical performance in the English Premier League. For instance, we consider averaging over more than 3 gameweeks. 
+
+\newpar
+
+Although \cite{Bonomo} use league table position for measuring the relative strength between adversaries, league position suffers from numerous drawbacks which make it unreliable for prediction. For example, the league table suffers from high variation in the early stage of the season and low variation in the late stage of the season. Further, competing teams may not share the equivalent number of matches during the season due to postponements, thus providing errors for many rounds. Additionally, the league table does not capture the fixtures during the season, hence it is inherently biased until the final match of the season has been played \citep{Constantinou}. Therefore, instead of weighting the teams based on their league position, we can utilize an Elo-rating in order to weight the relative team strengths in the league. In addition, an empirical value of home field advantage in the Premier League is used as a factor for the home advantage. In order to measure a player's recent performance, decisions are made on whether a player is on a positive or negative point streak.
+
+\subsubsection{The Elo system}
+
+The Elo system introduced in section \ref{Strength_of_football_teams} is a rating system used for measuring the relative strength level of sport teams and individual athletes. Within football, the Elo system can be used in order to determine a club's Elo value. The great advantage of the Elo system lies in its simplicity: there is only one value per club at each point in time, the higher the better. 
+
+\newpar
+
+\subsubsection{Using Elo values to rate Premier League teams}
+
+The Elo values provide a sophisticated measurement of the relative strength between the Premier League teams. Further, as the values are updated once a match has been played, the Elo system somehow catches which teams that are in a good form. Elo values can be obtained according to equation \ref{eq5.2} and \ref{eq5.4}. Clubelo.com provide historical Elo values for most of the professional football teams in the world, including teams in the English Premier League, English 1st division etc. These values are used in order to compute the relative team strength in this project, using a k-value of 20. A great advantage of the ratings provided by Clubelo is the fact that these values are modified, taking into account home field advantage, goal difference and inter-league adjustments. In addition, the Elo values from Clubelo incorporate all fixtures and not only league matches.
+
+\newpar
+
+Once the Elo values are obtained, they can be used in order to weight the previous performance of each Fantasy Premier League player. It is likely to suggest that a player playing for a top-rated team has a greater probability of scoring many points than a player playing for a poor team. In addition, a player is more likely to gain many points against a weak opponent than against a top-rated team. Hence, one should consider both the opponent and the team of a player when calculating his previous average. 
+
+\newpar
+
+In Table \ref{Elo.1617} some Elo values for the first gameweeks of the English Premier League 2016/17 season are listed. Note that the values are calculated ahead of each gameweek, so that the values in the GW1 column are the Elo values of the teams before gameweek 1 has been played. 
+
+\begin{table}[H]
+\centering
+\caption{Elo ratings for Premier League 2016/2017}
+\label{Elo.1617}
+\begin{tabular}{|l|l|l|l|l|l|}
+\cline{2-6}
+\multicolumn{1}{l|}{} & \multicolumn{1}{l|}{} & \multicolumn{4}{c|}{Elo value}  \\ \cline{2-6} 
+\hline
+                      & Team                  & GW1    & GW2    & GW3  & GW4    \\
+                      \hline
+1                     & Chelsea               & 1793   & 1800   & 1798 & 1804   \\
+2                     & Tottenham             & 1804   & 1804   & 1800 & 1798   \\
+3                     & Man City              & 1848   & 1856   & 1858 & 1863   \\
+4                     & Man Utd               & 1789   & 1797   & 1799 & 1804   \\
+-                     &                       &        &        &      &        \\
+-                     &                       &        &        &      &        \\
+-                     &                       &        &        &      &        \\
+17                    & Watford               & 1624   & 1631   & 1618 & 1612   \\
+18                    & Hull                  & 1589   & 1603   & 1613 & 1608   \\
+19                    & Middlesbrough         & 1595   & 1597   & 1601 & 1604   \\
+20                    & Sunderland            & 1655   & 1654   & 1636 & 1641   \\
+\hline
+\end{tabular}
+\end{table}
+
+Values from table \ref{Elo.1617} can be used in order to weight the performance of a player. For instance, if a forward received many points against Chelsea, that is more impressive than if the same player received equal points against Sunderland. Hence, one should weight the performances appropriately. In the following, an approach for weighting historical performance is suggested. For instance, let's assume that Paul Pogba, a midfielder at Manchester United received the following points for the first three gameweeks: 
+
+
+\begin{table}[H]
+\centering
+\caption{Paul Pogba imaginary points}
+\label{my-label}
+\begin{tabular}{|l|l|l|l|l|}
+\hline
+\multicolumn{1}{|c|}{} & \multicolumn{4}{c|}{Points Gained} \\ \hline
+Opponent               & GW1        & GW2       & GW3    & GW4   \\
+\hline
+Chelsea                & 6          &           &        &       \\
+Sunderland             &            & 9         &        &       \\
+Watford                &            &           & 10     &         \\
+Tottenham              &            &           &        & ?      \\
+\hline
+\end{tabular}
+\end{table}
+
+If one simply used his average score for the past three gameweeks in order to predict his performance for the next gameweek, one would predict Pogba to gain 8.33 points in gameweek 4. However, in this case one does not account for the fact that Manchester United were facing teams of different quality. In addition, one does not consider the fact that Pogba plays for Manchester United, a team that in general performs better than most other teams. As mentioned above, these factors should be considered. Hence, it is necessary to weight the previous performance taking into account the opponent team and the player's team. This can be solved in the following way: 
+\newpar
+In gameweek 1, Manchester United were facing Chelsea and Pogba earned 6 points. In order to account for the fact that Pogba plays for Manchester United and was facing Chelsea (a higher ranked team), one simply multitplies his score with Chelseas Elo value and divides it by Manchester Uniteds Elo value. Thus, Paul Pogba's expected points should be set to:
+\begin{equation*}
+    \textrm{Paul Pogba GW1} = 6 \times \frac{1793}{1789} = 6.013 
+\end{equation*}
+As can be observed, his modified points increase when facing an opponent that is assumed to be better than his team. On the contrary, when facing a weaker team, for instance Sunderland his modified points decrease: 
+\begin{equation*}
+    \textrm{Paul Pogba GW2} = 9 \times \frac{1654}{1797} = 8.284 
+\end{equation*}
+
+In general a players expected points gained can be calculated by the following equation: 
+\begin{equation} \label{actualpoints}
+\textrm{Expected points} = \textrm{Modified points} \times \frac{\textrm{Opponent Elo value}}{\textrm{Player's team Elo value}}    
+\end{equation}
+
+By calculating expected points according to equation \ref{actualpoints}, Paul Pogbas adjusted average for the first three gameweeks would be 7.764. The following equation is used in order to calculate the expected points for an upcoming gameweek: 
+\begin{equation}
+    \textrm{Expected points} = \textrm{Modified average} \times \frac{\textrm{Player's team Elo value}}{\textrm{Opponent Elo value}}
+\end{equation}
+In this way, players are rewarded with an increased expected points when playing for a team with a higher Elo value than its opponent. Hence, his expected performance against Tottenham in the upcoming gameweek 4 would be: 
+\begin{equation*}
+    \textrm{Expected points for Pogba GW4} = 7.764 \times \frac{1804}{1798} = 7.790
+\end{equation*}
+
+
+\subsubsection{Home field advantage}
+As pointed out in section \ref{Forecasting_of_future_performance} numerous studies have proven that some kind of home field advantage exists in football matches. Football teams have a tendency of performing better when playing at their home field than when playing at their opponents ground. This home field advantage has to be considered when one is to forecast the upcoming performance of the Premier League players. 
+\newpar
+Usually when one is to determine the home field advantage in a football league, one focuses on the outcome of the game, i.e.  win, draw or loss. In Fantasy Premier League, the outcome of a match has no impact in the point system. As the most important point-factor in FPL is goals scored, the home field advantage has to be calculated in terms of goals. 
+\newpar
+The home field advantage can be calculated according to the approach suggested by \cite{Pollard}. However, instead of focusing of match outcomes, one determine the advantage by looking into goals. Imagine that each team plays 38 matches during the season, equally divided between home and away games. With 20 teams facing each other twice a season, that implies a total of 380 matches a season. Further, assume that a total of 1000 goals were scored during a particular season. If there were no home field advantage, one would expect that 500 of the goals were scored by the home team and 500 by the away team, yielding a factor of 0.5. However, the results show that 620 of the goals were scored by the home team, which represents 62 \% of the goals scored. With an expected value of 50 \% and an actual value of 62 \% the home field advantage in terms of goals scored can be calculated by: 
+\begin{equation*}
+    \textrm{Home field advantage} = \frac{\textrm{Actual goals scored home}}{\textrm{Expected goals scored away}} = \frac{0.62}{0.5} = 1.24 
+\end{equation*}
+
+Similarly, the away field advantage is calculated according to:
+\begin{equation*}
+    \textrm{Away field advantage} = \frac{\textrm{Actual goals scored away}}{\textrm{Expected goals scored away}} = \frac{0.38}{0.5} = 0.76
+\end{equation*}
+\newpar
+In this thesis the home field advantage is calculated as an empirical value for the entire Premier League. Hence, each team's home field advantage is not considered. The idea is that the empirical home field advantage along with the relative team strengths calculated by use of the Elo system will give an appropriate representation of a team's performance both home and away. 
+\newpar
+In order to find an appropriate empirical value for the home field advantage, several previous seasons should be considered. In this project thesis, the empirical value is set to the average of the home field advantage over the past five Premier League seasons. This is due to the fact that the home field advantage value has been stabilized over the past seasons. 
+
+\subsubsection{Player point streak}
+Fantasy Premier League managers have a tendency of selecting players that are on a great point streak. As mentioned in section \ref{Forecasting_of_player_performance} \cite{Bonomo} add a factor in order to account for players point streak. This factor can take a value between 0.95 and 1.05, depending on the duration of a player's point streak. Unfortunately, they do not describe how they determine whether a player is on a point streak or not. Therefore, we choose to determine a player's point streak in the following way: 
+\newpar
+If a player receives more than X points for 2 gameweeks in a row, his point streak value will be set to 1.01. Further, if the streak continues, the value will increase by 0.01 for each match that his points exceed the X number of points. When a player has received more than X points 6 gameweeks in a row, his point streak value is set to the maximum of 1.05. Hence, the value does not increase if his streak exceeds 6 matches. The same rule applies for players scoring less than Y points 2 gameweeks in a row; then his streak value will be set to 0.99. When scoring less than Y points 6 matches in a row, the point streak value is set to a minimum of 0.95. Once the scoring streak is broken, the player's value is set to 1. 
