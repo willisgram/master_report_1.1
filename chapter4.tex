@@ -28,13 +28,12 @@ Though the objective function is formulated in such way that it maximizes the nu
 
 
 
-
+\newpage
 
 \section{Definition of Sets, Indices, Parameters and Variables}\label{def_sets_ind_par_var}
 
 \begin{table}[H]
 \centering
-\caption{Sets.}
 \begin{tabular}{@{}lll@{}}
 \toprule
 Set           &   &                                                               \\ \midrule
@@ -44,11 +43,12 @@ $\mathcal{C}$ & - & Set of teams.                                               
 $\mathcal{L}$ & - & Substitution priorities, where 1 is first priority. \\
 \bottomrule
 \end{tabular}
+\caption{Sets.}
 \end{table}
 
 \begin{table}[H]
 \centering
-\caption{Subsets.}
+\resizebox{\columnwidth}{!}{%
 \begin{tabular}{@{}llll@{}}
 \toprule
 Subset            &   &                                       &                                                 \\ 
@@ -61,13 +61,14 @@ $\mathcal{P}_{c}$ & - & Subset of football players in a team, & \quad $\mathcal{
 $\mathcal{T}_{FH}$ & - & Subset of the gameweeks in the first half of the season,                & \quad $\mathcal{T}_{FH} \ \subset \mathcal{T}$   \\
 $\mathcal{T}_{SH}$ & - & Subset of the gameweeks in the second half of the season.                & \quad $\mathcal{T}_{SH} \ \subset \mathcal{T}$   \\
 \bottomrule
-\end{tabular}
+\end{tabular}%
+}
+\caption{Subsets.}
 \end{table}
 
 
 \begin{table}[H]
 \centering
-\caption{Indices.}
 \begin{tabular}{@{}lll@{}}
 \toprule
 Index &   &           \\ \midrule
@@ -75,13 +76,14 @@ $p$   & - & Players   \\
 $t$   & - & Gameweeks \\
 $l$   & - & Priority  \\ \bottomrule
 \end{tabular}
+\caption{Indices.}
 \end{table}
 
 
 \begin{table}[H]
 \tabcolsep=0.11cm
 \centering
-\caption{Parameters.}
+\resizebox{\columnwidth}{!}{%
 \begin{tabular}{@{}lll@{}}
 \toprule
 Parameters                       &   &                                                                                                \\ \midrule
@@ -109,14 +111,16 @@ $\phi$                         & - & Number of players which are substitutes.   
 $\phi^{K}$                   & - & Number of keepers which are subsitutes.                                                          \\
 $\overline{Q}$                   & - & Maximum number of free transfers possible to accumulate over gameweeks.                        \\
 $\underline{Q}$                  & - & Number of free transfers given every gameweek.                                                 \\ \bottomrule
-\end{tabular}
+\end{tabular}%
+}
+\caption{Parameters.}
 \end{table}
 
 
 \begin{table}[H]
 \tabcolsep=0.11cm
 \centering
-\caption{Variables.}
+\resizebox{\columnwidth}{!}{%
 \begin{tabular}{@{}lll@{}}
 \toprule
 Variables    &   &                                                                                                    \\ \midrule
@@ -137,7 +141,9 @@ ${\lambda_{pt}}$   & - & Binary auxiliary variable.      \\
 $v_{t}$      & - & Remaining budget in a gameweek $t$.                                                                \\
 $q_{t}$      & - & Number of  free transfers available in a gameweek $t$.                                             \\
 $\alpha_{t}$ & - & Number of transfers which is not free in a gameweek $t$.                                      \\ \bottomrule
-\end{tabular}
+\end{tabular}%
+}
+\caption{Variables.}
 \end{table}
    
 \section{Mathematical Model} \label{mathematical_model}

@@ -2,7 +2,7 @@
 \chapter{Computational Study}\label{chapter_experimental_setup}
 
 
-In this chapter, a computational study of the solution framework suggested in Chapter \ref{chapter_solution_approach} is conducted. The goal is to provide and justify numerical values for parameters used in the solution framework based on historical data, before it is tested on the 2017/2018 season. The results of testing the model on the 2017/2018 season could have been presented in this chapter, but for the reader's readability, this is presented in the next chapter.
+In this chapter, a computational study of the solution framework suggested in Chapter \ref{chapter_solution_approach} is conducted. The goal is to provide and justify numerical values for parameters used in the solution framework based on historical data, before it is tested on the 2017/2018 season. The results of testing the model on the 2017/2018 season could have been presented in this chapter, but for the purpose of readability, we have decided to presented the results in its own chapter, namely Chapter \ref{chapter_computational_study}.
 
 \newpar
 
@@ -35,35 +35,36 @@ A question that arises with the international transfer window, is how newly tran
 \subsubsection{Irregular gameweeks}
 For blank gameweeks, expected points, $\hat{p}$, are set to 0 for players that are not featured. For double gameweeks, forecasts are made for both matches. We assume that information on whether a gameweek is blank or double is known at least as many gameweeks ahead as the length of the sub-horizon.
 
-\newpage
 
 \section{Forecast of Player Performance}
 \label{Exp_setup_Player_Performance_Prediction}
 
 
-
-In this section, we present the experimental setup for the three different forecasting methods. For all methods, we set numerical values for parameters such as the sub-horizon in the rolling horizon framework and justify the decision. For the Modified Average method, a detailed parameter-study is undertaken in order find the best combination of numerical values for parameters such as the sub-horizon and track-length. For the Regression method, a detailed variable selection procedure is performed. For the Odds method, the handling of data obtained by Sportsradar is presented. 
+With ex-post data available, a sub-horizon set to 38 gameweeks (an entire season) is optimal. However, ex-post data is not available ahead of a gameweek. Consequently, a sub-horizon of 38 gameweeks is not guaranteed to be optimal. In fact, considering all the uncertainty of future events, regarding goalscorers, penalties saves, injuries etc. a sub-horizon of 38 gameweeks is likely to be sub-optimal. Therefore, in this section, we present a computational study for the three different forecasting methods. For all methods, we set numerical values for parameters such as the sub-horizon in the rolling horizon framework and penalty term $R$ and justify the decisions. For the Modified Average method, a detailed parameter-study is undertaken in order find the best combination of numerical values for parameters such as the sub-horizon and track-length. For the Regression method, a detailed variable selection procedure is performed. For the Odds method, the handling of data obtained by Sportsradar is presented. 
 
 \subsection{Modified Average}
-As mentioned in Section \ref{Player_Performance}, the relative team strength factors are calculated according to the Elo values. These are updated for every gameweek, depending on the results in the previous games. An overview of the Elo values is attached in the Appendix. 
+The aim of this parameter study is to set numerical values to the variables presented in Equation \ref{eq:bonomo} for the Modified Average mehod. As explained in Section \ref{Player_Performance} and Appendix \ref{app_walk_through}, the relative team strength factors are calculated according to the Elo values. These values are updated for every gameweek, depending on the results in the previous games. An overview of the Elo values is attached in the Appendix. 
 
 \newpar
 
-Table \ref{Field advantage} provides the calculated values for field advantages for the past six Premier League seasons. As observed, the field advantages are somewhat consistent with the home field advantage ranging from 1.105 to 1.149 and the away field advantage ranging from 0.851 to 0.895. Hence, taking the average over the past five seasons seems to yield an appropriate field advantage factor. That is, the average computed for the 2016/2017 season is based on season 2011/2012 to 2015/2016.
+\subsubsection{Determining field factor and streak factor variables X and Y}
+
+Table \ref{Field advantage} provides the calculated values for field factors for the past six Premier League seasons. As observed, the home field factor range from 1.105 to 1.149 and the away field factor range from 0.851 to 0.895. Furthermore, the average of factors over the 5 last seasons before the 2016/2017 and before the 2017/2018 season is presented in the table. The Pre 16/17 Avg is based on season 2011/2012 to 2015/2016 and the Pre 17/18 Avg is based on season 2012/2013 to 2016/2017. Thus, taking the average over the past 5 seasons yields almost identical factors before the 2016/2017 and before 2017/2018 season. Hence, the home filed factor is set to 1.13 and the away field factor is set to 0.87. 
+
 
 \begin{table}[H]
 \centering
 \smaller
-\begin{tabular}{|l|l|l|l|l|l|l|l|l|}
+\begin{tabular}{|l|c|c|c|c|c|c|c|c|}
 \hline
-Season & 11-12    & 12-13   & 13-14    & 14-15    & 15-16 & 16-17 & 16-17 Avg & 17-18 Avg \\ 
+Season & 11-12    & 12-13   & 13-14    & 14-15    & 15-16 & 16-17 & Pre 16-17 Avg & Pre 17-18 Avg \\ 
 \hline
-Home advantage & 1.133 & 1.114 & 1.137 & 1.149 & 1.105 & 1.141 & \textbf{1.128} & \textbf{1.129}\\
+Home factor & 1.133 & 1.114 & 1.137 & 1.149 & 1.105 & 1.141 & \textbf{1.128} & \textbf{1.129}\\
 \hline
-Away advantage & 0.867 & 0.886 & 0.863 & 0.851 & 0.895 & 0.859 & \textbf{0.872} & \textbf{0.871}\\
+Away factor & 0.867 & 0.886 & 0.863 & 0.851 & 0.895 & 0.859 & \textbf{0.872} & \textbf{0.871}\\
 \hline
 \end{tabular}
-\caption{Field advantages for previous 6 seasons.}
+\caption{Field factors for previous 6 seasons.}
 \label{Field advantage}
 \end{table}
 
@@ -72,11 +73,11 @@ For the point streak factor, the variables \textit{X} and \textit{Y} regarding w
 
 \subsubsection{Determining optimal track-length and sub-horizon}
 
-With ex-post data available, a sub-horizon set to 38 gameweeks (an entire season) is optimal. However, ex-post data is not available ahead of a gameweek. Consequently, a sub-horizon of 38 gameweeks is not guaranteed to be optimal. In fact, considering all the uncertainty of future events, regarding goalscorers, penalties saves, injuries etc. a sub-horizon of 38 gameweeks is likely to be sub-optimal. In the following, we aim to determine an optimal sub-horizon based on data for the 2016/2017 season. In addition, we decide how many gameweeks to look back when forecasting the future performances based on the previous averages.
+In the following, we aim to determine an optimal sub-horizon based on data for the 2016/2017 season. In combination, we decide how many gameweeks to look back when forecasting the future performances based on the previous averages. That is, we aim the find the optimal combination of sub-horizon and track-length.
 
 \newpar
 
-When determining the optimal sub-horizon and track-length, we have decided that the sub-horizon should not exceed the track-length. We assume that the track-length is not accurate when forecasting more gameweeks ahead than what it is composed of. The readers should be aware that the player forecast are expected to improve as the track-length increases. For instance, consider the case when the track-length is 6 gameweeks. As the data is tested on the 2016/2017 season, we only have data to consider the matches after gameweek 6 has been played. Hence, we get an opportunity of initially selecting the players that have performed best over the 6 first gameweeks. As an increase in track-length allows one to select players that have initially performed well over more matches, one can argue that the player selection in 2016/2017 is biased. Due to this bias, we do not consider track-lengths greater than 6 gameweeks. Notice that only the training data is biased. When we run the model for the 2017/2018 season, the previous gameweeks are simply set to the last gameweeks from the 2016/2017 season. Moreover, the reader should bear in mind that the parameters set are based solely on data from 2016/2017. Ideally, with more data available, the parameters should have been trained over several seasons.
+When determining the optimal sub-horizon and track-length, we have decided that the sub-horizon should not exceed the track-length. We assume that the track-length is not accurate when forecasting more gameweeks ahead than what it is composed of. As data is only available for 2 seasons, the readers should be aware that the model's performance is expected to improve as the track-length increases. For instance, consider the case when the track-length is 6 gameweeks. As the data is trained on the 2016/2017 season, we only have data to consider the matches after gameweek 6 has been played. Hence, we get an opportunity of initially selecting the players that have performed best over the 6 first gameweeks. As an increase in track-length allows one to select players that have initially performed well over more matches, one can argue that the player selection in 2016/2017 is biased. Due to this bias, we do not consider track-lengths greater than 6 gameweeks. Notice that only the training data is biased. When we run the model for the 2017/2018 season, the previous gameweeks are simply set to the last gameweeks from the 2016/2017 season. Moreover, the reader should bear in mind that the parameters set are based solely on data from 2016/2017. Ideally, with more data available, the parameters should have been trained over several seasons.
 
 
 
@@ -94,7 +95,7 @@ Figure \ref{fig:pen_4} displays the results when considering track-lengths from 
 
 \begin{table}[H]
 \centering
-\begin{tabular}{|l|l|l|l|c|}
+\begin{tabular}{|c|c|c|c|c|}
 \hline
 Sub-horizon & Track-length & Objective Value & Mean & Penalized transfers \\
 \hline
@@ -115,7 +116,7 @@ Sub-horizon & Track-length & Objective Value & Mean & Penalized transfers \\
 \end{table}
 
 
-As observed in Figure \ref{fig:pen_4} and Table \ref{tab:pen_4_ill_trans}, the model reaches its best performances with a sub-horizon of 1 gameweek combined with track-lengths between 4-6 gameweeks. However, obtaining a weekly mean of 49.82 points would only have been sufficient enough to reach the top 35th percentile in the overall rankings. From Table \ref{tab:pen_4_ill_trans}, it is apparent that the model performs many penalized transfers. In general, making 1.5 penalized transfers on average each gameweek would penalize $1.5\cdot4\cdot38 = 228$ points, and have a huge impact on the overall rankings. Moreover, according to Table \ref{tab:pen_4_ill_trans}, the performances generally increases as the number of penalized transfers decreases. Consequently, in the following we investigate how regulations on the penalty parameter affects the results. This violates the game rules of FPL, and is in reality only a compensation for inaccurate forecasts. However, as we seek to maximize performance of the model, it is worth investigating. 
+As observed in Figure \ref{fig:pen_4} and Table \ref{tab:pen_4_ill_trans}, the model reaches its best performances with a sub-horizon of 1 gameweek combined with track-lengths between 4-6 gameweeks. However, obtaining a weekly mean of 49.82 points would only have been sufficient to reach the top 35-40\% in the overall rankings in the 2016/207 season. From Table \ref{tab:pen_4_ill_trans}, it is apparent that the model performs many penalized transfers. In general, making 1.5 penalized transfers on average each gameweek would penalize $1.5\cdot4\cdot38 = 228$ points. Moreover, according to Table \ref{tab:pen_4_ill_trans}, the performances generally increases as the number of penalized transfers decreases. Consequently, in the following we investigate how regulations on the penalty parameter affects the results. This violates the game rules of FPL, and is in reality only a compensation for inaccurate forecasts. However, as we seek to maximize performance of the model, it is worth investigating. 
 
 
 \subsubsection{Model run with different penalties}
@@ -133,7 +134,7 @@ To set values for the parameters penalty, track-length and sub-horizon, differen
 \begin{figure}[H]
     \centering
     \includegraphics[scale=0.45]{fig/chapter_6/paramter_choice.png}
-    \caption{Performance with different penalty term, sub-horizons and track-lengths.}
+    \caption{Performance with different penalty terms, sub-horizons and track-lengths.}
 \label{Parameter_choice}    
 \end{figure}
 
@@ -141,7 +142,7 @@ In Figure \ref{Parameter_choice}, only the best run (maximum mean) for each diff
 
 \begin{table}[H]
 \centering
-\begin{tabular}{|l|l|l|l|l|}
+\begin{tabular}{|c|c|c|c|c|}
 \hline
 Penalty & Sub-horizon & Track-Length & Total Points & Mean  \\
 \hline
@@ -174,7 +175,7 @@ Figure \ref{fig:fixed_f_hor} and Table \ref{tab:top_5} display the best combinat
 
 \begin{table}[H]
 \centering
-\begin{tabular}{|l|l|l|l|l|}
+\begin{tabular}{|c|c|c|c|c|}
 \hline
 Penalty & Horizon & Forecast Horizon & Total Points & Mean  \\
 \hline
@@ -207,13 +208,15 @@ To summarize the discussion above, we have chosen to run the Modified Average ap
 
 \subsection{Regression}\label{exp_setup_reg}
 
+In the following, we present a procedure for finding numerical values to the approaches outlined in Section \ref{Player_Performance} for the regression model. When making decisions, both purely analytic and more rationally influenced arguments are considered. For instance, even if the points obtained by a forward might be correlated with the number of clean sheets his teams have achieved, we still might exclude the variable. The intuition is that with training data limited for one season only, on can not blindly trust the models. Without taking it to the extreme, we keep this quote by \cite{brooks} in the back of our minds: \textit{"Some econometricians would go as far as to suggest that the statistical adequacy of a model (...), is largely irrelevant if the model produces accurate forecasts."}
+
 \subsubsection{Variables}
 
-As mentioned in Section \ref{exp_setup_data}, where it is reasonable, data are set equal to the last gameweeks of the 2016/2017 season. This is for instance the case for \textit{goals} and \textit{assists}. For \textit{transfers in} and \textit{transfers out}, however, this is not a sensible approach, as human manager do not base their transfer-decisions with the upcoming season in mind. Therefore, these values are set equal to 0 in the first gameweek. The variables \textit{saves} and \textit{penalty saves} are only defined for goalkeepers, and are thus only considered for goalkeepers.
+As mentioned in Section \ref{exp_setup_data}, where it is reasonable, data are set equal to the last gameweeks of the 2016/2017 season. This is for instance the case for \textit{goals} and \textit{assists}. For \textit{transfers in} and \textit{transfers out}, however, this is not a sensible approach, as human manager do not base their transfer-decisions in the last gameweek of the season with the upcoming season in mind. Therefore, these values are set equal to 0 in the first gameweek. The variables \textit{saves} and \textit{penalty saves} are only defined for goalkeepers, and are thus only considered for goalkeepers.
 
 \subsubsection{Categorization based on Position}
 
-As outlined in Section \ref{Sol_approach_regression}, we have decided to separate the players based on their positions. To substantiate this decision, a visual assessment is undertaken. The analysis is done for the final gameweek of the 2016/2017 season, as it constitutes the training set used. First, Figure \ref{fig:cluster_plots} displays a box-plot of the total points for each different position. The different positions appear to exhibit some differing characteristics. The variance seems larger for midfielders and forwards than what it is for defenders and goalkeepers. Further, defenders and goalkeepers have the highest median scores, while the most positive outliers are found among midfielders and forwards. Secondly, the figure shows how total points are associated with the variables \textit{clean sheets}, goals and assists for different positions. It is clear that goals and assists are not contributing a lot in terms of total points for goalkeepers, but are important for midfielders and forwards. Figure \ref{fig:cluster_plots} also manifest that clean sheets are important for goalkeepers and defenders in order to earn a high point score.
+As outlined in Section \ref{Sol_approach_regression}, we have decided to separate the players based on their positions. To substantiate this decision, a visual assessment is undertaken. The analysis is done for the 2016/2017 season. First, Figure \ref{fig:cluster_plots} displays a box-plot of the total points for each different position. The different positions appear to exhibit some differing characteristics. The variance seems larger for midfielders and forwards than what it is for defenders and goalkeepers. Further, defenders and goalkeepers have the highest median scores, while the most positive outliers are found among midfielders and forwards. Secondly, the figure shows how total points are associated with the variables \textit{clean sheets}, goals and assists for different positions. It is clear that goals and assists are not contributing a lot in terms of total points for goalkeepers, but are important for midfielders and forwards. Figure \ref{fig:cluster_plots} also manifest that clean sheets are important for goalkeepers and defenders in order to earn a high point score. Based on the observations, categorizing players based on posistion appears to be reasonable.
 
 \begin{figure}[H]
     \centering
@@ -225,7 +228,7 @@ As outlined in Section \ref{Sol_approach_regression}, we have decided to separat
 
 \subsubsection{Time Series of Points}
 
-In order to determine if one should treat the points a player obtains as a time series (i.e the effect of form), the Durbin-Watson test and the Ljung-Box test with lag 1-5 for autocorrelation are performed. Table \ref{tab:auto_tests} presents the results of the tests. Based on the results, 75\%-95\% of the players exhibit insignificant autocorrelation in their time-series of points at a significance level of 10 \%, and 80\%-99\% at significance level 5\%. The results indicate no autocorrelation effects. However, this result should be interpreted carefully as individual players may still display a time-dependency in points obtained. Regardless, we have decided to neglect time-series effects in the regression. That is, the variable \textit{previous points} is excluded from consideration. The methodology works as a complement to the Modified Average method.
+In order to determine if one should treat the points a player obtains as a time series (i.e the effect of form), the Durbin-Watson test and the Ljung-Box test with lag 1-5 for autocorrelation are performed. Table \ref{tab:auto_tests} presents the results of the tests. Based on the results, 75\%-95\% of the players exhibit insignificant autocorrelation in their time-series of points at a significance level of 10 \%, and 80\%-99\% at significance level 5\%. The results indicate no autocorrelation effects. Therefore,. the variable \textit{previous points} is disregarded. The methodology works as a complement to the Modified Average method, where only the points in the track-length are considered.
 
 \begin{table}[H]
 \centering
@@ -248,7 +251,7 @@ Ljung-Box lag 5 & 81 \% & 85 \%
 
 \subsubsection{Variable Selection}
 
-As described in Section \ref{Sol_approach_regression}, lasso regression with \textit{k}-fold cross validation is performed in order to conduct a variable selection. Data from the entire 2016/2017 season is used, and separated into $\textit{k}=10$ folds for the cross validation. In Figure \ref{fig:lasso_all}, a plot of (average \textit{k}-fold) MSE against values of log($\lambda$) for each position is presented. Note that in each plot there are 2 dotted vertical lines. The leftmost line marks the log($\lambda$)-value with lowest MSE. The rightmost marks the log($\lambda$)-value with one standard deviation higher MSE than the lowest MSE. Furthermore, the numbers in the top of the plot indicate the number of variables included for each value of log($\lambda$). The reason why the number of variables may exceed the number of variables presented in Section \ref{Sol_approach_regression}, is that a dummy-variable is introduced for each level of a categorical variable. That is, the variables \textit{team} and \textit{opponent} will be treated as 20 different variables each as there are 20 teams (levels) in the English Premier League. If only a few of the dummy-variables are selected by the lasso-regression, the variable associated with them is excluded from consideration. Similarly, if all except a few dummy-variables are selected, all levels are included. That is, some levels are included even if they are not selected by the lasso regression.
+As described in Section \ref{Sol_approach_regression}, lasso regression with \textit{k}-fold cross validation is performed in order to conduct a variable selection. Data from the entire 2016/2017 season is used, and separated into $\textit{k}=10$ folds for the cross validation. In Figure \ref{fig:lasso_all}, a plot of average \textit{k}-fold MSE, $CV_{(k)}$, against values of log($\lambda$) for each position is presented. The reader is reminded that $\lambda$ is the tuning-parameter found in Equation \ref{eq:lasso}. In each plot there are 2 dotted vertical lines. The leftmost line marks the log($\lambda$)-value with lowest MSE. The rightmost marks the log($\lambda$)-value with one standard deviation higher MSE than the lowest MSE. Furthermore, the numbers in the top of the plot indicate the number of variables included for each value of log($\lambda$). The reason why the number of variables may exceed the number of variables presented in Section \ref{Sol_approach_regression}, is that a dummy-variable is introduced for each level of a categorical variable. That is, the variables \textit{team} and \textit{opponent} will be treated as 20 different variables each as there are 20 teams (levels) in the English Premier League. If only 1-2 of the dummy-variables are selected by the lasso-regression, the variable associated with them is excluded from consideration. Similarly, if more than 2 dummy-variables are selected, all levels are included. That is, some levels are included even if they are not selected by the lasso regression.
 
 \newpar
 
@@ -270,14 +273,14 @@ As evident from Figure \ref{fig:cluster_plots},f no goalkeepers scored a goal in
 
 \begin{table}[H]
 \centering
-\begin{tabular}{|l|l|l|l|l|}
+\begin{tabular}{|l|c|c|c|c|}
 \hline
 Variable     & Coefficient ($\beta$) & Std. Error & t-value & p-value \\ \hline
-(Intercept)  & -3,35E+00    & 7,1E-01    & -4,7    & 2,4E-06               \\
-Cost         & 8,33E-07 & 1,6E-07    & 5,3     & 1,4E-07               \\
-Transfers in & 4,50E-05 & 7,0E-06    & 6,4     & 2,3E-10               \\
-Minutes      & 1,12E-02 & 2,0E-03    & 5,5     & 4,0E-08               \\
-Saves        & 1,76E-02 & 2,8E-03    & 6,4     & 2,4E-10
+(Intercept)  & -3.35E+00    & 7.1E-01    & -4.7    & 2.4E-06               \\
+Cost         & 8.33E-07 & 1.6E-07    & 5.3     & 1.4E-07               \\
+Transfers in & 4.50E-05 & 7.0E-06    & 6.4     & 2.3E-10               \\
+Minutes      & 1.12E-02 & 2.0E-03    & 5.5     & 4.0E-08               \\
+Saves        & 1.76E-02 & 2.8E-03    & 6.4     & 2.4E-10
 \\
 \hline
 \end{tabular}
@@ -287,7 +290,7 @@ Saves        & 1,76E-02 & 2,8E-03    & 6,4     & 2,4E-10
 
 \begin{table}[H]
 \centering
-\begin{tabular}{|l|l|}
+\begin{tabular}{|c|c|}
 \hline
 Variable     & Value   \\ \hline
 Cost         & 5.5 $\cdot$ $10^6$ \\
@@ -306,7 +309,7 @@ Table \ref{tab:var_petr} shows the cost, transfers in, minutes and saves of Petr
     -3.35 + 8.33\cdot10^{-7}\cdot5.5\cdot10^6 + 4.5\cdot10^{-5}\cdot13 884 + 1.12\cdot10^{-2}\cdot90 + 20\cdot1.76\cdot10^{-2} \approx 3.2
 \end{equation*}
 
-Note that the illustration does not capture the fact that the $\beta$ are subject to change due to new available information and refitting of the model.
+Note that the illustration does not capture the fact that the $\beta$-values are subject to change due to refitting of the model when new information becomes available.
 
 
 \subsubsection{Defenders}
@@ -319,19 +322,19 @@ None of the variables associated with team were selected, but 4 of the variables
 
 \begin{table}[H]
 \centering
-\begin{tabular}{|l|l|l|l|l|}
+\begin{tabular}{|l|c|c|c|c|}
 \hline
 Variable      & Coefficient ($\beta$) & Std. Error & t-value & p-value \\ \hline
-(Intercept)   & -3,5E+00     & 3,9E-01    & -9,00    & 3,4E-19 \\
-Cost          & 7,9E-07      & 7,4E-08    & 10,7    & 2,4E-26 \\
-Transfers in  & 2,7E-05      & 3,2E-06    & 8,54     & 1,9E-17 \\
-Transfers out & -1,9E-05     & 3,1E-06    & -6,10    & 1,1E-09 \\
-Home/Away     & 3,9E-01      & 8,5E-02    & 4,54     & 5,8E-06 \\
-Minutes       & 1,2E-02      & 1,1E-03    & 11,2    & 1,3E-28 \\
-Yellow Cards  & 7,9E-02      & 2,0E-02    & 3,88     & 1,1E-04 \\
+(Intercept)   & -3.5E+00     & 3.9E-01    & -9.00    & 3.4E-19 \\
+Cost          & 7.9E-07      & 7.4E-08    & 10.70    & 2.4E-26 \\
+Transfers in  & 2.7E-05      & 3.2E-06    & 8.54     & 1.9E-17 \\
+Transfers out & -1.9E-05     & 3.1E-06    & -6.10    & 1.1E-09 \\
+Home/Away     & 3.9E-01      & 8.5E-02    & 4.54     & 5.8E-06 \\
+Minutes       & 1.2E-02      & 1.1E-03    & 11.20    & 1.3E-28 \\
+Yellow Cards  & 7.9E-02      & 2.0E-02    & 3.88     & 1.1E-04 \\
 \hline
 \end{tabular}
-\caption{Summary of the linear regression for Defenders.}
+\caption{Summary of the linear regression for defenders.}
 \label{tab:coef_DEF}
 \end{table}
 
@@ -341,19 +344,19 @@ From Figure \ref{fig:lasso_all}, it is apparent that the model with the lowest M
 
 \begin{table}[H]
 \centering
-\begin{tabular}{|l|l|l|l|l|}
+\begin{tabular}{|l|c|c|c|c|}
 \hline
 Variable         & Coefficient ($\beta$)  & Std. Error & t value & p-value \\ \hline
-(Intercept)      & -2,05E+00 & 3,0E-01    & -6,94   & 4,3E-12 \\
-Cost             & 4,76E-07  & 3,6E-08    & 13,1   & 2,4E-38 \\
-Transfers In     & 9,85E-06  & 1,4E-06    & 7,18    & 8,0E-13 \\
-Transfers Out    & -8,03E-06 & 1,5E-06    & -5,47   & 4,8E-08 \\
-Home/Away        & 2,82E-01  & 6,7E-02    & 4,19    & 2,9E-05 \\
-Minutes          & 1,01E-02  & 9,5E-04    & 10,7   & 2,9E-26 \\
-Goals            & 7,57E-02  & 2,2E-02    & 3,51    & 4,5E-04 \\
-Penalties Missed & -3,98E-01 & 1,7E-01    & -2,31   & 2,1E-02 \\
-Clean Sheets     & 6,78E-02  & 1,6E-02    & 4,21    & 2,6E-05 \\
-Assists          & 5,23E-02  & 2,0E-02    & 2,61    & 9,1E-03 \\
+(Intercept)      & -2.05E+00 & 3.0E-01    & -6.94   & 4.3E-12 \\
+Cost             & 4.76E-07  & 3.6E-08    & 13.10   & 2.4E-38 \\
+Transfers In     & 9.85E-06  & 1.4E-06    & 7.18    & 8.0E-13 \\
+Transfers Out    & -8.03E-06 & 1.5E-06    & -5.47   & 4.8E-08 \\
+Home/Away        & 2.82E-01  & 6.7E-02    & 4.19    & 2.9E-05 \\
+Minutes          & 1.01E-02  & 9.5E-04    & 10.70   & 2.9E-26 \\
+Goals            & 7.57E-02  & 2.2E-02    & 3.51    & 4.5E-04 \\
+Penalties Missed & -3.98E-01 & 1.7E-01    & -2.31   & 2.1E-02 \\
+Clean Sheets     & 6.78E-02  & 1.6E-02    & 4.21    & 2.6E-05 \\
+Assists          & 5.23E-02  & 2.0E-02    & 2.61    & 9.1E-03 \\
 \hline
 \end{tabular}
 \caption{Summary of the linear regression for midfielders.}
@@ -362,21 +365,21 @@ Assists          & 5,23E-02  & 2,0E-02    & 2,61    & 9,1E-03 \\
 
 
 \subsubsection{Forwards}
-For forwards, the variable clean sheet is not taken into consideration. Forwards are not rewarded for clean sheets, and from Figure \ref{fig:cluster_plots} it is hard to spot a pattern between total points and clean sheets for forwards. The Figure \ref{fig:lasso_all} shows that for forwards, the model with the lowest MSE value includes 25 variables, while the model one standard deviation away includes 4. Again, we suspect that more than 4 variables have a higher predictive power, and hence the model with minimum MSE is selected. Enough levels of the variables team and opponent are included to make it justifiable to select them. The coefficients from the linear regression are presented in Table \ref{tab:coef_FWD}. All the signs in front of the coefficients appear consistent with their intuitive interpretation, except for the variable \textit{penalties missed}. This can perhaps stem from that fact that if a player misses a penalty, he might also frequently take the penalties for his team, thus earning points when he scores. Note however, that both home/away and penalties missed are insignificant in the linear regression model for a significance level of 5\%. Regardless, we have decided to include them, as they were initially selected by the lasso regression.
+For forwards, the variable clean sheet is not taken into consideration. Forwards are not rewarded for clean sheets, and from Figure \ref{fig:cluster_plots} it is hard to spot a pattern between total points and clean sheets for forwards. The Figure \ref{fig:lasso_all} shows that for forwards, the model with the lowest MSE value includes 25 variables, while the model one standard deviation away includes 4. Again, we suspect that more than 4 variables have a higher predictive power, and hence the model with minimum MSE is selected. Enough levels of the variables team and opponent are included to make it justifiable to select them. The coefficients from the linear regression are presented in Table \ref{tab:coef_FWD}. All the signs in front of the coefficients appear consistent with their intuitive interpretation, except for the variable \textit{penalties missed}. This can perhaps stem from that fact that if a player misses a penalty, he might also frequently take the penalties for his team, thus earning points when he scores. Note however, that both home/away and penalties missed are insignificant in the linear regression model for a significance level of 5\%. We have decided to include them, as they were initially selected by the lasso regression. However, excluding the is perhaps more appropriate from a strictly theoretical perspective.
 
 \begin{table}[H]
 \centering
-\begin{tabular}{|l|l|l|l|l|}
+\begin{tabular}{|l|c|c|c|c|}
 \hline
 Variable         & Coefficient ($\beta$)  & Std. Error & t value & p-value \\ \hline
-(Intercept)      & -1,75E+00 & 6,7E-01    & -2,62   & 9,0E-03 \\
-Cost             & 3,89E-07  & 6,7E-08    & 5,79    & 8,4E-09 \\
-Transfers In     & 1,39E-05  & 1,9E-06    & 7,24    & 6,8E-13 \\
-Transfers Out    & -5,40E-06 & 1,8E-06    & -3,03   & 2,5E-03 \\
-Home/Away        & 1,52E-01  & 1,4E-01    & 1,10    & 2,7E-01 \\
-Minutes          & 9,02E-03  & 2,3E-03    & 3,99    & 6,9E-05 \\
-Goals            & 6,54E-02  & 2,6E-02    & 2,55    & 1,1E-02 \\
-Penalties Missed & 5,52E-01  & 3,0E-01    & 1,87    & 6,2E-02 \\
+(Intercept)      & -1.75E+00 & 6.7E-01    & -2.62   & 9.0E-03 \\
+Cost             & 3.89E-07  & 6.7E-08    & 5.79    & 8.4E-09 \\
+Transfers In     & 1.39E-05  & 1.9E-06    & 7.24    & 6.8E-13 \\
+Transfers Out    & -5.40E-06 & 1.8E-06    & -3.03   & 2.5E-03 \\
+Home/Away        & 1.52E-01  & 1.4E-01    & 1.10    & 2.7E-01 \\
+Minutes          & 9.02E-03  & 2.3E-03    & 3.99    & 6.9E-05 \\
+Goals            & 6.54E-02  & 2.6E-02    & 2.55    & 1.1E-02 \\
+Penalties Missed & 5.52E-01  & 3.0E-01    & 1.87    & 6.2E-02 \\
 \hline
 \end{tabular}
 \caption{Summary of the linear regression for forwards.}
@@ -393,14 +396,26 @@ Since we only have data for one season to train the model, we have considered it
 
 \subsection{Odds}
 
-In order to obtain necessary data, we have cooperated with Sportradar, a Norwegian company providing data for bookmakers. Sportradar delivers odds and probabilities of several sports events, including English Premier League. They have provided us with all the necessary probabilities, including result outcomes for each Premier League match as well as individual probabilities such as goals scored and assists given. These data made all the computational work a lot easier, as Sportradar exported structured excel files containing all the necessary data. However, Sportsradar were only capable of providing us data for the 30 first gameweeks of the 2017/2018 season. 
+In order to obtain necessary data, we have cooperated with Sportradar, a Norwegian company providing data for bookmakers. Sportradar delivers odds and probabilities of several sports events, including the English Premier League. Sportsradar have provided team odds including result outcomes as well as individual odds for goals scored and assists. Odds are provided for each Premier League match from gameweek 1 until gameweek 31 in the 2017/2018 season. Sportradar exported csv files containing all the necessary data for each match marked with a match id. In order to link the match id to actual matches, Sportradar's API was utilized. Then, the data was processed and converted into forecasts in R.
 
 \newpar
 
-Compared to the other two solution approaches, the player list is limited when calculating expected points using odds probabilities. The data from Sportradar was delivered post-season, which has affected the player list. Players that has been transferred or lend to other clubs during the 2017/2018 season are not considered. This is due to the fact that these players are no longer listed in Sportradar's database of Premier League players. In general, the reduced player list will not affect the results of the model, as the players that are lend out are typically lend to clubs in the English Championship division. Hence, these players were not consider good enough to contribute for the teams in the Premier League. However, some of the transfers might have an impact on the results. For instance, players like Philippe Coutinho and Michy Batshuayi are players that contributed with fantasy points in the first half of the season. Unfortunately, these players are not considered when using the odds approach, which is considered as a drawback of the approach. 
+A few noteworthy comments must be made about the data used. First, compared to the other two solution approaches, the player list is a bit different for the Odds method, as it is based on Sportradar's database of English Premier League players when the data was received. Thus, a minor drawback is that players that have been transferred or lent to other clubs during the 2017/2018 season, are not considered. The reduced player list is not expected to affect the results of the model by much, as only a handful of players such as Philippe Coutinho and Michy Batshuayi contributed with a sizable amount of fantasy points before transferring away. 
 
 \newpar
-As odds are primarily available for fixtures in the near future, primarily for the upcoming gameweek, the forecast method using odds is further limited. In our case, we only have odds available one gameweek ahead. Hence, the sub-horizon in the optimization model is forced to be one gameweek. Compared to the other suggested methods, this is considered a drawback. Furthermore, the penalty term, $R$, is set to 4 as stated in the game rules. 
+
+Secondly, goalkeepers are not assigned with a probability for goals scored or assists provided. Thus, the only way points are forecast for goalkeepers are from expected points earned by keeping clean sheets. Thus, there is no way to distinguish the expected points of a team's first, second and third choice for goalkeeper. We have decided to circumvent the issue by only awarding points to goalkeepers who played in at in at least 3 previous gameweeks, and have considered the 2016/2017 season for the first 3 gameweeks of the 2017/2018 season. For the other players, as described in Section \ref{Player_Performance}, we assume that their probability of starting is incorporated in the of probability of scoring a goal and providing an assists.
+
+\newpar
+
+Thirdly, a detailed record of the odds for bookings were not kept by Sporsradar. Thus, we have decided to neglect the effect of bookings. However, as it only account for a deduction of 1 point in the FPL, it is not considered a crucial drawback.
+
+\newpar
+
+Finally, there exists a more severe limitation related to the data in the Odds method. Bookmakers usually only provide odds for the upcoming gameweek. Hence, the odds can only be used in order to predict the fantasy points one gameweek ahead. That is, the sub-horizon must be set to 1. Furthermore, we do not have odds-data for the 2016/2017 season. Therefore, we can not conduct a parameter tuning with respect to the penalty term. Hence, the penalty term, $R$, is set to 4 as stated in the game rules. 
+
+\newpar
+
 
 
 \section{Gamechips} \label{exp_setup_gamechips}
@@ -415,7 +430,7 @@ Notice that the decisions on when to play the gamechips are not fixed ahead of t
  
 \section{Risk Handling} \label{exp_setup_Value_Variance}
 
-\subsection{Variance in the proposed model}
+\subsection{Variance in the Proposed model}
 
 In order to estimate the variance of each player and the correlation between players, their historical performances are considered. To obtain reliable estimations, data for the entire 2016/2017 season is used. Therefore, it is impossible to also find a suitable variance threshold using data on the 2016/2017 season. As a consequence, we have decided to do an ex-post analysis of how the risk handling constraints effect the solution obtained in the 2017/2018 season, thus providing a basis for future research and models.
 
@@ -445,7 +460,7 @@ Table \ref{tab:cor_team} and Table \ref{tab:cor_opp} show the correlation coeffi
 
 \begin{table}[H]
 \centering
-\begin{tabular}{|l|l|l|l|}
+\begin{tabular}{|c|c|c|c|}
 \hline
 Position & Position & $\rho$    & p-value  \\
 \hline
@@ -463,9 +478,9 @@ MID      & FWD      & 0.238  & 1.72 E-08 \\
 
 \begin{table}[H]
 \centering
-\begin{tabular}{|l|l|l|l|}
+\begin{tabular}{|c|c|c|c|}
 \hline
-Position & Position & $\rho$    & p-value  \\
+Position & Position & $\rho$ & p-value  \\
 \hline
 GLK      & GLK      & 0.0162 & 0.759    \\
 GLK      & DEF      & -0.106 & 0.0374   \\

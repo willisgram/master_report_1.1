@@ -2,7 +2,35 @@
 
 \chapter{Recommendations for Further Research}
 
-Firstly, a potential for future research exists by the fact that more data will be available in the future. Thus, procedures such as a parameter tuning with the regression is possible. Furthermore, a parameter tuning with gemachips or variance is an interesting topic.
+The FPLDP is not an in-depth researched area. The area has limited research literature, as only one article was found on FPLDP \citep{Matthews}, and only one article on Fantasy Football \citep{Bonomo}. To the author's knowledge, the mathematical model presented is the first of its kind for the Fantasy Premier League and the concept of modelling gamechips have never been considered in Fantasy Sports before. Thus, the novelty of the FPLDP makes recommendations for future research topics an important issue to address.
+
+\newpar
+
+When the model is run with realized points, the results demonstrate that there is a large gap between the optimal solution and the top manager. Moreover, it illustrates that there is much uncertainty in the FPLDP. Thus, instead of taking the deterministic solution method adopted in the thesis, using a stochastic solution methods or a method based on machine learning are ideas for further research. Modelling it as a Markov Decision Problem is also possible, as done by \cite{Matthews}.
+\newpar
+
+A large potential lies in the implementation of the gamechips. As seen in the thesis, our implementation does not guarantee an increased performance. The Wildcard, in particular, could benefit from another form of implementation. The qualitative strategy suggested in the thesis does not seem complementary to the forecast-based optimization model. Thus, examining the effect of different implementations is an exiting topic for further research. One interesting approach would be to consider a type of punishment in terms of penalized points for the use of gamechips. Another approach would be to implement the gamechips analogous to the exercise of a financial option. 
+
+\newpar
+
+Interesting approaches exist with potential of improving the forecasting methods. Some are solely related to the fact that in the future, more data will be available. For example, a parameter tuning can be conducted for the Regression method, and the parameter tuning for Modified Average method could have been based on data for several seasons. Furthermore, with more data available, one can fit the regression model by only considering matches at a similar stage of previous seasons. For instance, total goals can have high predictive power of realized points in the second part of the season, but perhaps not in the first couple of gameweeks. Other topics for future related to the forecasts are not founded in the scarcity of data. Rather, they are connected to discoveries made in the thesis. For instance, it is clear that the Odds method performs best in the beginning of the season. Thus, combining methods is an interesting approach to improve performance. For example, one could use the Odds method for the first 5 gameweeks and then switch to the Modified Average. Alternatively, one could use odds as an explanatory variable in the regression.
+
+\newpar
+
+An analysis of risk handling was presented in this thesis. The analysis indicated that the risk handling could be used to improve performance or alternatively to reduce risk. However, more research is required before one can make more conclusive statements. 
+
+\begin{comment}
+Furthermore,  is possible. In addition, as regression is a data dependent method it would have been interesting to see the results of regression variables tuned on a bigger data set. For the Odds method, it is difficult to say that something different could have been done considering the restrictions on data from Sportsradar. However, ideally it would have been interesting to have odds for future gameweeks such that the sub-horizon could have been set to higher than 1. A parameter tuning on this method would also be interesting. Furthermore, a parameter tuning taking account for gamechips or variance is also an interesting topic.
+
+\newpar
+
+The findings in this thesis are hard to generalize as they are tested on only on data for one season. Nevertheless, the results imply that there is potential to obtain high performance with a mathematical model and it can be competitive against human FPL managers. Because of the limitation of data and its constraints, it would be interesting to use the data of 2017/2018 season to enhance the solution framework presented in this thesis in order to see if it yields higher performance for next year's Fantasy Premier League. 
+
+
+\end{comment}
+
+\begin{comment}
+Firstly, a potential for future research exists by the fact that more data will be available in the future. Thus, procedures such as a parameter tuning with the regression is possible. Furthermore, a parameter tuning with gamechips or variance is an interesting topic.
 
 \newpar
 
@@ -15,3 +43,25 @@ With respect to the gamechips, in particular the Wildcard can benefit from anoth
 \newpar
 
 Others may wish to consider entirely different models such as a stochastic optimization or a method based on machine learning.
+
+\end{comment}
+
+
+
+\begin{comment}
+- fortelle at dette er et nytt område å bruke statistisk analyse på og derfor er det mye rom for forbedring. selv om området er litt banalt, er det over 6 millioner som spiller spillet og har derfor en betydning
+
+- det er tidligere utviklet optimerginsmodeller og løsningsmetoder for andre Fantasy Sports, men det har aldri blitt utviklet en optimeringsmodell eller løsningsmetode på FPL. den matematiske modellen presentert i denne oppgaven er den første optimeringsmodellen utviklet for FPL 
+
+- FPLDP er løst ved en deterministisk løsningsmetode og det har sine begrensninger. her er det rom for utbedring og metoder som er mer stochastic knyttet kunne vært interessant 
+
+- det er flere faktorer som er oppe til forbedring i forhold til løsningsmetoden. for det første er den største drawbacken mangel på data på et slikt problem.
+
+fra det av følger det at sånn som modified average kunne blitt parameter tunet på flere sesonger. videre, hadde det vært veldig interessant å gjøre en parameter tuning på regresjonsmetoden, men også tunet regresjonsvariablene på et større data set. ettersom det er en svært data avhengig metode, er det rimelig å anta at bedre resultater kan oppnås. for odds metoden hadde det vært vanskelig å gjøre noe annerledes, ettersom dataen var limitert fra Sportsradar. I en perfekt verden hadde det vært interessant om man hadde hatt odds for flere uker i fremtiden, og dermed optimert for en sub-horizon høyere enn 1 her og. Ideelt, hadde en parameter tuning også vært interesant her. 
+
+- resultatene viser at effekten av gamechipsene er varierende for de forskjellige metodene. resultatene sett for seg selv for free hit, bench boost og triple captain er gode, men for wildcard virker det ikke så bra. det er rimelig å anta at gamechipsene egentlig skal ha positiv effekt ettersom det gir flere muligheter, og spesielt free hit, bench boost og triple captain. årsaken til de varierende resultatene tyder på at det er implementeringen av gamechipsene. i denne thesis er gamechippenes implementering gjort ved utvikling av mer kvalitative strategier enn kvantitative strategier. implementering av en mer data dreven gamechips sees på som en stor potensial for further research 
+
+- videre, har varians blitt implementert som et mål på risk ved inspirasjon fra portfølje optimering. i denne thesis kunne man kun gjøre en ex-post analyse for å sjekke den påvirkning, og påvirkningen er varierende. for å oppnå bedre performance i fpl tyder det på at det lønner seg å ha en viss threshold for å minimere risken, men formålet om at selve risken blir lavere er usikkert
+
+- studiene gjort i denne thesis er vanskelig å generalisere med tanke på at det kun er testet på en sesong, allikvel tyder resultatene på at det er mulig å bruke en optimeringsmodell for å oppnå good perforamnce og være kompetitativ mot human fpl manager. på grunn av datamangel og dens konsekvenser hadde det dermed vært svært interessant og bruke data på 2017/2018 season for å ha et grunnlag til å forbedre forecasting metodene og dermed se om prestasjonene hadde vært bedre for neste år FPL sesong.
+\end{comment}

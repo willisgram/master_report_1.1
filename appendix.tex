@@ -1,11 +1,18 @@
-\section*{\begin{center}{\Huge Appendix}\end{center}}
-\addcontentsline{toc}{chapter}{Appendix}
-$\\[0.5cm]$
-- the attacking and defensive strength of the different seasons.\\ - the expected goals home and away for all gameweeks.  
-\noindent Write your appendix here...
+%\section*{\begin{center}{\Huge Appendix}\end{center}}
 
-\section{A1 - Bonus Point System}
-\label{A1_BPS}
+
+\appendix
+%\renewcommand{\thesection}{\thechapter.\alph{section}}
+
+\renewcommand{\thechapter}{\Alph{chapter}}
+
+%\addcontentsline{toc}{chapter}{Appendix}
+%$\\[0.5cm]$
+
+\chapter{Bonus Point System}
+\section{Bonus Point System}\label{A1_BPS}
+
+The Bonus Point System used in the scoring of Fantasy Premier League is presented here. It utilizes several statistics supplied by Opta, a sport analytics company, to create a performance score for players. The players with the top three BPS in a given match receive bonus points - three points to the highest-scoring player, two to the second best and one to the third. The table is obtained from www.premierleague.com. 
 
 \begin{table}[H]
 \centering
@@ -47,12 +54,20 @@ Being caught offside                                                     & -1  \
 Shot off target                                                          & -1 \\
 \hline
 \end{tabular}
-\caption{Bonus Point System}
+\caption{Bonus Point System.}
 \end{table}
 
 
-\section{A2 - The Elo System}
+
+\chapter{The Elo System}
+\section{The Elo System}
 \label{A2_Elo_System}
+
+The Elo system introduced in Section \ref{Strength_of_football_teams} is a rating system used for measuring the relative strength level of sport teams and individual athletes. Within football, the Elo system can be used in order to determine a club's Elo value. The great advantage of the Elo system lies in its simplicity: there is only one value per club at each point in time, the higher the better. 
+
+\begin{comment}
+Elo values can be obtained according to equation \ref{eq5.2} and \ref{eq5.4}. Clubelo.com provide historical Elo values for most of the professional football teams in the world, including teams in the English Premier League, English 1st division etc. These values are used in order to compute the relative team strength in this project, using a k-value of 20. A great advantage of the ratings provided by Clubelo is the fact that these values are modified, taking into account home field advantage, goal difference and inter-league adjustments. In addition, the Elo values from Clubelo incorporate all fixtures and not only league matches.
+\end{comment}
 
 The performance of a team is not measured absolutely, but inferred from wins, losses and draws against other teams. If team A has a Elo value of $R_A$ and team B has a Elo value of $R_B$, team A has an expected score of 
 \begin{equation}\label{eq5.2}
@@ -111,7 +126,7 @@ In the following, the Elo values used for 2017/2018 season is presented in form 
 \begin{table}[H]
 \centering
 \smaller
-\begin{tabular}{|l|l|l|l|l|l|l|l|l|l|}
+\begin{tabular}{|l|c|c|c|c|c|c|c|c|c|}
 \hline
 Team           & GW1  & GW2  & GW3  & GW4  & GW5  & GW6  & GW7  & GW8  & GW9   \\
 \hline
@@ -145,7 +160,7 @@ Huddersfield   & 1471 & 1499 & 1510 & 1513 & 1514 & 1514 & 1529 & 1525 & 1611  \
 \begin{table}[H]
 \centering
 \smaller
-\begin{tabular}{|l|l|l|l|l|l|l|l|l|l|}
+\begin{tabular}{|l|c|c|c|c|c|c|c|c|c|}
 \hline
 Team           & GW10 & GW11 & GW12 & GW13 & GW14 & GW15 & GW16 & GW17 & GW18 \\
 \hline
@@ -179,7 +194,7 @@ Huddersfield   & 1538 & 1536 & 1546 & 1537 & 1525 & 1523 & 1521 & 1534 & 1531 \\
 \begin{table}[H]
 \centering
 \smaller
-\begin{tabular}{|l|l|l|l|l|l|l|l|l|l|}
+\begin{tabular}{|l|c|c|c|c|c|c|c|c|c|}
 \hline
 Team           & GW19 & GW20 & GW21 & GW22 & GW23 & GW24 & GW25 & GW26 & GW27 \\
 \hline
@@ -213,7 +228,7 @@ Huddersfield   & 1553 & 1557 & 1558 & 1560 & 1555 & 1543 & 1536 & 1533 & 1531 \\
 \begin{table}[H]
 \centering
 \smaller
-\begin{tabular}{|l|l|l|l|l|l|l|l|l|}
+\begin{tabular}{|l|c|c|c|c|c|c|c|c|}
 \hline
 Team           & GW28 & GW29 & GW30 & GW31 & GW32 & GW33 & GW34 & GW35 \\
 \hline
@@ -242,3 +257,82 @@ Huddersfield   & 1557 & 1568 & 1565 & 1559 & 1548 & 1547 & 1551 & 1560 \\
 \caption{Elo values for 2017/2018 season.}
 \label{tab:elo_values_gameweeks_4}
 \end{table}
+
+
+
+\section{Walk-through of calculating adjusted average points based on Elo ratings } \label{app_walk_through}
+
+
+In Table \ref{tab:Elo.1617_app}, Elo values for the first gameweeks of the English Premier League 2016/17 season are listed. Note that the values are calculated ahead of each gameweek, so that the values in the GW1 column are the Elo values of the teams before gameweek 1 has been played. 
+
+\begin{table}[H]
+\centering
+\begin{tabular}{|c|l|c|c|c|c|}
+\cline{2-6}
+\multicolumn{1}{l|}{} & \multicolumn{1}{l|}{} & \multicolumn{4}{c|}{Elo value}  \\ \cline{2-6} 
+\hline
+                      & Team                  & GW1    & GW2    & GW3  & GW4    \\
+                      \hline
+1                     & Chelsea               & 1793   & 1800   & 1798 & 1804   \\
+2                     & Tottenham             & 1804   & 1804   & 1800 & 1798   \\
+3                     & Man City              & 1848   & 1856   & 1858 & 1863   \\
+4                     & Man Utd               & 1789   & 1797   & 1799 & 1804   \\
+-                     &                       &        &        &      &        \\
+-                     &                       &        &        &      &        \\
+-                     &                       &        &        &      &        \\
+17                    & Watford               & 1624   & 1631   & 1618 & 1612   \\
+18                    & Hull                  & 1589   & 1603   & 1613 & 1608   \\
+19                    & Middlesbrough         & 1595   & 1597   & 1601 & 1604   \\
+20                    & Sunderland            & 1655   & 1654   & 1636 & 1641   \\
+\hline
+\end{tabular}
+\caption{Elo values for Premier League 2016/2017.}
+\label{tab:Elo.1617_app}
+\end{table}
+
+Values from Table \ref{tab:Elo.1617_app} is used in order to weight the performance of a player. In the following, an example of weighting historical performance is presented. Paul Pogba, a midfielder at Manchester United, received the following points for the first three gameweeks: 
+
+
+\begin{table}[H]
+\centering
+\begin{tabular}{|c|l|c|c|c|c|}
+\hline
+\multicolumn{1}{|c|}{} & \multicolumn{4}{c|}{Realized points} \\ \hline
+Opponent               & GW1        & GW2       & GW3    & GW4   \\
+\hline
+Chelsea                & 6          &           &        &       \\
+Sunderland             &            & 9         &        &       \\
+Watford                &            &           & 10     &         \\
+Tottenham              &            &           &        & ?      \\
+\hline
+\end{tabular}
+\caption{Imaginary realized points for player Paul Pogba.}
+\label{tab:appendix_paul_pogba_example}
+\end{table}
+
+If one simply used his average score for the past three gameweeks in order to predict his performance for the next gameweek, one would predict Pogba to gain 8.33 points in gameweek 4. However, in this case one does not account for the fact that Manchester United were facing teams of different quality. In addition, one does not consider the fact that Pogba plays for Manchester United, a team that in general performs better than most other teams. Hence, it is necessary to weight the previous performance taking into account the opponent team and the player's team. Equation \ref{eq:adj_avg} is used to calculate the \textit{adjusted average points}. 
+
+\newpar
+
+In gameweek 1, Manchester United were facing Chelsea and Pogba earned 6 points. In order to account for the fact that Pogba plays for Manchester United and was facing Chelsea (a higher ranked team), the realized points in gameweek 1 is adjusted higher:
+
+\begin{equation*}
+    \textrm{Paul Pogba GW1} = 6 \cdot \frac{1793}{1789} = 6.013 
+\end{equation*}
+
+As can be observed, his modified points increase when facing an opponent that is assumed to be better than his team. On the contrary, when facing a weaker team as Sunderland in gameweek 2 and Watfordi in gameweek 3, his realized points in gameweek 2 is adjusted lower: 
+
+\begin{equation*}
+    \textrm{Paul Pogba GW2} = 9 \cdot \frac{1654}{1797} = 8.284 
+\end{equation*}
+
+
+\begin{equation*}
+    \textrm{Paul Pogba GW3} = 10 \cdot \frac{1618}{1799} = 8.994
+\end{equation*}
+
+Hence, his adjusted average points in gameweek 4 accounted for \textit{upcoming opponent strength}, is calculated as: 
+
+\begin{equation*}
+    \frac{1}{3} \cdot (6.013 + 8.284 + 8.994) \cdot \frac{1798}{1804} \approx 7.74 
+\end{equation*}
