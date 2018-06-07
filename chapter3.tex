@@ -83,11 +83,11 @@ An approach used for rating the players in the Norwegian Tippeligaen, the top ti
 
 \newpar
 
-As mentioned in Section \ref{Opt_Models_for_Fantasy_Sports}, \cite{Bonomo} proposed a mathematical model for an Argentinian Fantasy League. In addition to the optimization model, they also forecast future performance for the individual players. The forecasts were calculated by averageing the points obtaeind in the three last gameweeks for each particular player. Further, a player's predicted points were multiplied by four deciding factors related to the upcoming match:
+As mentioned in Section \ref{Opt_Models_for_Fantasy_Sports}, \cite{Bonomo} proposed a mathematical model for an Argentinian Fantasy League. In addition to the optimization model, they also forecast future player points for the individual players. The forecasts were calculated by averaging the points obtained in the three last gameweeks for each particular player. Further, a player's predicted points were multiplied by four deciding factors related to the upcoming match:
 \begin{itemize}
     \item 1.05 if the team is playing at home and 0.95 if the team is playing away.
     \item A value between 0.95 and 1.05, linearly dependent on the position in the league table. The players on the team leading the league are weighted by 1.05, while the players on the team in the bottom of the league are weighted by 0.95.
-    \item 0.95 to 1.05, depending on a performance streak factor.
+    \item 0.95 to 1.05, depending on a point streak factor.
     \item A starting line-up factor. This factor is set to 1 for players assumed to be starting in the next gameweek. The factor were based on coaches’ announcements, press reports, or information posted on the game website. 
 \end{itemize}
 
