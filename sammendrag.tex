@@ -1,0 +1,38 @@
+
+\begin{comment}
+
+\pagenumbering{roman} 				
+\setcounter{page}{1}
+
+\pagestyle{fancy}
+\fancyhf{}
+\renewcommand{\chaptermark}[1]{\markboth{\chaptername\ \thechapter.\ #1}{}}
+\renewcommand{\sectionmark}[1]{\markright{\thesection\ #1}}
+\renewcommand{\headrulewidth}{0.1ex}
+\renewcommand{\footrulewidth}{0.1ex}
+\fancyfoot[LE,RO]{\thepage}
+\fancypagestyle{plain}{\fancyhf{}\fancyfoot[LE,RO]{\thepage}\renewcommand{\headrulewidth}{0ex}}
+
+\end{comment}
+
+%\pagenumbering{roman}
+
+\section*{\Huge Sammendrag}
+\addcontentsline{toc}{chapter}{Sammendrag}	
+$\\[0.5cm]$
+
+Fantasy Premier League er et online spill hvor deltakere samler imagin\ae re lag best\aa ende av ekte spillere i engelsk fotballs toppdivisjon, Premier League. Deltakerne blir hver uke tildelt poeng basert p{\aa} spillernes prestasjoner i ekte Premier League-kamper. I denne oppgaven utvikles en matematisk modell som beskriver Fantasy Premier League. Videre er en prognosebasert optimeringsmodell utviklet for {\aa} gj\o re beslutninger i Fantasy Premier League. I motsetning til andre Fantasy Sports inneholder Fantasy Premier League gamechips som kan brukes for {\aa} forbedre prestasjonen i spesielle uker. Disse gamechipsene er modellert i den matematiske modellen.
+
+\newpar
+
+
+Den matematiske modellen har blitt l\o st ved hjelp av en rullende horisont heuristikk med prognoser for spillerpoeng som input. Tre metoder er utviklet for {\aa} generere prognoser. Den f\o rste tiln\ae rmingen er sentrert rundt gjennomsnittet av poeng oppn\aa dd tidligere for hver enkelt spiller. Den andre tiln\ae rmingen er basert p{\aa} regresjon p{\aa} flere forklarende variabler. Den tredje og siste tiln\ae rmingen utnytter odds satt av spillselskaper for {\aa} forutsi poeng. B\aa de odds relatert til lag og individuelle spillere er benyttet. For {\aa} f{\aa} tilgang til data for den siste metoden har vi samarbeidet med Sportradar, et norsk selskap som tilbyr odds til internasjonale bookmakere. Den matematiske modellen som er utviklet l\o ses ogs{\aa} med realiserte poeng for {\aa} finne den optimale l\o sningen.
+
+\newpar
+
+Strategier for implementering av gamechiper er utviklet og gamechipenes innflytelse blir testet. Videre er effekten av {\aa} legge til begrensninger relatert til risikoh\aa ndtering analysert. Det er testet om det eksisterer en avveining mellom risiko og bel\o nning tilsvarende det som finnes i portef\o ljeoptimering.
+
+\newpar
+
+Modellen har blitt kj\o rt for de f\o rste 35 ukene av 2017/2018 Fantasy Premier League sesongen, og resultatene sammenlignes med prestasjonene til Fantasy Premier League-spillere. Den siste delen av oppgaven er dedikert til diskusjon av videre forskning for {\aa} forbedre modellens ytelse.
+

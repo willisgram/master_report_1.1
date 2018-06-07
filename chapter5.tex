@@ -3,25 +3,31 @@
 
 \chapter{Solution Framework} \label{chapter_solution_approach}
 
-The FPLDP is a complex problem with a high degree of uncertainty. In each gameweek a large range of decisions must be optimized. Compared to other Fantasy Sports, the gamechips make it even more complicated. The objective of the model presented in Chapter 4 is to maximize the number of expected points. If the model is run ex-post, the model yields the optimal solution as the realized points are known. However, in order to compete in FPL, decisions must be made ex-ante. Thus, estimations of expected points and strategies for when the gamechips should be played are required. The aim of this chapter is to propose a solution framework designed to maximize performance over the entire season. Furthermore, we present techniques with the aim of providing input for the framework.
+The FPLDP is a complex problem with a high degree of uncertainty. In each gameweek a large range of decisions must be optimized. Compared to other Fantasy Sports, the gamechips make it even more complicated. If the model presented in Chapter \ref{mathematical_model} is run ex-post, it yields the optimal solution as the realized points are known. However, in order to compete in FPL, decisions must be made ex-ante. Thus, estimations of expected points and strategies for when the gamechips should be played are required. The aim of this chapter is to propose a solution framework designed to maximize performance over the entire season. By a framework, a methodology for competing in the FPL on the same terms as managers are meant. Thus, a framework includes a solution method for the mathematical model, a method for generating forecasts of player points and strategies for the use of gamechips. In addition, an approach to handle variance in, and correlation between, player points is included in the framework. This procedure is hereby referred to as risk handling.
 
 \newpar
-In the first section of this chapter, we present an overview of the solution approach suggested. In Section \ref{Player_Performance}, three different methods for forecasting player performance are described. Finally, in the Sections \ref{Ch.5_Game_chips} and \ref{Ch.5_Variance_tradeoff}, respectively, methods for implementing gamechips and handling risk are proposed.
+
+As seen throughout this chapter, the framework is intended to be solely data-driven. That is, a participant in the FPL applying the framework does not have to make any decision based on his or her own judgment. Thus, the inherent skill and knowledge of the FPL possessed by a participant applying the framework is essentially irrelevant for its performance.
+
+\newpar
+
+In Section \ref{section_solution_method}, a solution method suggested for solving the mathematical model is presented. In Section \ref{Player_Performance}, three different methods for forecasting player performance are described. Finally, in the Sections \ref{Ch.5_Game_chips} and \ref{Ch.5_Variance_tradeoff}, respectively, methods for implementing gamechips and handling risk are proposed.
 
 
-\section{Solution Approach}
+\section{Solution Method}\label{section_solution_method}
 
-As stochastic programming models seek to leverage probability distribution of uncertain parameters, they are regarded as more computational demanding than deterministic programming models \citep{Shapiro}. A common method for solving a stochastic model is by use of scenario generation. For the FPLDP, the number of scenarios explodes even for a modest number of scenarios. With only two scenarios in a gameweek, the number of scenarios already reaches over 1 million for 20 gameweeks ($2^{20} = 1\,048\,576$). Therefore, solving a stochastic model over a whole season is infeasible. Hence, we have decided to solve the FPLDP with a deterministic approach. It is solved in a rolling horizon framework where decisions are implemented for one gameweek at a time. When decisions are optimized for a given gameweek, a certain number of gameweeks ahead is considered and forecasts of player points are generated. Furthermore, strategies for when to use gamechips and a method for incorporating risk are added to the mathematical model.
+As stochastic programming models seek to leverage probability distribution of uncertain parameters, they are regarded as more computational demanding than deterministic programming models \citep{Shapiro}. A common method for solving a stochastic model is by use of scenario generation. For the FPLDP, the number of scenarios explodes even for a modest number of scenarios in each gameweek. With only two scenarios in a gameweek, the number of scenarios already reaches over 1 million for 20 gameweeks ($2^{20} = 1\,048\,576$). Therefore, solving a stochastic model over a whole season is computationally infeasible. Hence, the FPLDP is solved with a deterministic approach. A rolling horizon framework is used where decisions are implemented for one gameweek at a time. When decisions are optimized for a given gameweek, a certain number of gameweeks ahead is considered and forecasts of player points are generated.
+
 \newpar
 
 
-When solving for the expected value of a player's points, the objective function described in Section \ref{mathematical_model} is simplified from: 
+When forecasts are used, the objective function described in Section \ref{sec:ob_func} is simplified from: 
 
 \begin{equation*}
 \smaller
 \begin{aligned}
-\text{max} \; z ={} & \EX_{\omega} \Big\lbrack\sum\limits_{p \in \mathcal{P}} \sum\limits_{t \in \mathcal{T}} \Big( \mathlarger{\rho}_{pt}(\omega)y_{pt} + \mathlarger{\rho}_{pt}(\omega)f_{pt} + \epsilon  \mathlarger{\rho}_{pt}(\omega)h_{pt} + \sum_{l \in \mathcal{L}}\kappa_{l} \mathlarger{\rho}_{pt}(\omega)g_{ptl} \\ 
-&  + 2 \mathlarger{\rho}_{pt}(\omega)c_{pt} \Big)  \Big\rbrack \\ 
+\text{max} \; z ={} & \EX \Big\lbrack\sum\limits_{p \in \mathcal{P}} \sum\limits_{t \in \mathcal{T}} \Big( \mathlarger{\rho}_{pt}(\omega_{t})y_{pt} + \mathlarger{\rho}_{pt}(\omega_{t})f_{pt} + \epsilon  \mathlarger{\rho}_{pt}(\omega_{t})h_{pt} + \sum_{l \in \mathcal{L}}\kappa_{l} \mathlarger{\rho}_{pt}(\omega_{t})g_{ptl} \\ 
+&  + 2 \mathlarger{\rho}_{pt}(\omega_{t})c_{pt} \Big)  \Big\rbrack \\ 
 & - R\sum_{t \in \mathcal{T}}\alpha_{t}
 \end{aligned}
 \end{equation*}
@@ -38,52 +44,15 @@ to
 \end{equation*}
 
 
-where $\hat{\rho}_{pt}$ denotes an estimation of expected points of each player $p$ in a gameweek $t$.
+where $\hat{\rho}_{pt}$ denotes an estimation of expected points for each player $p$ in a gameweek $t$.
 
 \newpar
 
 
-The solution approach is divided into three different elements. The elements are:
 
-\begin{itemize}
-    \item Forecast of player performance
-    \item Gamechip strategies
-    \item Risk handling
-\end{itemize}
+\subsection{Rolling Horizon}
 
-The forecasts are estimations of player performance used as input in the mathematical model, while the gamechip strategies are decisions regarding which gameweeks to play the various gamechips. In order account for risk, additional constraints are introduced. By risk, we refer to the variance in overall team performance. The variance is induced by the variance in an individual player's predicted performance and from correlation in points obtained by players in the same or opposing teams.
-
-\begin{comment}
-
-\begin{figure}[H]
-    \centering
-    \includegraphics[scale = 0.65]{fig/chapter_5/solution_method.png}
-    \caption{Elements in the solution approach.}
-    \label{fig:solution_approach}
-\end{figure}
-
-\end{comment}
-\newpar
-
-In each gameweek, the mathematical model is solved for a set of gameweeks as new and updated information is incorporated. In this thesis, three forecast methods are considered to predict future player performances. The methods are: 
-\begin{itemize}
-    \item \textbf{Modified Average}. The solution approach suggested by \cite{Bonomo} is adapted and modified to FPL for prediction of a player's expected points.
-    \item \textbf{Regression}. From a pool of explanatory variables related to the FPL, variables are selected and a linear regression model is fitted. 
-    \item \textbf{Odds}. Bookmakers' odds can be adjusted to present a probability and consequently indicate future performance. Odds related to scorelines, goals, assists and yellow cards are utilized in order to estimate expected points. 
-\end{itemize}
-
-\newpar
-
-Gamechip strategies are actions developed to decide when it is optimal to use the gamechips.  There exists limited literature on this topic. Consequently, there is a leeway for new ideas. Many interesting approaches could be adopted to decide the optimal use of gamechips. The approach adopted in this thesis is mainly qualitative and aim to take advantage of future gameweeks which are \textit{blank} or \textit{double}. The reader is reminded gameweek is blank when at least one team does not play, and a double if a team is featured more than once. 
-
-\newpar
-
-As described in Section \ref{Other_Relevant_Research}, there is a large resemblance between the FPLDP and the well known portfolio selection problem in financial theory. This is taken advantage of as risk is handled in an analogous manner.
-
-
-\subsection{Rolling horizon}
-
-The idea behind a rolling horizon heuristic is to split the problem into several sub-problems along a time axis, and then solve them in a chronological order taking into account the solution of the previous sub-problem. The heuristic suits problems with a long planning horizon where there are limited dependency between decisions made early and late in the planning horizon. Industrial planning and scheduling problems are common areas where the heuristic is used. The most important considerations are the number of sub-problems versus the length of each sub-problem, and which decisions to fix in each sub-problem. 
+The idea behind a rolling horizon heuristic is to split the problem into several sub-problems along a time axis, and then solve them in a chronological order taking into account the solution of the previous sub-problem. The heuristic suits problems with a long planning horizon where there are limited dependencies between decisions made early and late in the planning horizon. Industrial planning and scheduling problems are common areas where the heuristic is used. The most important considerations are the number of sub-problems versus the length of each sub-problem, and also which decisions to fix in each sub-problem. 
 
 \begin{figure}[H]
     \centering
@@ -96,12 +65,12 @@ Rolling horizon is an appropriate solution method for FPLDP as managers are prov
 
 \newpar
 
-In the rolling horizon heuristic, each sub-problem is solved over shorter sub-horizons for the whole season. This corresponds well to the FPLDP, as FPL managers often consider several gameweeks when making decisions. Each sub-horizon is split in two time periods ($TP$). The two \textit{TP}s are $TP_k^{C}$, which is the central period that will be implemented in sub-problem $k$, and the forecasting period $TP_k^{F}$. Before solving sub-problem $k+1$, variables $x$, $v$ and $q$ are frozen and used as input. The sub-horizon is shifted so that the first part of $TP_k^{F}$ becomes $TP_{k+1}^{C}$. If the central period and the forecasting period have equal length, the forecasting period becomes the new central period. 
+In the rolling horizon heuristic, each sub-problem is solved over shorter sub-horizons. This corresponds well to the FPLDP, as FPL managers often consider several gameweeks when making decisions. Each sub-horizon is split in two time periods ($TP$). The two \textit{TP}s are $TP_k^{C}$, which is the central period that will be implemented in sub-problem $k$, and the forecasting period $TP_k^{F}$. Before solving sub-problem $k+1$, variables $x$, $v$ and $q$ are frozen prior to $k+1$ and used as input. The gameweek in which decisions are already implemented, is regarded as the fixed period. The sub-horizon is shifted so that the first part of $TP_k^{F}$ becomes $TP_{k+1}^{C}$. If the central period and the forecasting period have equal length, the forecasting period becomes the new central period. To summarize, three periods are considered:
 
 \begin{enumerate}[label=(\roman*)]
-    \item \textbf{Fixed period (FP)}. A gameweek where decisions have been implemented and used as input for the next sub-problem. These decisions are the players that are selected in a gameweek, $x$, the remaining budget variable, $v$, and the number of free transfers available, $q$.
-    \item \textbf{Central period (CP)}. A gameweek where new decisions are implemented. The decisions include which players to include in the selected squad, $x$, determining the starting line-up, $y$, the choice of captain, $f$,  vice-captain, $h$, whether to use a gamechip or not and which substitution priority, $g$, to assign.  
-    \item \textbf{Forecasting period (PP)}. To avoid making too myopic decisions, a predefined number of gameweeks are selected and input data such as expected points, variance and correlation are generated based on information available at that point in time. Decisions are made for these gameweeks, but not implemented.  The decisions are subject to change when new and updated information is available. 
+    \item \textbf{Fixed period (FP)}. A gameweek where decisions have been implemented and used as input for the next sub-problem. These decisions are the players that are selected in a gameweek, $x$, the remaining budget, $v$, and the number of free transfers available, $q$.
+    \item \textbf{Central period (CP)}. A gameweek where new decisions are implemented. The decisions are which players to include in the selected squad, $x$, determining the starting line-up, $y$, the choice of captain, $f$,  vice-captain, $h$, whether to use a gamechip or not and which substitution priority, $g$, to assign.  
+    \item \textbf{Forecasting period (PP)}. To avoid making too myopic decisions, a predefined number of gameweeks are selected and input data such as expected points are generated based on information available at that point in time. Decisions are made for these gameweeks, but not implemented.  The decisions are subject to change when new and updated information becomes available. 
 \end{enumerate}
 
 The FP, CP and PP in a sub-problem are illustrated graphically in figure \ref{fig:rolling_horizon}. In the figure, the predicted part overlaps the central part in order to illustrate that the input data in the central part is also predicted. The sub-horizon is set to 4 gameweeks in the figure. 
@@ -115,80 +84,58 @@ The FP, CP and PP in a sub-problem are illustrated graphically in figure \ref{fi
 
 \newpar
 
-An important decision is that of determining the length of the sub-horizon. Ideally, the sub-horizon should be for the remaining length of the season. However, due to the uncertainty of the forecasts, this is not necessarily ideal. Thus, several alternatives concerning the length of the sub-horizon should be tested in order to see what gives the best result. 
+An important decision is that of determining the length of the sub-horizon. Due to uncertainty in the forecasts, it is not necessarily ideal for the sub-horizon to be for the remaining length of the season. Thus, several alternatives concerning the length of the sub-horizon should be tested in order to see what gives the best result. In Chapter \ref{chapter_experimental_setup}, setting an appropriate length for the sub-horizon is further discussed. Note that in the framework, the aspect of value, sell price and sell-one fee with regards to a player's price is implemented. However, no attempt is made to forecast future prices. The prices are simply assumed to be what they are in the beginning of the horizon for the entire sub-horizon. For example, if the player Mahrez is bought for \pounds 9.0m in a sub-problem, his sell price is set to this for the sub-problem's entire sub-horizon. When solving for the next sub-problem, if his value increases to \pounds 9.2m, his sell price is updated to \pounds 9.1m and set to this for the entire sub-horizon. 
 
-\newpar
+\section{Forecast of Player Points} \label{Player_Performance}
 
-By including forecasting, gamechip strategies and variance, we have arrived at a \textit{forecast-based optimization model} for the Fantasy Premier League Decision Problem. Algorithm \ref{alg:forecast_based_opt_model} gives a pseudo code for the forecast-based optimization model.
+To generate input for the forecasting period in the rolling horizon heuristic, forecasts of player points are required. In this thesis, three forecasting methods are considered. The methods are: 
 
+\begin{itemize}
+    \item \textbf{Modified Average}. The solution approach suggested by \cite{Bonomo} is adapted and modified to FPL for prediction of a player's expected points.
+    \item \textbf{Regression}. From a pool of explanatory variables related to the FPL, variables are selected and a linear regression model is fitted. 
+    \item \textbf{Odds}. Bookmakers' odds can be transformed into a probability and consequently used to forecast future player points. Odds related to factors such as scorelines, goals and assists are utilized in order to estimate expected points. 
+\end{itemize}
 
-\newpar
-
-\begin{algorithm}[H]
-\setstretch{1.35}
-\caption{Forecast-based optimization model}
-\begin{algorithmic}
-\State{$k$ = 1} 
-\While{$k$ $\leq$ $\mathcal{|T|}$}
-    \State{Generate input data: expected points, variance and correlation for $TP_{k}^{C}$ and $TP_{k}^{F}$}
-    \If{a gameweek in $TP_{k}^{F}$ is \textit{double} or \textit{blank}}
-        \State{Implement gamechip strategy}
-    \ElsIf{a gameweek in $TP_{k}^{F}$ according to Wildcard strategy}
-        \State{Implement Wildcard strategy}
-    \EndIf
-    \State{Solve the mathematical model for the problem defined by $TP^{C}_{k}$ and $TP^{F}_{k}$}
-    \State{Fix variables $x$, $v$ and $q$ in central period $TP^{C}_{k}$}
-    \State{  $k \gets k + 1$}
-\EndWhile
-\end{algorithmic}
-\label{alg:forecast_based_opt_model}
-\end{algorithm}
-
-
-
-\section{Forecast of Player Performance} \label{Player_Performance}
-
-The solution framework suggested is based on forecasts of player performance as input to the optimization model. Thus, the forecasting method is not a part of the framework per se, but rather a way of generating input. However, forecasts constitutes a substantial part of the forecast-based optimization model. With this in mind, and for the purpose of readability, we have decided to include a section devoted to forecast of player performance in the chapter describing the solution framework. Thus, in the following, the three different forecasting methods used in the thesis are presented. 
 
 \subsection{Modified Average} \label{Sol_approach_Modified_Average}
 
-As discussed in the literature study, \cite{Bonomo} suggests a solution approach for the Argentinian Premier League and achieves promising results. Therefore, the first forecast method is based on their solution approach. However, the methodology is modified in order to make it applicable for the English Fantasy Premier League rather than the Argentinian Fantasy League. Moreover, some modifications are made as an effort to improve the method. Hence, the first forecasting method is called the Modified Average method.
+As discussed in Section \ref{Forecasting_of_player_performance}, \cite{Bonomo} suggested a solution approach for the Argentinian Fantasy League and achieved promising results. Therefore, the first forecast method is based on their solution approach. However, the methodology is modified in order to make it applicable for the English Fantasy Premier League rather than the Argentinian Fantasy League. Moreover, some modifications are made as an effort to improve the method. Hence, the first forecasting method is called the Modified Average method.
 
 \newpar
 
-As mentioned in \ref{Forecasting_of_player_performance}, \cite{Bonomo} use the average points for the three last gameweeks to forecast the performance in the upcoming gameweek. The forecast is further weighted by four factors: upcoming opponent strength, home advantage, whether a player is on a good performance streak and whether a player is assumed to be in the starting line-up. More generally, \cite{Bonomo} estimate a player's expected points for the next gameweek according to Equation \ref{eq:bonomo}. In the following, we discuss how each element of the equation is decided by \cite{Bonomo} and the modifications made.
+In Section \ref{Forecasting_of_player_performance} it is explained that  \cite{Bonomo} used the average points for the three last gameweeks to forecast player points in the upcoming gameweek. The forecast was further weighted by four factors: opponent strength factor, home field advantage, whether a player is on a good performance streak and whether a player is assumed to be in the starting line-up. More specifically, \cite{Bonomo} estimated a player's expected points for the next gameweek according to Equation \ref{eq:bonomo}. In the following, it is explained how each factor of the equation were decided by \cite{Bonomo} and which modifications that are made.
 
 \begin{equation}
 \begin{split}
-    \hat{\rho}  = & \textrm{\textit{Adjusted avg. points}} \times \textrm{\textit{Upcoming opponent strength}} \times \textrm{\textit{Field factor}} \\
-        & \times \textrm{\textit{Point streak}} \times \textrm{\textit{Starting line-up factor}}
+    \hat{\rho}  = & \textrm{\textit{Tracking average}} \times \textrm{\textit{ Opponent strength factor}} \times \textrm{\textit{Field factor}} \\
+        & \times \textrm{\textit{Point streak factor}} \times \textrm{\textit{Starting line-up factor}}
 \end{split}
 \label{eq:bonomo}
 \end{equation}
 
-\subsubsection{Adjusted average points and upcoming opponent strength}
+\subsubsection{Tracking Average and Opponent Strength Factor}
 
-\cite{Bonomo} calculate an \textit{adjusted average} by averaging the points obtained in the 3 previous gameweeks. The first modification suggested is to consider averages over more than 3 previous gameweeks. The number of previous gameweeks taken into consideration when forecasting is hereby referred to as the \textit{track-length}. In addition, \cite{Bonomo} optimizes for 1 gameweek ahead when decisions are set in a current gameweek. Thus, \cite{Bonomo} use a sub-horizon of 1 gameweek and a track-length of 3 gameweeks when solving for the Argentinian Fantasy League.
-
-\newpar
-
-Considering different track-lengths is not the only modification made with respect to adjusted average points. Another adjustment is to weigh the averages based on the strength of the opposition faced in the previous matches. \cite{Bonomo} does not account for the strength of the opposition faced when averaging previous points. However, they use league table position for measuring the relative strength between adversaries when predicting future points. That is, when they determine \textit{upcoming opponent strength}. Yet, league position suffers from numerous drawbacks which makes it unreliable for prediction. For example, the league table suffers from high variation in the early stage of the season and low variation in the late stage of the season. Further, competing teams may not share the equivalent number of matches during the season due to postponements. Additionally, the league table does not capture when fixtures are played during the season. Hence it is inherently biased until the final match of the season has been played \citep{Constantinou}. Therefore, instead of weighting the teams based on their league position, measuring team strength with basis in Elo rankings are suggested. 
-
+\cite{Bonomo} calculated a \textit{tracking average} by averaging the points obtained in the 3 previous gameweeks. The first modification suggested is to consider averages over more than 3 previous gameweeks. The number of previous gameweeks taken into consideration when forecasting is hereby referred to as the \textit{track-length}. In addition, \cite{Bonomo} optimized for only 1 gameweek ahead when decisions are set in a current gameweek. Thus, \cite{Bonomo} used a sub-horizon of 1 gameweek and a track-length of 3 gameweeks when solving for the Argentinian Fantasy League.
 
 \newpar
 
-The Elo system introduced in Section \ref{Strength_of_football_teams} is a rating system used for measuring the relative strength level of sport teams and individual athletes. Clubelo.com provides historical Elo values for most of the professional football teams in the world, including teams in the English Premier League. The Elo values provide a sophisticated measurement of the relative strength between the Premier League teams. Further, as the values are updated once a match has been played, the Elo system considers the aspect of form. In addition, the ratings account for goal difference and inter-league adjustments. The Elo values also incorporate all fixtures, not only league matches. In Appendix \ref{appendix_elo_values_pl}, it is shown how Elo ratings are transformed into a factor of team strength. 
+Considering different track-lengths is not the only modification made with respect to the tracking average. Another adjustment is to weigh previous points based on the strength of the opposition faced in the previous matches. \cite{Bonomo} did not account for the strength of the opposition faced when averaging previous points. However, they used league table position for measuring the relative strength between adversaries when predicting future points. That is, when they determined \textit{opponent strength factor}. Yet, league position suffers from numerous drawbacks which makes it unreliable for prediction. For example, the league table suffers from high variation in the early stage of the season and low variation in the late stage of the season. Further, competing teams may not share the equivalent number of matches during the season due to postponements. Additionally, the league table does not capture who has played against who during the season. Hence it is inherently biased until the final match of the season has been played \citep{Constantinou}. Therefore, instead of weighting the teams based on their league position, measuring team strength with basis in Elo rankings are suggested. 
+
+
+\newpar
+
+The Elo system, briefly introduced in Section \ref{Strength_of_football_teams}, is a rating system used for measuring the relative strength level of sport teams and individual athletes. Clubelo.com provides historical Elo ratings for most of the professional football teams in the world, including teams in the English Premier League. The Elo ratings provide a sophisticated measurement of the relative strength between the Premier League teams. Further, as the rating are updated once a match has been played, the Elo system considers the aspect of form. In addition, the ratings account for goal difference and inter-league adjustments. The Elo ratings also incorporate all fixtures, not only league matches. In Appendix \ref{A2_Elo_System}, it is shown how Elo ratings are transformed into a factor of team strength. 
 
 \newpar
 
 
-Once Elo values are obtained, they can be used in order to weight the previous performance of each Fantasy Premier League player. In Table \ref{Elo.1617}, some Elo values for the first gameweeks of the English Premier League 2016/2017 season are listed. Note that the values are calculated ahead of each gameweek, so that the values in the GW1 column are the Elo values of the teams before gameweek 1 has been played. 
+Once Elo ratings are obtained, they can be used in order to weight the previous points of each Fantasy Premier League player. In Table \ref{Elo.1617}, some Elo ratings for the first gameweeks of the English Premier League 2016/2017 season are listed. Note that the ratings are calculated ahead of each gameweek, so that the ratings in the GW1 column are the Elo ratings of the teams before gameweek 1 has been played. 
 
 \begin{table}[H]
 \centering
 \begin{tabular}{|l|l|l|l|l|l|}
 \cline{2-6}
-\multicolumn{1}{l|}{} & \multicolumn{1}{l|}{} & \multicolumn{4}{c|}{Elo value}  \\ \cline{2-6} 
+\multicolumn{1}{l|}{} & \multicolumn{1}{l|}{} & \multicolumn{4}{c|}{Elo rating}  \\ \cline{2-6} 
 \hline
                       & Team                  & GW1    & GW2    & GW3  & GW4    \\
                       \hline
@@ -209,33 +156,29 @@ Once Elo values are obtained, they can be used in order to weight the previous p
 \label{Elo.1617}
 \end{table}
 
-Values from Table \ref{Elo.1617} can be used in order to weight the performance of a player. For instance, receiving 9 points against Chelsea is more impressive than receiving 9 points against Sunderland. Hence, a suggestion is to weight the performances accordingly. Equation \ref{eq:adj_avg} shows how a player's adjusted average points is computed when the track-length is $m$ and realized points in gameweek $i$ is denoted $p_i$. In a similar manner, relative Elo values, rather than values based on the league table, are used to determine upcoming opponent strength, as seen in Equation \ref{eq:opp_str}. Thus, both previous performance and future expected points account for faced and upcoming opposition. Notice that in Equation \ref{eq:adj_avg}, Elo values for both opponent and team is denoted by $i$. This is because the Elo values are updated every gameweek. In Appendix \ref{app_walk_through}, a detailed walk-through of the calculations can be found.
+Ratings from Table \ref{Elo.1617} can be used in order to weight the previous points of a player. For instance, receiving 9 points against Chelsea is more impressive than receiving 9 points against Sunderland based in their respective Elo ratings. Hence, a suggestion is to weight the points accordingly. Equation \ref{eq:adj_avg} shows how a player's tracking average is computed when the track-length is $m$ and realized points in gameweek $i$ is denoted $\rho_i$. 
 
 \begin{equation}
-\textrm{\textit{Adjusted avg.points}} = \frac{1}{m}\sum_{i=1}^m p_i \cdot \frac{(\mathrm{Opponent \ Elo \ value})_i}{(\mathrm{Team \ Elo \ value})_i}
+\textrm{\textit{Tracking average}} = \frac{1}{m}\sum_{i=1}^m \rho_i \cdot \frac{(\mathrm{Opponent \ Elo \ rating})_i}{(\mathrm{Team \ Elo \ rating})_i}
 \label{eq:adj_avg}
 \end{equation}
 
+Furthermore, Elo ratings, rather than values based on the league table, are used to determine opponent strength factor, as seen in Equation \ref{eq:opp_str}. Thus, both previous points and future expected points account for faced and upcoming opposition. Notice that in Equation \ref{eq:adj_avg}, Elo ratings for both opponent and team is denoted with $i$. This is because the Elo ratings are updated every gameweek.
+
+
+
 \begin{equation}
-\textrm{\textit{Upcoming opponent strength}} = \frac{\textrm{Team Elo value}}{\textrm{Opponent Elo value}}
+\textrm{\textit{opponent strength factor}} = \frac{\textrm{Team Elo rating}}{\textrm{Opponent Elo rating}}
 \label{eq:opp_str}
 \end{equation}
 
 
-\begin{comment}
-can utilize an Elo-rating in order to weight the relative team strengths in the league. In addition, an empirical value of home field advantage in the Premier League is used as a factor for the home advantage. In order to measure a player's recent performance, decisions are made on whether a player is on a positive or negative point streak.
-
-
-
- 
-\end{comment}
-
-\subsubsection{Field factor}
-As pointed out in Section \ref{Forecasting_of_future_performance}, numerous studies have proven that home field advantage exists in football matches. That is, football teams have a tendency of performing better when playing at their home field than when playing at opponent's ground. In order to distinguish between home field advantage and away field (dis)advantage, we have called the variable for \textit{field factor}. \cite{Bonomo} set the home field factor to 1.05 and away field factor to 0.95 without further elaboration. 
+\subsubsection{Field Factor}
+As pointed out in Section \ref{HomeFieldAdvantage}, numerous studies have concluded that a home field advantage exists in football. That is, football teams have a tendency of performing better when playing at their home field than when playing at opponent's ground. In order to distinguish between home field advantage and away field (dis)advantage, the variable that takes such an advantage into account is called the \textit{field factor}. \cite{Bonomo} set the home field factor to 1.05 and away field factor to 0.95 without further elaboration. 
 
 \newpar
 
-Studies of home field advantages in a football, e.g. \cite{Pollard}, often concentrate on the outcome of the game, i.e. win, draw or loss. In Fantasy Premier League, however, the outcome of a match has no direct impact in the point system. Further, an important point-factor in FPL is goals scored. Thus, a decision was taken to calculate the home field advantage with basis in goals. The factors are calculated for the entire Premier League, not for each team. The idea is that the field factor alongside the relative team strengths calculated by the Elo system will complement each other. The home field factor for a particular season is calculated as:
+Studies of home field advantages in a football, e.g. \cite{Pollard}, usually concentrate on the outcome of the game, i.e. win, draw or loss. In Fantasy Premier League, however, the outcome of a match has no direct impact in the point system. Further, an important aspect influencing points in FPL is goals scored. Thus, the field factor is calculated with basis in goals. Further, the field factor is calculated for the all teams in the Premier League, not for each specific team. The idea is that the field factor alongside the relative team strengths calculated by the Elo ratings will complement each other. The home field factor for a particular season is calculated as:
 
 \begin{equation*}
     \textrm{Home field factor} = \frac{\textrm{Total number of goals scored home}}{\textrm{Total number of goals scored}} 
@@ -247,20 +190,99 @@ Similarly, the away field factor is calculated as:
     \textrm{Away field factor} = \frac{\textrm{Total number of goals scored away}}{\textrm{Total number of goals scored}}
 \end{equation*}
 
-In order to find an appropriate empirical value for the home field advantage, number of goals in several previous seasons are considered.
+As seen later in Section \ref{sec:comp_s_MA}, several previous seasons are considered in order to find an appropriate empirical value for the field factor.
 
 
-\subsubsection{Player point streak}
-\cite{Bonomo} adjust their forecasts with a value between 0.95 and 1.05 to account for a player's \textit{point streak}. They do not describe further how the point streak factor was determined. Therefore, we choose to determine a player's point streak in the following way: If a player receives more than \textit{X} points for 2 gameweeks in a row, his point streak value will be set to 1.01. Further, if the streak continues, the value will increase by 0.01 for each match that his points exceed the \textit{X} number of points. When a player has received more than \textit{X} points 6 gameweeks in a row, his point streak value is set to the maximum of 1.05. Hence, the value does not increase if his streak exceeds 6 matches. The same rule applies for players scoring less than \textit{Y} points 2 gameweeks in a row, then his streak value will be set to 0.99. When scoring less than \textit{Y} points 6 matches in a row, the point streak value is set to a minimum of 0.95. Once a streak is broken, the player's point streak is set to 1. In Section \ref{Exp_setup_Player_Performance_Prediction}, a method for determining the values \textit{X} and \textit{Y} is proposed.
+\subsubsection{Point Streak Factor}
 
-\subsubsection{Starting line-up factor}
+\cite{Bonomo} adjusted their forecasts with a value between 0.95 and 1.05 to account for a player's point streak. They did not further describe how the \textit{point streak factor} was determined. In this thesis, a player's point streak factor is determined in the following way: if a player receives more than \textit{X} points for 2 gameweeks in a row, his point streak factor will be set to 1.01. Further, if the streak continues, the factor will increase by 0.01 for each match that his points exceed \textit{X} number of points. When a player has received more than \textit{X} points 6 gameweeks in a row, his point streak factor is set to the maximum of 1.05. Hence, the value does not increase if his streak exceeds 6 matches. The same rule applies for players scoring less than \textit{Y} points 2 gameweeks in a row, then his point streak factor will be set to 0.99. When obtaining less than \textit{Y} points 6 matches in a row, the point streak factor is set to a minimum of 0.95. Once a streak is broken, the player's point streak factor is set to 1. In Section \ref{sec:comp_s_MA}, a method for determining \textit{X} and \textit{Y} is proposed.
 
-\cite{Bonomo} decide the \textit{starting line-up factor} by considering coaches' announcements, press reports and information posted on the website of the Argentinian Fantasy league. As the forecast-based optimization model is solely data-driven, an explicit attempt of implementing this factor for the FPL is not undertaken. Rather, as seen later in Section \ref{exp_setup_data}, we adjust all forecasts by data provided about injuries and suspensions.
+\subsubsection{Starting Line-up Factor}
+
+\cite{Bonomo} decided the \textit{starting line-up factor} by considering coaches' announcements, press reports and information posted on the website of the Argentinian Fantasy League. Such considerations are of qualitative nature. As the solution framework is intended to be data-driven, an explicit attempt of implementing this factor for the FPL is not undertaken. Rather, as seen later in Section \ref{exp_setup_data}, all forecasts are adjusted by data concerning injuries and suspensions.
+
+\subsubsection{Summarizing Numerical Example}
+
+In order to summarize the Modified Average method, a numerical example for a track length of 2 for Manchester United's Paul Pogba is provided. In Table \ref{tab:example_elo_ratings} and \ref{tab:example_realized_points}, fictive values for realized points and Elo ratings are given. 
+
+\begin{table}[H]
+\parbox{.45\linewidth}{
+\centering
+\begin{tabular}{|c|l|c|c|c|c|}
+\hline
+\multicolumn{1}{|c|}{} & \multicolumn{3}{c|}{Realized points} \\ \hline
+Opponent            & GW1        & GW2       & GW3       \\
+\hline                 
+Chelsea             & 6         &           &           \\
+Sunderland             &           & 9         &           \\
+Watford           &           &           &  ?        \\
+\hline
+\end{tabular}
+\caption{Realized points for Paul Pogba.}
+\label{tab:example_realized_points}
+}
+\hfill
+\parbox{.45\linewidth}{
+\centering
+\begin{tabular}{|l|c|c|c|}
+\hline
+Team        & GW1   & GW2   & GW3  \\ 
+\hline
+Man Utd     & 1789  & 1797  & 1799  \\
+Chelsea     & 1793  &       &       \\
+Sunderland  &       & 1654  &       \\
+Watford     &       &       & 1618 \\ \hline
+\end{tabular}
+\caption{Elo ratings for three gameweeks.}
+\label{tab:example_elo_ratings}
+}
+
+\end{table}
+
+Thus, Paul Pogba's tracking average can be calculated as:
+
+\begin{equation*}
+    \textrm{Tracking Average} = \frac{1}{2} \cdot (6 \cdot \frac{1793}{1789} + 9 \cdot \frac{1654}{1797}) \approx 7.15
+\end{equation*}
+
+
+and the opponent strength factor can be found as:
+
+\begin{equation*}
+    \frac{1618}{1799} \approx 0.90
+\end{equation*}
+
+\begin{table}[H]
+\centering
+\begin{tabular}{|l|l|}
+\hline
+Factor &  Value \\ 
+            \hline
+Tracking average &  7.15\\
+Opponent strength factor & 0.90\\
+Field factor  &  1.5 \\
+Points streak factor  & 1 \\
+Starting line-up factor & 1\\
+\hline
+\end{tabular}
+\caption{Numerical values for Equation \ref{eq:bonomo}.}
+\label{tab:example_modified_average}
+\end{table}
+
+Finally, all factors required to calculate the expected points for Paul Pogba in the upcoming gameweek are summarized in Table \ref{tab:example_modified_average}. Thus, in compliance with Equation \ref{eq:bonomo}, Pogba's expected points for the upcoming gameweek are according to the Modified Average method:
+
+\begin{equation*} \label{eq:pogba_ma}
+    7.15 \cdot 0.90 \cdot 1.5 \cdot 1 \cdot 1 \approx 9.7
+\end{equation*}
+
+
+
 
 \subsection{Regression}
 \label{Sol_approach_regression}
 
-As seen in the literature study, forecasting player performance in football has had promising results (kilde). Therefore, as a second way of forecasting Fantasy Premier League points, we suggest a regression based method. In order to create a regression model, the following steps are undertaken:
+As seen in the literature review, regression is commonly in research related to sports (\cite{vabo}; \cite{Yang}). Therefore, as a second way of forecasting Fantasy Premier League points, a regression based method is proposed. In order to create a regression model, the following steps are undertaken:
+
 \begin{enumerate} [label=(\roman*)]
     \item separate players based on position,
     \item perform a variable selection,
@@ -268,7 +290,7 @@ As seen in the literature study, forecasting player performance in football has 
 \end{enumerate}
 
 \subsubsection{Variables}
-In order to perform a regression and estimate expected points in the next gameweek, numerous numerical and categorical explanatory variables are considered. In the following, all variables considered are presented: 
+In order to perform a regression and estimate expected points, numerous numerical and categorical explanatory variables are considered. In the following, all variables considered are presented: 
 
 \newpar
 
@@ -284,7 +306,7 @@ In order to perform a regression and estimate expected points in the next gamewe
 \begin{itemize}
     \item \textbf{Team} - Which teams the players play for. This variable can change during the international transfer window in August and January.  
     
-    \item \textbf{Position} - Describes whether a player is a goalkeeper, a defender, a midfielder or a forward. The variable is constant throughout the season.
+    \item \textbf{Position} - Describes whether a player is a goalkeeper, defender, midfielder or forward. The variable is constant throughout the season.
     \item \textbf{Home/Away} - Displays whether a match is played at home or away.
 \end{itemize}
 \newpar
@@ -293,51 +315,51 @@ In order to perform a regression and estimate expected points in the next gamewe
 \newpar
 \begin{itemize}
     \item \textbf{Previous points} - Points obtained in the previous gameweeks.
-    \item \textbf{Cost} - The purchase cost of a player.
+    \item \textbf{Price} - The purchase price (value) of a player.
     \item \textbf{Transfers in} - The amount of FPL managers that bought the player ahead of a given gameweek.
     \item \textbf{Transfers out} - The amount of FPL managers that sold the player ahead of a given gameweek.
     \item \textbf{Minutes Played} - Minutes played in the previous gameweek.
     \item \textbf{Yellow Cards} - Total amount of yellow cards received in the previous gameweeks.
     \item \textbf{Red Cards} - Total amount of red cards received in the previous gameweeks.
     \item \textbf{Goals} - Total amount of goals scored in the previous gameweeks.
-    \item \textbf{Assists} - The amount of assists in the previous gameweeks.
-    \item \textbf{Penalties Missed} - The amount of penalties missed in the previous gameweeks.
-    \item \textbf{Penalties Saved} - The number of penalties saved by a goalkeeper in the previous gameweeks.
+    \item \textbf{Assists} - Total amount of assists in the previous gameweeks.
+    \item \textbf{Penalties Missed} - Total amount of penalties missed in the previous gameweeks.
+    \item \textbf{Penalties Saved} - Total number of penalties saved by a goalkeeper in the previous gameweeks.
     \item \textbf{Saves} - Total amount of saves made by a goalkeeper in the previous gameweeks.
-    \item \textbf{Clean sheets} - The amount of matches a player was awarded with a clean sheet in the previous gameweeks. As explained in Chapter \ref{chapter_problem_description}, clean sheets are only awarded goalkeepers, defenders and midfielders who play a minimum of 60 minutes during the match.
+    \item \textbf{Clean sheets} - Total number of matches a player was awarded with a clean sheet in the previous gameweeks. As explained in Chapter \ref{chapter_problem_description}, clean sheets are only awarded goalkeepers, defenders and midfielders who play a minimum of 60 minutes during the match.
     
 \end{itemize}
 
-\subsubsection{Categorization by position}
+\subsubsection{Categorization by Position}
 
 %Seperate analysis by positions because of different eccects of covariates (betas)
 
-As described in Chapter \ref{chapter_problem_description}, points are awarded based on different criteria to players in different \textit{positions}. For instance, goalkeepers, defenders and midfielders are rewarded points for keeping a clean sheet, but forwards are not. Based on this knowledge, we have decided to segment the players into their respective positions before continuing the regression procedure. If we were to regress on all available variables, such a distinction would perhaps not be necessary, as the coefficient related to the categorical variable position could compensate the differences. However, we aim to limit the number of explanatory variables for each position by use of variable selection. Therefore, the separation is done. 
+As described in Chapter \ref{chapter_problem_description}, points are awarded based on different criteria to players in different \textit{positions}. For instance, goalkeepers, defenders and midfielders are rewarded points for keeping a clean sheet, but forwards are not. Based on this knowledge, it is decided to categorize the players based on their respective positions before continuing the regression procedure. If all available variables were regressed, such a distinction would perhaps not be necessary, as the coefficient related to the categorical variable position could compensate the differences. However, the aim is to limit the number of explanatory variables for each position by use of variable selection. Therefore, the categorization is done. 
 
 \newpar
 
-In order to provide further justification for the categorization based on position, a box-plot and scatter-plots are assessed in Section \ref{exp_setup_reg}. For example, in the box-plot, we investigate whether the empirical distribution in points obtained differs between positions. Moreover, in the scatter plot, we visually inspect the relation between for instance total points, goals and position.
+In order to provide further justification for the categorization based on position, a box-plot and scatter-plots are assessed in Section \ref{exp_setup_reg}. For example, in the box-plot, it is investigated whether the empirical distribution in points obtained differs between positions. Moreover, the scatter plots are visually inspected to see the relation between, for example, total points, goals and position.
 
-\subsubsection{Times series effect of points}
+\subsubsection{Times Series Effect of Points}
 
-The presence of a scoring streak, or a "hot hand", has long been a topic of research (\cite{hot_hand}; \cite{hot_hand_2}). If it is present in FPL, points gained in the closest previous matches could be an interesting explanatory variable. If not, aggregated variables such as total number of goals scored can be just as predictive. In order to assess if elements of a time series are correlated with each other, \textit{autocorrelation} is a reasonable metric to asses. Just as correlation measures the extent of a linear relationship between two variables, autocorrelation measures the linear relationship between lagged values of a time series \citep{Hyndman}. For example, $r_1$ measures the relationship between $y_t$ and $y_{t-1}$. In general, there exists many autocorrelation coefficients, and the value of $r_k$ can be written as in Equation \ref{eq:rk}. 
+The presence of a scoring streak, or a "hot hand", has long been a topic of research (\cite{hot_hand}; \cite{hot_hand_2}). If it is present in FPL, points gained in the most previous matches could be an interesting explanatory variable. If not, aggregated variables such as total number of goals scored can be just as predictive. In order to assess if elements of a time series are correlated with each other, \textit{autocorrelation} is a reasonable metric to asses. Just as correlation measures the extent of a linear relationship between two variables, autocorrelation measures the linear relationship between lagged values of a time series \citep{Hyndman}. For example, $r_1$ measures the relationship between $y_t$ and $y_{t-1}$. In general, there exist many autocorrelation coefficients, and the value of $r_k$ can be written as in Equation \ref{eq:rk}. 
 
 
 \begin{equation}\label{eq:rk}
     r_k = \frac{\sum_{t=k+1}^T(y_t-\bar{y})(y_{t-k}-\bar{y})}{\sum_{t=1}^T(y_t-\bar{y})^2}
 \end{equation}
 
-In order to test for autocorrelation, the Ljung-Box test and the Durbin-Watson test are conducted. The Ljung-Box test is a statistical test that is often conducted in order to test for autocorrelation in a time series for different lags \citep{Hyndman}. The Durbin-Watson test is another test frequently conducted in order to test for the presence of autocorrelation for the first lag \citep{Carol_1}. A detailed description of the tests can be found in \cite{Hyndman} and \cite{Carol_1} respectively.
+In order to test for autocorrelation, the Ljung-Box test and the Durbin-Watson test are conducted. The Ljung-Box test is a statistical test that is often conducted in order to test for autocorrelation in a time series for different lags \citep{Hyndman}. The Durbin-Watson test is another test frequently conducted in order to test for the presence of autocorrelation for the first lag \citep{Carol_1}. A detailed description of the tests can be found in \cite{Hyndman} and \cite{Carol_1}, respectively.
 
-\subsubsection{Variable selection}
+\subsubsection{Variable Selection}
 
-In order to select variables, we perform a \textit{k-folk cross validation} in combination with a \textit{lasso regression}. Before these topics are treated, a brief discussion of training and test sets and forecast error measurement is presented.
+In order to select variables, we perform a \textit{k-fold cross validation} in combination with a \textit{lasso regression}. Before these topics are treated, a brief discussion of training- and test sets and forecast error measurement is presented.
 
 
-\subsubsection{Training and test sets}
-Generally speaking, in order to determine the accuracy of a forecast, out-of-sample forecasts should be evaluated \citep{Hyndman}. To accomplish this, available data should separated into two portions: training and test data. A model is first fitted using the training data only. Then, the model's forecast accuracy is determined by comparing forecasts from the model with actual realizations contained in the test data. Furthermore, in general, if a model is fit on all available data, rather than separated into a training- and test set, the model would be subject to over-fitting \citep{Hyndman}. That is, the model performs well on the sample data, but does not necessarily forecast well out of sample.
+\subsubsection{Training- and Test Sets}
+In general, in order to determine the accuracy of a forecast, out-of-sample forecasts should be evaluated \citep{Hyndman}. To accomplish this, available data should be separated into two portions: training- and test data. A model is first fitted using the training data only. Then, the model's forecast accuracy is determined by comparing forecasts from the model with actual realizations contained in the test data. Furthermore, in general, if a model is fit on all available data, rather than separated into a training- and test set, the model would be subject to over-fitting \citep{Hyndman}. That is, the model performs well on the sample data, but does not necessarily forecast well out of sample.
 
-\subsubsection{Forecast error measurement}
+\subsubsection{Forecast Error Measurement}
 A forecast error is the difference between an observed value and its forecast \citep{Hyndman}, as defined as in Equation \ref{eq:f_err}. Here, \{$ y_{1},...,y_{T} $\} is the training set data, \{$ y_{T+1},,y_{T+2},...$\} is the test set data and $\hat{y}_{t+h|T}$ is the forecast at time \textit{T+h}, given \textit{T}. 
 
 \begin{equation}\label{eq:f_err}
@@ -355,7 +377,7 @@ Commonly used error measures include the Mean Squared Error (MSE, Equation \ref{
 \end{equation}
 
 
-\subsubsection{\textit{k}-fold cross validation}
+\subsubsection{\textit{k}-fold Cross Validation}
 \textit{k}-fold cross validation involves randomly dividing a set of observations into \textit{k} groups, or \textit{folds}, of equal size \citep{ISLR}. The first fold is treated as the test set, and the remaining $k-1$ folds are used to train a model. The procedure is repeated \textit{k} times, and for each repetition, a new fold makes up the test set. The process results in \textit{k} estimates of the test-error, $MSE_1$, $MSE_2$ ..., $MSE_k$. Finally, a \textit{k}-fold average MSE, denoted $CV_{(k)}$ is computed by averaging the values, as shown in Equation \ref{eq:cv} \citep{ISLR}.
 
 \begin{equation}\label{eq:cv}
@@ -368,15 +390,14 @@ As seen previously, a number of explanatory variables are available. If all were
 
 \newpar
 
-According to \cite{ISLR}, lasso regression is a \textit{shrinkage method} used in order to perform variable selection. By shrinkage method, the authors refer to methods were coefficients are sunken towards zero relative to least squares estimates. This shrinkage has the effect of reducing variance. Depending on what type of shrinkage is performed, some of the coefficients may be estimated to be exactly zero. Lasso regression is such a shrinkage method. Hence, lasso regression can perform
-variable selection. The aim of lasso regression is to find the lasso coefficients $\hat{\beta}_{\lambda}^{L}$ that minimize the quantity:
+According to \cite{ISLR}, lasso regression is a \textit{shrinkage method} used in order to perform variable selection. By shrinkage method, the authors refer to methods were coefficients are sunken towards zero relative to least squares estimates. This shrinkage has the effect of reducing variance. Depending on what type of shrinkage is performed, some of the coefficients may be estimated to be exactly zero. Lasso regression is such a shrinkage method and can therefore perform a variable selection. The aim of lasso regression is to find the lasso coefficients $\hat{\beta}_{\lambda}^{L}$ by minimizing the expression found in Equation \ref{eq:lasso}:
 
 \begin{equation}
     \sum_{i=1}^n\Big (y_i-\beta_0-\sum_{j=1}^p\beta_jx_{ij}\Big)^2 + \lambda \sum_{j=1}^p|\beta_j| = RSS + \lambda \sum_{j=1}^p|\beta_j|
     \label{eq:lasso}
 \end{equation}
 
-Here, RSS is the Residual Sum of Squares, the quantity minimized in multiple linear regression. However, in contrast to linear regression, Lasso regression does not only minimize RSS. It also penalizes the sum of the $\beta$-coefficients by absolute value. Or, more precisely, it uses an $l_1$ penalty. This has the desired effect of forcing some of the coefficient estimates to be exactly equal to zero when the tuning parameter $\lambda$ is sufficiently large \citep{ISLR}. Hence, lasso regression performs variable selection.
+Here, RSS is the Residual Sum of Squares, which is minimized in multiple linear regression. However, in contrast to linear regression, Lasso regression does not only minimize RSS. It also penalizes the sum of the $\beta$-coefficients by absolute value. Or, more precisely, it uses an $l_1$ penalty. This has the desired effect of forcing some of the coefficient estimates to be exactly equal to zero when the tuning parameter $\lambda$ is sufficiently large \citep{ISLR}. Hence, lasso regression performs a variable selection.
 
 \newpar 
 
@@ -384,24 +405,26 @@ In order to decide the value of $\lambda$, and subsequently what variables to in
 
 \subsubsection{Model Selection}
 
-It is important to note that lasso regression is only conducted in order to perform variable selection. The  $\hat{\beta}_{\lambda}^{L}$-values from the regression are \textit{not} carried forward. Instead, we have decided to forecast points by use of linear regression on the variables selected by the lasso regression. Linear regression has an advantage over a lasso regression as it has more easily interpreted coefficients and well-defined variance \citep{ISLR}. This makes the calculation of \textit{p}-values possible. Moreover, the use of linear regression makes the results more accessible for readers from different disciplines as it is a widely known procedure. Furthermore, a linear regression model has an advantage compared to for instance logistic regressions, as points can be negative, which is a possibility in FPL.
+It is important to note that lasso regression is only conducted in order to perform variable selection. The  $\hat{\beta}_{\lambda}^{L}$-values from the regression are \textit{not} carried forward. Instead, points are forecast by use of linear regression on the variables selected by the lasso regression. Linear regression has an advantage over a lasso regression as it has more easily interpreted coefficients and well-defined variance \citep{ISLR}. This makes the calculation of \textit{p}-values possible. Moreover, the use of linear regression makes the results more accessible for readers from different disciplines as it is a widely known procedure. Furthermore, a linear regression model has an advantage compared to for instance logistic regressions as points can be negative, which is a possibility in FPL.
 
 \newpar 
 
-The variable \textit{previous points} is the only variable explicitly related to points earned. We have decided not to include other variables such as total points in the season so far and points from the Bonus Point System. These variables would be highly correlated with variables such as goals. Thus, one rational for excluding them is not to over-complicate the regression model. Furthermore, since the bonus points to a large degree are decided by the same factors as "regular" points (e.g. goals, assists, clean sheets etc) their effects are assumed included in the coefficients for these explanatory variables. 
+The variable \textit{previous points} is the only variable explicitly related to points earned. Other variables such as total points in the season so far and points from the Bonus Point System are not included. These variables would be highly correlated with variables such as goals. Thus, one rational for excluding them is not to over-complicate the correlation between explanatory variables in the regression model. Furthermore, since the bonus points to a large degree are decided by the same factors as "regular" points (e.g. goals, assists, clean sheets etc) their effects are assumed included in the coefficients for these explanatory variables. 
 
 
 \subsection{Odds}
 
-In Section \ref{Strength_of_football_teams}, scoreline prediction was briefly discussed. A scoreline prediction gives the probability of a result outcome to occur. The amount of goals scored is argued to follow a Poisson Distribution, where match results are generated by attack- and defence parameters of the two competing teams. In their project report, \cite{Gupta} created a scoreline prediction for the fixtures of the Premier League and used it in order to forecast future performance of the players in FPL. However, they found their scoreline predictions far less accurate than those of bookmakers' odds. Therefore, we find it interesting to adapt an approach based on bookmakers' odds. Instead of trying to estimate parameters of a Poisson distribution, scoreline probabilities are directly inferred from odds. As stated in Section \ref{Strength_of_football_teams}, \cite{Hvattum} found that Elo ratings appeared to be considerably less accurate than market odds when used for forecasts. Thus, the method serves as complement to the Elo based Modified Average method.
+As seen in the literature review in Section \ref{Strength_of_football_teams}, \cite{Hvattum} found that Elo ratings appeared to be considerably less accurate than market odds when used for forecasts. Furthermore, in their project report, \cite{Gupta} created a scoreline prediction for the fixtures of the Premier League and used it in order to forecast future performance of the players in FPL. However, they found their scoreline predictions far less accurate than those of bookmakers' odds. Therefore, it interesting to adapt an approach based on bookmakers' odds, as the method serves as complement to the Elo based Modified Average method.
+
 
 \newpar
 
-In order to obtain predictions of player performances, odds must be transferred into expected points. Odds can be separated into \textit{team odds} and \textit{individual player odds}. Team odds include all odds related to a team's performance such as result odds. Individual player odds include odds related to an individual player's performance such as goals scored, assists provided and bookings. 
+In order to obtain predictions of player points, odds must be transferred into expected points. Odds can be separated into \textit{team odds} and \textit{individual player odds}. Team odds include all odds related to a team's performance such as result odds. Individual player odds include odds related to an individual player's performance such as goals scored, assists provided and bookings. 
 
 \newpar
 
-The team odds adopted is related to scorelines, and serve two purposes. First, it is used to calculate the probability of a team keeping a clean sheet. Moreover, it is used in order to calculate the expected goals scored by a team. By summing all the result odds and dividing each individual result odds by that sum, the probability of each exact result can be obtained. In Table \ref{tab:odds_probabilities}, an example is given for the odds and the corresponding probabilities. By summing all the probabilities for the scorelines where Leicester has a clean sheet, it can be found that the probability of Leicester keeping a clean sheet is 0.316. Thus, in order to calculate expected points from clean sheets, the probability is multiplied with points received for a clean sheet, i.e. 4 points for goalkeepers and defenders and 1 point for midfielders. Secondly, team odds is used to obtain a team's expected goals. This is done by multiplying goals scored in each scoreline with the probability of that scoreline occurring.
+The team odds used is related to scorelines, and serve two purposes. First, it is used to calculate the probability of a team keeping a clean sheet. By summing all the result odds and dividing each individual result odds by that sum, the probability of each exact result can be obtained. In Table \ref{tab:odds_probabilities}, an example is given for the odds and the corresponding probabilities. By summing all the probabilities for the scorelines where Leicester has a clean sheet, it can be found that the probability of Leicester keeping a clean sheet is 0.316. Thus, in order to calculate expected points from clean sheets, the probability is multiplied with points received for a clean sheet, i.e. 4 points for goalkeepers and defenders and 1 point for midfielders. Secondly, team odds is used to obtain a team's expected goals. This is done by multiplying goals scored in each scoreline with the probability of that scoreline occurring. In the example from Table \ref{tab:odds_probabilities} Leicester's expected goals is found to be 1.310.
+
 
 \begin{table}[H]
 \begin{subtable}{1\textwidth}
@@ -453,8 +476,7 @@ The team odds adopted is related to scorelines, and serve two purposes. First, i
 
 
 
-In an analogous manner as with team odds, individual odds can be transformed into expected points. However, there is no straightforward way of transferring an individual odds into a probability. Thus, we have decided to calculate the probability as the inverse of the odds. Thus, if the odds of the player Jamie Vardy to score one or more is 2, his probability is $\frac{1}{2}=50\%$. If the odds were set in a "fair" way, i.e. the odds market was perfect, such a conversion would resemble reality. However, bookmakers are profit-seekers. Thus, if bookmakers are to profit, the odds they set must transfer into probabilities lower than the real ones. Moreover, the probabilities is transferred into expected points by multiplying both with expected goals and points obtained for a goal. The same goes for assists. In football, not all goals are assisted and consequently should be accounted for in the probability to give an assist. It is assumed that the odds are set taken this factor into consideration. For cards as well, but here one does not have to take the scoreline into account. In the example from Table \ref{tab:odds_probabilities} Leicester's expected goals is found to be 1.310. 
-
+In an analogous manner as with team odds, individual odds can be transformed into probabilities. However, now the probabilities are calculated as the inverse of the odds. Thus, if Leicester's Riyad Mahrez is assigned an odds of 4 for scoring one or more goals, his probability of scoring is $\frac{1}{4}=25\%$. Note, however, that by using this method it is assumed that the odds are set in a "fair" way, i.e. the odds market is a perfect market. In reality bookmakers are profit-seekers. Thus, if bookmakers are to profit, the odds they set must transfer into probabilities lower than the real ones and the validity of assumption can be weakened. After odds are transferred into probabilities, the probabilities are converted to expected points. For points related to scoring a goal, for example, this is achieved by multiplying expected goals and points obtained for a goal. Points for assists are allocated in a similar manner. Note, that not all goals are assisted. However, it is assumed that bookmakers take this into consideration when setting the odds.
 
 \begin{table}[H]
 \centering
@@ -472,45 +494,45 @@ Yellow Card & 8    & 0.125       \\
 \end{table}
 
 
-Finally, the expected points of a player can be computed. In Table \ref{tab:ind_odds_riyad_mahrez}, a fictive set of individual odds and probabilities is given for the Leicester midfield player, Riyad Mahrez. In equation \ref{eq:riyad_mahrez_odds}, it is shown that he is expected to obtain 2.641 points for the Leicester-Burnley match.
+Finally, the expected points of a player can be computed. In Table \ref{tab:ind_odds_riyad_mahrez}, a fictive set of individual odds and probabilities are given for the Leicester midfield player, Riyad Mahrez. The reader is reminded that a midfielder earns 5 points for a goal, 3 points for an assist, 1 point for a clean sheet and -1 point for a yellow card. In equation \ref{eq:riyad_mahrez_odds}, it is shown that he is expected to obtain 3.40 points for the Leicester-Burnley match.
 
 
 \begin{equation} \label{eq:riyad_mahrez_odds}
-    5 \cdot 1.310 \cdot 0.25 + 3 \cdot 1.310 \cdot 0.4 + 1 \cdot 0.316 - 1 \cdot 0.125 \approx 3.401
+    5 \cdot 1.310 \cdot 0.25 + 3 \cdot 1.310 \cdot 0.4 + 1 \cdot 0.316 - 1 \cdot 0.125 \approx 3.40
 \end{equation}
 
-Note that the probability of starting is not explicitly handled. Nor is points awarded for playing over 60 minutes. However, one can argue that the probability of starting is incorporated in individual odds, i.e. as the probability of scoring a goal or providing an assists. Regardless, an improvement of the Odds might incorporate these points more directly.
+Note that the probability of starting is not explicitly handled. Nor is points awarded for playing over 60 minutes. However, one can argue that the probability of starting is incorporated in individual odds, i.e. as the probability of scoring a goal or providing an assists.
 
 \section{Gamechips} \label{Ch.5_Game_chips}
 
-In the following we present how the gamechips are implemented in the model. Human FPL managers have to make decisions on when to use their gamechips, i.e. they have to decide whether it is best to play them in a given gameweek or if it is optimal to wait. As the model is solved using a rolling horizon heuristic, a strategy for when to use the gamechips is required. Since the model is solved over a sub-horizon, there is nothing that prevents the model from not using the gamechips in the current sub-problem, unless the strategy addresses this issue. Many different approaches can be undertaken in order to develop such a strategy. One strategy is to base the decisions on intuition and well known strategies among human FPL managers. Another interesting approach would be to consider a type of punishment in terms of penalized points for the use of gamechips. Furthermore, an alternative approach would be to implement the gamechips analogous to the exercise of a financial option. We have decided to undertake the first-mentioned qualitative approach. A lot of theories have emerged on when it is optimal to use the chips (kilder). Regardless, more quantitative approaches have huge potential and are exciting topics for future research.
+Gamechip strategies are actions developed to decide when it is optimal to use the gamechips. There exists limited literature on this topic. Consequently, there is a leeway for new ideas. Many interesting approaches could be adopted to decide the optimal use of gamechips. The approach adopted in this thesis is mainly qualitative and aim to take advantage of future gameweeks which are \textit{blank} or \textit{double}. The reader is reminded gameweek is blank when at least one team does not play, and a double if a team is featured more than once. 
+
+\newpar
+
+Human FPL managers have to make decisions on when to use their gamechips, i.e. they have to decide whether it is best to play them in a given gameweek or if it is optimal to wait. As the model is solved using a rolling horizon heuristic, a strategy for when to use the gamechips is required. Since the model is solved over a sub-horizon, there is nothing that prevents the model from not using the gamechips in the current sub-problem, unless the strategy addresses this issue. Many different approaches can be undertaken in order to develop such a strategy. One strategy is to base the decisions on intuition and well known strategies among FPL managers.\footnote{See websites \url{https://www.premierleague.com/news/624013} and \url{https://www.premierleague.com/news/404004}} As limited research is done on the use of gamechips, these strategies are considered an appropriate place to start. Other interesting approaches include to consider a type of punishment in terms of penalized points for the use of gamechips or to implement the gamechips analogous to the exercise of a financial option. Thus, strategies that are more quantitatively influenced are exciting topics for future research.
 
 \subsection{First Wildcard}
-The first Wildcard, which has to be played within the first half of the season, is usually played at the end of the first quarter of the season. There is high uncertainty at the start of the season related to starting line-ups and the form of players. In addition, the summer transfer window ends in gameweek 4, providing a possibility of players being sold, lend or bought. Thus, using the Wildcard after a few gameweeks allows human managers to wait and consider such developments. However, if a manager waits too long, they can miss the opportunity of adding players that over performs compared to their expectation. Hence, playing the Wildcard in last part of the first quarter of the season takes both considerations into account. This is implemented by giving the mathematical model the opportunity to play a Wildcard in a specific gameweek which is chosen beforehand.
 
+The first Wildcard, which has to be played within the first half of the season, is played at the end of the first quarter of the season. There is high uncertainty at the start of the season related to starting line-ups and the form of players. In addition, the summer transfer window ends in gameweek 4, providing a possibility of players being sold, lend or bought. Thus, using the Wildcard after a few gameweeks allows managers to wait and consider such developments. However, if managers wait too long, they can miss the opportunity of adding players that over-perform compared to their initial expectations. Hence, playing the Wildcard in last part of the first quarter of the season takes both considerations into account. This is implemented by giving the mathematical model the opportunity to play a Wildcard in a specific gameweek which is chosen beforehand.
 
 \subsection{Triple Captain}
-It is wise to play the Triple Captain in a double gameweek as it is reasonable to assume players are expected to gain more points when featured twice. Thus, the model is given the opportunity to play the Triple Captain in the first double gameweek of the season. 
-
-\newpar
-
-More quantitative approaches could be to use the financial metric, Sharpe Ratio \citep{Sharpe}. It's a method to calculate risk-adjusted return, and could be adopted to FPLDP where one plays the Triple Captain when a player hits a predetermined lower limit of Sharpe Ratio. Another interesting approach could be to model it as the Secretary Problem (\cite{Lindley}; \cite{Bruss}). It's a well studied problem in mathematics-probability-optimization which finds a strategy for maximizing the probability of choosing the best among $N$ available candidates.  
+It is assumed sensible to play the Triple Captain in a double gameweek as players are expected to gain more points when they are featured twice. Thus, the model is given the opportunity to play the Triple Captain in the first double gameweek of the season. 
 
 \subsection{Second Wildcard and Bench Boost}
-The second Wildcard should be played with caution, as it is wise to also consider the Bench Boost when using it. As the Bench Boost allows each player in the squad to collect points, and not only the starting line-up, the Bench Boost should be played in a double gameweek. Therefore, the model is set to play the second Wildcard in the gameweek ahead of a double gameweek.
+The second Wildcard should be played with caution, as it is wise to also consider the Bench Boost when using it. As the Bench Boost allows each player in the selected squad to collect points, and not only the starting line-up, the Bench Boost should be played in a double gameweek. Therefore, the model is set to play the second Wildcard in the gameweek ahead of a double gameweek.
+
 
 \subsection{Free Hit}
-The Free Hit, which allows the manager to perform unlimited free transfers for one gameweek, should be used wisely. There are in general two cases where playing the Free Hit is reasonable. First, the Free Hit could be played in a blank gameweek, i.e. a gameweek consisting of less than 10 fixtures. This is done to ensure that all the players in your starting line-up are featured for that particular gameweek. Another wise choice is to play the Free Hit in a double gameweek, ensuring that the majority of the starting line-up consists of players that are featured twice. The first method is implemented and hence the model is given the opportunity to play the Free Hit in a blank gameweek. 
+The Free Hit, allows the manager to perform unlimited free transfers for one gameweek. In the gameweek after, the selected squad is changed back. There are in general two cases where playing the Free Hit is reasonable. First, the Free Hit could be played in a blank gameweek to ensure that all the players in the starting line-up are featured for that particular gameweek. Second, Free Hit could be played in a double gameweek to ensure that the majority of the starting line-up consists of players that are featured twice. As two other gamechips already are related to double gameweeks, the first method is implemented.
 
+\subsection{Gamechip Implementation in the Mathematical model}
 
-\subsection{Gamechip implementation in the mathematical model}
-
-The gamechips are implemented in the mathematical model by setting right hand side of constraints \ref{eq:wildcard_first_half_of_the_season} - \ref{eq:free_hit} equal to 0, and are only set to 1 in the respective constraints when the specific gameweeks are considered in the sub-horizon. Thus, the constraints are deactivated and have no effect on the objective function. Alternatively, the constraints related to a gamechip could be relaxed or removed, and only introduced when the specific gameweeks are considered in the sub-horizon.
+The gamechips are implemented in the mathematical model by initially setting the right-hand side of constraints \ref{eq:wildcard_first_half_of_the_season} - \ref{eq:free_hit} equal to 0. The right-hand side of the constrains are only set to 1 in the respective constraints when a gameweek where a gamechip can be played is considered in the sub-horizon. Up to those gameweeks, the constraints are deactivated and have no effect on the objective function. 
 
 \newpar
 
 
-The opportunity of using a gamechip is firstly introduced when reaching a sub-horizon which includes a particular gameweek where a gamechip can be used. When that particular gameweek is reached, the respective constraints is split in two. For example, if the sub-horizon is set to 4, and the first Wildcard is allowed to be played in gameweek 12, it is first considered when the mathematical model is run for sub-problem 9. In the model, the right hand side of constraints \ref{eq:wildcard_second_half_of_the_season} - \ref{eq:free_hit} are set to 0, while constraints \ref{eq:wildcard_first_half_of_the_season} is split in two: 
+The opportunity of using a gamechip is first introduced when reaching a sub-horizon which includes a gameweek where a gamechip can be used. When that particular gameweek is reached, the related constraints are split in two. For example, if the sub-horizon is set to 4, and the first Wildcard is allowed to be played in gameweek 12, it is first considered when the mathematical model is run for sub-problem 9. In the model, the right-hand side of constraints \ref{eq:wildcard_second_half_of_the_season} - \ref{eq:free_hit} are set to 0, while constraints \ref{eq:wildcard_first_half_of_the_season} is split in two: 
 
 \begin{equation*}
     \begin{aligned}
@@ -531,17 +553,24 @@ In the next sub-problem, the range is moved so the constraints is now modelled a
 The other gamechips are implemented in a similar way as the Wildcard. 
 
 
+
 \section{Risk Handling} \label{Ch.5_Variance_tradeoff}
 
+As both goalkeepers and defenders in the same team earn 4 points for keeping a clean sheet, it is not hard to imagine that the points they obtained are positively correlated. Similarly, it is not unreasonable to assume that the points a goalkeeper and forward of opposing teams earn are negative correlated. In this section, a method for dealing with this assumed correlation in points obtained, as well as the fluctuations of individual player's points, is presented. As described in Section \ref{Other_Relevant_Research}, there is a large resemblance between the FPLDP and the well known portfolio selection problem in financial theory. This is taken advantage of as risk is handled in an analogous manner. Thus, one might say that the objective of adding risk handling is \textit{diversification}, a risk management technique with the purpose of yielding higher returns (expected points) without increasing risk.
+
+
+
 \subsection{Player Variance}
-Variance refers to the variability in each player's realized points. Some midfielders are for instance known to be consistently starting, but seldom contribute in terms of assists or goals. It is reasonable to assume that such players have a low expected value of points, but also a low variability in points earned. Other players might contribute a lot in terms of assists and goals when they are playing, but are perhaps often injured. Such players could have a high predicted value, but also a high variance in points obtained. \newpar
+
+Variance refers to the variability in each player's realized points. Some midfielders are for instance known to be consistently starting, but seldom contribute in terms of assists or goals. It is reasonable to assume that such players have a low expected value of points, but also a low variability in points obtained. Other players might contribute a lot in terms of assists and goals when they are playing, but are perhaps often injured. Such players could have a high predicted value, but also a high variance in points obtained. 
 
 \subsection{Correlation}
-The variance of each player only considers each player's individual contribution to the team's total variance. However, it is natural to assume that there exists a correlation between the performance of players. For instance, as the goalkeeper and defenders of the same team are rewarded for keeping a clean sheet, their performances are expected to be positively correlated. Similarly, it is intuitive that the goalkeeper and forwards of two opposing teams are negatively correlated. Whether or not there exists correlation between defenders of opposing teams are perhaps not so obvious. In order to test for correlation, Pearson's Product-Moment Correlation test is performed. By applying the test, a few assumptions are made. The variables are assumed approximately normally distributed and display homoscedasticity (constant variance). For a full description of Pearson's Product-Moment Correlation and its underlying assumptions, the reader is referred to \cite{laerd}.  \newpar
+
+The variance of each player only considers each player's individual contribution to the team's total variance. As discussed, it is natural to assume that there exists a correlation between the points obtained by players. However, even if the points obtained by a goalkeeper and a defenders from the same team are expected to be positively correlated, it is perhaps not so obvious whether or not there exists correlation between defenders of opposing teams. In order to test for correlation, Pearson's Product-Moment Correlation test is performed. By applying the test, a few assumptions are made. The variables are assumed approximately normally distributed and display \textit{homoscedasticity} (constant variance). For a full description of Pearson's Product-Moment Correlation test and its underlying assumptions, the reader is referred to \cite{laerd}. 
 
 \subsection{Team Variance}
 
-In Section \ref{Other_Relevant_Research}, it is pointed out that the FPLDP has a lot of similarities with portfolio optimization. In financial optimization it is common to examine the trade-off between expected return and variance \citep{Markowitz}. According to \cite{Zenios}, the variance of a portfolio containing \textit{n} assets with weight \textit{w} can be expressed as 
+In financial optimization it is common to examine the trade-off between expected return and variance \citep{Markowitz}. According to \cite{Zenios}, the variance of a portfolio containing \textit{n} assets with weight \textit{w} can be expressed as 
 
 \begin{equation}
     \sigma^2(w) = \sum_{i = 1}^{n}\sum_{i' = 1}^{m}\sigma_{ii'}w_{i}w_{i'} = \sum_{i = 1}^{n}\sigma_{i}^2w_i^2 + \sum_{i = 1}^{n}\sum_{\substack{i' = 1;\\ i' \neq i}}^{n}\sigma_{ii'}w_iw_{i'}
@@ -552,28 +581,21 @@ where, $w_i$ is the portfolio weight of asset $i$, $\sigma_{i}^2$ is the varianc
 
 \newpar
 
-In our case, the mathematical model optimizes over the starting line-up variable, $y$. We are interested in finding the variance of the sum of total points obtained rather than the variance in percentage return, which is often the case in finance. Hence,  equation \ref{eq:port_var} can be rewritten by utilizing the fact that each "portfolio weight" is either 1 or 0. If the expression for covariance is also substituted with correlation, the expression simplifies to
+In the case of FPLDP, the mathematical model optimizes over the starting line-up variable, $y$. In Equation \ref{eq:port_var} returns are expressed in percentage, as is common in finance.  
+For the FPLDP, however, it is the variance of the sum of total points obtained each gameweek, rather than the variance in percentage return, that is of interest. Hence, Equation \ref{eq:port_var} can be rewritten by utilizing the fact that each "portfolio weight" is either 1 or 0. If the expression for covariance is also substituted with correlation, the expression simplifies to
 
-\begin{comment}
+
 \begin{equation}
-    \sigma^2(y) = (\frac{1}{11})^2\sum_{i = 1}^{n}\sigma_i^2y_i + (\frac{1}{11})^2\sum_{i = 1}^{n}\sum_{\substack{j = 1;\\ j \neq i}}^{n} \sigma_i^{2}\sigma_j^{2}y_{i}y_{j}\rho_{i,j}
+    \sigma^2(y) = \sum_{i = 1}^{n}\sigma_i^2y_i + \sum_{i = 1}^{n}\sum_{\substack{j = 1;\\ j \neq i}}^{n} \sigma_i^{2}\sigma_j^{2}y_{i}y_{j}\eta_{i,j}
     \label{eq:team_var}
 \end{equation}
 
-\end{comment}
+where $\sigma_{i}^2$ is the variance of expected points obtained by player \textit{i}, $\sigma_{j}^2$ is the variance of expected points obtained by player \textit{j} and $\eta_{i,j}$ is the correlation between expected points obtained by player $i$ and player $j$. In addition, $y_i$ and $y_j$ are binary variables indicating whether player $i$ and player $j$ are included in the starting line-up (portfolio) of players. Conventionally $\rho$ is used to denote correlation. However, in this thesis, $\eta$ denotes correlation as $\rho$ is already used to denote points. \newline
 
-\begin{equation}
-    \sigma^2(y) = \sum_{i = 1}^{n}\sigma_i^2y_i + \sum_{i = 1}^{n}\sum_{\substack{j = 1;\\ j \neq i}}^{n} \sigma_i^{2}\sigma_j^{2}y_{i}y_{j}\rho_{i,j}
-    \label{eq:team_var}
-\end{equation}
-
-where $\sigma_{i}^2$ is the variance of expected points obtained by player \textit{i}, $\sigma_{j}^2$ is the variance of expected points obtained by player \textit{j} and $\rho_{i,j}$ is the correlation between expected points obtained by player $i$ and player $j$. In addition, $y_i$ and $y_j$ are binary variables indicating whether player $i$ and player $j$ are included in the starting line-up
-(portfolio) of players.\newline
-
-In the mathematical model, we may now determine an upper threshold for the variance of the starting line-up at time $t$ as described below. Note that in equation \ref{eq:team_var} two binary variables are multiplied. In order to linearize the expression, an auxiliary variable, $\delta_{pp't}$, is introduced and the following set of equations are inferred.
+In the mathematical model, an upper threshold is determined for the variance of the starting line-up at time $t$ as described below. Note that in Equation \ref{eq:team_var} two binary variables are multiplied. In order to linearize the expression, an auxiliary variable, $\delta_{pp't}$, is introduced and the following set of equations are inferred.
 
 \begin{equation} \label{eq:variance}
-    \sigma^2_{t} = \sum_{p = 1}^{P}\sigma_p^2 y_{pt} + \sum_{p = 1}^{P}\sum_{\substack{p' = 1; \\ p' \neq p}}^{P} \sigma_p^2\sigma_p'^2\rho_{p,p',t} \delta_{pp't} \qquad\qquad t \in \mathcal{T}
+    \sigma^2_{t} = \sum_{p = 1}^{P}\sigma_p^2 y_{pt} + \sum_{p = 1}^{P}\sum_{\substack{p' = 1; \\ p' \neq p}}^{P} \sigma_p^2\sigma_{p'}^2\eta_{p,p',t} \delta_{pp't} \qquad\qquad t \in \mathcal{T}
 \end{equation}
 
 \begin{equation} \label{eq:variance_threshold}
@@ -592,17 +614,34 @@ In the mathematical model, we may now determine an upper threshold for the varia
     \delta_{pp't} \geq y_{pt} + y_{p't} - 1  \qquad\qquad p \in \mathcal{P}, p' \in \mathcal{P}, p' \neq p, \enskip t \in \mathcal{T}
 \end{equation}
 
+Note that constraints \eqref{eq:variance} and \eqref{eq:variance_threshold} could be combined into one constraint. However, for the sake of legibility, they are both explicitly written. Observe also that term $\sigma_{0}^2$ in constraints \eqref{eq:variance_threshold} is the risk threshold, i.e. a parameter set according to the risk preference of an investor in the portfolio optimization setting. In Section \ref{exp_setup_Value_Variance}, estimation of the parameters related to risk handling is treated. Furthermore, in Section \ref{sec:res_risk_hand} the effect of changing the risk threshold, $\sigma_{0}^2$, is analysed.
+
+\section{Forecast-Based Optimization Model}
+
+As seen throughout the chapter, methods for generating input data related to forecasts and risk handling, as well as strategies for the use of gamechips are developed. By taking the aforementioned elements into consideration, a \textit{forecast-based optimization model} for the Fantasy Premier League Decision Problem is developed. Algorithm \ref{alg:forecast_based_opt_model} gives a pseudo code for the forecast-based optimization model. Here, ${GC}$ is the set of gameweeks where gamechips are implemented according the the gamechips strategies. 
 
 
 
-\begin{comment}
-\subsection{Further discussion}
-\begin{itemize}
-    \item diskutere om fordeling
-    \item varians eller standardavvik
-    \item what hypotesis test is performed
-\end{itemize}
-\end{comment}
+\begin{algorithm}[H]
+\setstretch{1.35}
+\caption{Forecast-based optimization model}
+\begin{algorithmic}
+\State{$k$ = 1}
+\State{Set risk handling threshold, $\sigma_{0}^2$}
+\While{$k$ $\leq$ $\mathcal{|T|}$}
+    \State{Generate input data: expected points, variance and correlation for $TP_{k}^{C}$ and $TP_{k}^{F}$}
+    \If{a gameweek in $TP_{k}^{F}$ is in $GC$}
+        \State{Implement gamechip strategy}
+    \EndIf
+    \State{Solve the mathematical model for the problem defined by $TP^{C}_{k}$ and $TP^{F}_{k}$}
+    \State{Fix variables $x$, $v$ and $q$ in central period $TP^{C}_{k}$}
+    \State{  $k \gets k + 1$}
+\EndWhile
+\end{algorithmic}
+\label{alg:forecast_based_opt_model}
+\end{algorithm}
+
+
 
 
 
