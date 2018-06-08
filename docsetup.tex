@@ -19,13 +19,22 @@
 \usepackage{relsize} %for å få større greske bokstaver. 
 \usepackage[multiple]{footmisc} % for å få dobbel fotnote.
 
+\usepackage{afterpage}
+
+%%%FOR Å FÅ FIGURER I EN SECTION
+\usepackage{placeins} % put this in your pre-amble
+\usepackage{flafter}  % put this in your pre-amble
+
 \usepackage{verbatim}
 \usepackage[Lenny]{fncychap}
 \usepackage[pdftex,bookmarks=true]{hyperref}
 \usepackage[pdftex]{hyperref}
 \usepackage{dcolumn}% for å få negative tall i tabeller.
 \newcolumntype{d}[1]{D{.}{.}{#1}}% for å få negative tall i tabeller.
-\usepackage{siunitx} % for å få negative tall i tabeller.
+\newcommand\mc[1]{{c}{#1}} 
+%\usepackage{siunitx} % for å få negative tall i tabeller.
+%\sisetup{table-format=-1.3, table-space-text-post={***}}
+
 \urlstyle{same}
 \hypersetup{
     colorlinks,%
@@ -34,6 +43,9 @@
     linkcolor=black,%
     urlcolor=black
 }
+\newcommand\Tstrut{\rule{0pt}{2.6ex}}         % = `top' strut
+\newcommand\Bstrut{\rule[-0.9ex]{0pt}{0pt}}   % = `bottom' strut
+
 
 %appendix
 \usepackage[toc,page]{appendix}
@@ -46,8 +58,6 @@
 %\makenomenclature
 \usepackage{natbib}
 \usepackage{setspace}
-
-
 
 
 % ShareLaTeX does not support glossaries now. Sorry...

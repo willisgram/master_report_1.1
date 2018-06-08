@@ -2,12 +2,12 @@
 
 \chapter{Model Formulation} \label{chapter_model_formulation}
 
-In this chapter, the mathematical optimization model of the Fantasy Premier League Decision Problem (FPLDP) is presented. In Section \ref{def_sets_ind_par_var}, the sets, indices, parameters and variables used in the model are defined. In Section \ref{mathematical_model}, the mathematical formulation is presented alongside explanations of the objective function and constraints.
+In this chapter, the mathematical optimization model for the Fantasy Premier League Decision Problem (FPLDP) is presented. In Section \ref{def_sets_ind_par_var}, the sets, indices, parameters and variables used in the model are defined. In Section \ref{mathematical_model}, the mathematical formulation is presented alongside explanations of the objective function and constraints.
 
 
 \newpar
 
-FPLDP is modelled as a stochastic mixed integer linear program. The points a player receives in each gameweek is stochastic and modeled as dependent on future random events during actual matches. Such random events include goals, assists, penalties, passes, saves etc. This is denoted in the model as $\rho_{pt}(\omega_{t})$, where $\omega_{t}$ is a future random event in gameweek $t$. The objective is to maximize expected points over a number of gameweeks. From the output, the most interesting decisions are the selected squad, starting line-up, substitutions, captain, vice-captain as well as whether to use any gamechips in a gameweek. 
+FPLDP is modeled as a stochastic mixed integer linear program. The points a player receives in each gameweek is stochastic and modeled as dependent on future random events during actual matches. Such random events include goals, assists, penalties, passes, saves etc. This is denoted in the model as $\rho_{pt}(\omega_{t})$, where $\omega_{t}$ is a future random event in gameweek $t$. The objective is to maximize expected points over a number of gameweeks. From the output, the most interesting decisions are the selected squad, starting line-up, substitutions, captain, vice-captain as well as whether to use any gamechips in a gameweek.
 
 \newpar
 
@@ -117,6 +117,7 @@ $\underline{Q}$                  & - & Number of free transfers given every game
 \end{table}
 
 
+
 \begin{table}[H]
 \tabcolsep=0.11cm
 \centering
@@ -165,7 +166,7 @@ The objective function maximizes expected points over a set of gameweeks $\mathc
 
 \newpar
 
-If more transfers are made than number of free transfers imposed by the rules, $R$ points are deducted for each penalized transfer. This is described by the term $R\sum_{t \in \mathcal{T}}\alpha_{t}$. 
+If more transfers are made than the number of free transfers imposed by the rules, $R$ points are deducted for each penalized transfer. This is described by the term $R\sum_{t \in \mathcal{T}}\alpha_{t}$. 
  
 \newpar
  
@@ -272,13 +273,13 @@ Constraints \eqref{eq:free_hit_sel_keeper} - \eqref{eq:free_hit_sel_club} are th
     \sum_{p \in \mathcal{P}^{F}} y_{pt}\geq E^{F} \qquad\qquad t \in \mathcal{T}
 \end{equation}
 
-Constraints \eqref{eq:start_team} - \eqref{eq:start_forward} enforce that the formation criteria is upheld in each gameweek. Constraints (\ref{eq:start_team}) handle the number of players in the starting line-up, while constraints (\ref{eq:start_keeper}) - (\ref{eq:start_forward}) ensure that the minimum number of players in each position is upheld. When the Bench Boost is used, all the substitutes are considered as in the starting line-up. This is ensured by the term $\phi b_{t}$ and $\phi^{K} b_{t}$ in constraints \eqref{eq:start_team} and \eqref{eq:start_keeper}, respectively.  
+Constraints \eqref{eq:start_team} - \eqref{eq:start_forward} enforce that the formation criterion is upheld in each gameweek. Constraints (\ref{eq:start_team}) handle the number of players in the starting line-up, while constraints (\ref{eq:start_keeper}) - (\ref{eq:start_forward}) ensure that the minimum number of players in each position is upheld. When the Bench Boost is used, all the substitutes are considered as in the starting line-up. This is ensured by the term $\phi b_{t}$ and $\phi^{K} b_{t}$ in constraints \eqref{eq:start_team} and \eqref{eq:start_keeper}, respectively.  
 
 \begin{equation} \label{eq:nonlinear_starting}
     y_{pt} \leq x_{pt}^{free hit} + x_{pt}(1-r_{t}) \qquad\qquad  p \in \mathcal{P}, \enskip t \in \mathcal{T}
 \end{equation}
 
-Constraints \eqref{eq:nonlinear_starting} enforce that only players in the selected squad can be picked for the starting line-up. Remember, when the Free Hit is used, the whole team can be changed for one gameweek, but in the next gameweek it changes back. This means that the gameweek the Free Hit is used $r_{t} = 1$ and $y_{pt}$ only takes value from $x_{pt}^{free hit}$, not $x_{pt}$. When the Free Hit is not used, i.e. $r_{t} = 0$, the constraints \eqref{eq:free_hit_sel_keeper} - \eqref{eq:free_hit_sel_club} ensure that $x_{pt}^{free hit}$ does not take value. Constraints \eqref{eq:nonlinear_starting} are non-linear. A linearization is given by constraints \eqref{eq:start_sel} - \eqref{eq:auxiliary_variable_free_hit} where $\lambda_{pt}$ is an auxiliary binary variable.
+Constraints \eqref{eq:nonlinear_starting} enforce that only players in the selected squad can be picked for the starting line-up. Remember, when the Free Hit is used, the whole team can be changed for one gameweek, but in the next gameweek it changes back. This means that the gameweek the Free Hit is used $r_{t} = 1$ and $y_{pt}$ only takes value from $x_{pt}^{free hit}$, not $x_{pt}$. When the Free Hit is not used, i.e., $r_{t} = 0$, the constraints \eqref{eq:free_hit_sel_keeper} - \eqref{eq:free_hit_sel_club} ensure that $x_{pt}^{free hit}$ does not take value. Constraints \eqref{eq:nonlinear_starting} are non-linear. A linearization is given by constraints \eqref{eq:start_sel} - \eqref{eq:auxiliary_variable_free_hit} where $\lambda_{pt}$ is an auxiliary binary variable.
 
 
 \begin{equation}\label{eq:start_sel}
@@ -313,7 +314,7 @@ In all the other gameweeks, $x_{pt}^{freehit}$ is zero. Constraints \eqref{eq:au
    f_{pt} + c_{pt} + h_{pt} \leq y_{pt}  \qquad\qquad p \in \mathcal{P}, \enskip t \in \mathcal{T}
 \end{equation}
 
-Constraints \eqref{eq:captain} - \eqref{eq:cap_vice_only_one} set restrictions for captain and vice-captain in the starting line-up. Constraints \eqref{eq:captain} ensure that there can only be 1 captain in a gameweek. It also make sure that in the gameweek the Triple Captain is used, no captain is picked. Further, constraints \eqref{eq:vicecaptain} ensure that there can only be 1 vice-captain in a gameweek. The last constraints \eqref{eq:cap_vice_only_one} enforce that a player can only be a captain, triple captain or vice-captain in a gameweek. 
+Constraints \eqref{eq:captain} - \eqref{eq:cap_vice_only_one} set restrictions for captain and vice-captain in the starting line-up. Constraints \eqref{eq:captain} ensure that there can only be 1 captain in a gameweek. They also make sure that in the gameweek the Triple Captain is used, no captain is picked. Further, constraints \eqref{eq:vicecaptain} ensure that there can only be 1 vice-captain in a gameweek. The last constraints \eqref{eq:cap_vice_only_one} enforce that a player can only be a captain, triple captain or vice-captain in a gameweek. 
 
 \subsubsection{Substitution Constraints}
 
@@ -354,7 +355,7 @@ Constraints \eqref{eq:subst} - \eqref{eq:subst_priority} explain how the substit
    e_{pt} + u_{pt} \leq 1  \qquad\qquad p \in \mathcal{P}, \enskip t \in \mathcal{T} 
 \end{equation}
 
-Constraints \eqref{eq:start_budg} - \eqref{eq:sell_buy} handle the budget flow and how transfers affect the budget. In the first gameweek, constraints (\ref{eq:start_budg}) assign the remaining budget of the starting budget $B^{S}$ to the variable $v_{1}$. Next, constraints (\ref{eq:budg_flow}) handle the flow in the variable $v_{t}$ for the remaining gameweeks. More specifically, the remaining budget for the next gameweek is decided by the remaining budget from the previous gameweek plus the difference in budget generated by transferring players in and out. Further, constraints (\ref{eq:var_handl}) ensure that a player in the selected squad in gameweek $t$ was either in the selected squad in the previous gameweek or transferred in. Constraints (\ref{eq:sell_buy}) make sure that a player can not be both transferred in and transferred out in the same gameweek.
+Constraints \eqref{eq:start_budg} - \eqref{eq:sell_buy} handle the budget flow and how transfers affect the budget. In the first gameweek, constraints (\ref{eq:start_budg}) assign the remaining budget of the starting budget $B^{S}$ to the variable $v_{1}$. Next, constraints (\ref{eq:budg_flow}) handle the flow in the variable $v_{t}$ for the remaining gameweeks. More specifically, the remaining budget for the next gameweek is decided by the remaining budget from the previous gameweek plus the difference in budget generated by transferring players in and out. Further, constraints (\ref{eq:var_handl}) ensure that a player in the selected squad in gameweek $t$ was either in the selected squad in the previous gameweek or transferred in. Constraints (\ref{eq:sell_buy}) make sure that a player cannot be both transferred in and transferred out in the same gameweek.
 
 
 \begin{equation} \label{eq:free_hit_budget}
@@ -396,7 +397,7 @@ Constraints \eqref{eq:free_hit_budget} ensure that the cost of the selected squa
 
 \newpar
 
-Constraints \eqref{eq:trans_second_gw} - \eqref{eq:trans_max} handle the transfers. The first constraints (\ref{eq:trans_second_gw}) set the number of free transfers in the second gameweek to $\underline{Q}$. This is the first time the decision of transferring players is considered, consequently the first time the limitation of free transfers is treated. Constraints (\ref{eq:trans_flow}) handle free transfers available in the next gameweek. Each gameweek, a number of $\underline{Q}$ free transfers are given. If they are not used, they are moved to the next gameweek. Further, the maximum number of free transfers is denoted by $\overline{Q}$. If the number of players transferred out exceeds the number of free transfers available, the variable $\alpha_{t}$ takes a value and each penalized transfer gets punished by $R$ points in the objective function. The exception is when the Wildcard is played. In this case, the number of free transfers is unlimited. This is ensured by the term $E w_{t}$, which makes sure that $\alpha_{t}$ does not take a value in the gameweek the Wildcard is used. Constraints \eqref{eq:trans_flow_illegal_transfers} are used to handle a special case in the modelling; it makes sure that $\alpha_{t}$ only can take the value of zero, when $q_{t}$ hits its upper limit, $\overline{Q}$. This will be further illustrated by an example where $\overline{Q} = 2$. 
+Constraints \eqref{eq:trans_second_gw} - \eqref{eq:trans_max} handle the transfers. The first constraints (\ref{eq:trans_second_gw}) set the number of free transfers in the second gameweek to $\underline{Q}$. This is the first time the decision of transferring players is considered, consequently the first time the limitation of free transfers is treated. Constraints (\ref{eq:trans_flow}) handle free transfers available in the next gameweek. Each gameweek, $\underline{Q}$ free transfers are given. If they are not used, they are moved to the next gameweek. Further, the maximum number of free transfers is denoted by $\overline{Q}$. If the number of players transferred out exceeds the number of free transfers available, the variable $\alpha_{t}$ takes a value and each penalized transfer gets punished by $R$ points in the objective function. The exception is when the Wildcard is played. In this case, the number of free transfers is unlimited. This is ensured by the term $E w_{t}$, which makes sure that $\alpha_{t}$ does not take a value in the gameweek the Wildcard is used. Constraints \eqref{eq:trans_flow_illegal_transfers} are used to handle a special case in the modeling; it makes sure that $\alpha_{t}$ only can take the value of zero, when $q_{t}$ hits its upper limit, $\overline{Q}$. This will be further illustrated by an example where $\overline{Q} = 2$.
 
 
 \begin{table}[H]
